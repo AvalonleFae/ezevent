@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EZEvent - Discover and Register for University Events</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Tailwind config for your colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ezevent-blue': '#C1E4FF',
+                        'ezevent-green': '#E0FFD7',
+                        'ezevent-white': '#FFFFFF',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+    /* Apply the font globally with fallbacks */
+    html, body, a, h1, h2, h3, p, div, span {
+        font-family: 'Inria Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    /* Ensure Tailwind's .font-sans class uses it too */
+    .font-sans {
+        font-family: 'Inria Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    </style>
+</head>
+<body class="bg-ezevent-white text-gray-800 font-sans">
+    <!-- Header -->
+    <header class="bg-ezevent-blue shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <nav class="flex items-center justify-between">
+                <div class="flex-shrink-0">
+                    <img src="./ezevent_logo.png" alt="EZEvent Logo" class="h-12 w-auto" loading="lazy">
+                </div>
+                <div class="flex space-x-4 text-sm md:text-base">
+                    <a href="landing_page.html" class="hover:text-blue-600 transition-colors">Home</a>
+                    <span class="text-gray-400">|</span>
+                    <a href="#" class="hover:text-blue-600 transition-colors">Event</a>
+                    <span class="text-gray-400">|</span>
+                    <a href="#about" class="hover:text-blue-600 transition-colors">About Us</a>
+                    <span class="text-gray-400">|</span>
+                    <a href="#contact" class="hover:text-blue-600 transition-colors">Contact Us</a>
+                    <span class="text-gray-400">|</span>
+                    <a href="#" class="hover:text-blue-600 transition-colors">Language</a>
+                    <span class="text-gray-400">|</span>
+                    <a href="#" class="hover:text-blue-600 transition-colors">Log In/Sign Up</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-ezevent-blue to-blue-200 py-20 text-center">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-6">Welcome to EZEvent</h1>
+            <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl mx-auto">Discover, register, and attend university events effortlessly. Connect with your campus community!</p>
+            <!-- Uncomment and customize if you add a download link -->
+            <!-- <a href="#download" class="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-shadow">Download the App</a> -->
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-ezevent-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">Why Choose EZEvent?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-ezevent-green p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+                    <img src="./test.jpg" alt="Discover Events" class="w-20 h-20 mx-auto mb-4 rounded-full object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Discover Events</h3>
+                    <p class="text-gray-600">Browse events by category, date, or university. Never miss out on fun or important gatherings.</p>
+                </div>
+                <div class="bg-ezevent-green p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+                    <img src="./test.jpg" alt="Easy Registration" class="w-20 h-20 mx-auto mb-4 rounded-full object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Easy Registration</h3>
+                    <p class="text-gray-600">One-tap sign-up with QR code check-ins. Track your RSVPs and get reminders.</p>
+                </div>
+                <div class="bg-ezevent-green p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+                    <img src="./test.jpg" alt="Organize Events" class="w-20 h-20 mx-auto mb-4 rounded-full object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Organize Like a Pro</h3>
+                    <p class="text-gray-600">Create and manage events with capacity limits, analytics, and attendee tracking.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-ezevent-blue">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">About EZEvent</h2>
+            <p class="text-lg text-gray-700 max-w-3xl mx-auto">EZEvent is designed for university students by students. Whether you're attending a hackathon, joining a concert, or hosting a club event, our app makes it simple and fun. Join thousands of students already using EZEvent to stay connected on campus.</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-ezevent-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Contact Us</h2>
+            <p class="text-lg text-gray-700 mb-8">Have questions or feedback? We'd love to hear from you! Reach out to our support team.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="mailto:support@ezevent.com" class="text-2xl text-blue-600 hover:text-blue-800 transition-colors" aria-label="Email support" title="Email support">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <a href="#" class="text-2xl text-pink-600 hover:text-pink-800 transition-colors" title="Instagram support">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="text-2xl text-blue-700 hover:text-blue-900 transition-colors" title="Facebook support">
+                    <i class="fab fa-facebook"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (Optional, added for completeness) -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 EZEvent. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
