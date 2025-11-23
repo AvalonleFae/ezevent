@@ -1,1 +1,1 @@
-University Event Management and Registration Application
+University Event Management and Registration Applicatione
