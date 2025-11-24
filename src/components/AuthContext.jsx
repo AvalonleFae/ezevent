@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { auth } from '../firebase'
+import { auth, db } from '../firebase'
+import { doc, getDoc } from 'firebase/firestore'
 
 // Keeps auth state accessible (check user logged in || null)
 const AuthContext = createContext({
@@ -9,11 +10,26 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
+  const [role, setRole] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      setLoading(true)
       setUser(currentUser)
+
+      if (currentUser) {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', currentUser.uid))
+          setRole(userDoc.exists() ? userDoc.data().role : null)
+        } catch (error) {
+          console.error('Failed to fetch user role', error)
+          setRole(null)
+        }
+      } else {
+        setRole(null)
+      }
+
       setLoading(false)
     })
 
@@ -21,7 +37,7 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, role, loading }}>
       {children}
     </AuthContext.Provider>
   )

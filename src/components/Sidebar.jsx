@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { signOut } from 'firebase/auth'
-import { auth } from '../firebase'
-import {doc, getDoc} from "firebase/firestore"
+import { auth, db } from '../firebase'
+import { doc, getDoc } from 'firebase/firestore'
 import { useNavigate } from "react-router-dom";
 import '../css/Sidebar.css'
 
@@ -26,7 +26,32 @@ const menuItems = {
 
 export default function Sidebar({ role }) {
 
-  // const [userDetails, ]
+    const navigate = useNavigate();
+    const [userData, setUserData] = useState({ name: '', role: '' });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      const fetchUserData = async () => {
+        try {
+          const currentUser = auth.currentUser;
+          if (currentUser) {
+            const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+            if (userDoc.exists()) {
+              setUserData({
+                name: userDoc.data().name || 'User',
+                role: userDoc.data().role || 'participant'
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchUserData();
+    }, []);
 
   async function handleLogout() {
     try{
@@ -43,8 +68,8 @@ export default function Sidebar({ role }) {
   return (
     <aside className="sidebar">
         <div className="user-profile">
-          <div className="user-name">John Doe</div>
-          <div className="user-role">Admin</div>
+          <div className="user-name">{userData.name}</div>
+          <div className="user-role">{userData.role}</div>
         </div>
       <ul>
         {items.map((item) => (

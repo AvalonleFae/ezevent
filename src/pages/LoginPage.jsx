@@ -1,26 +1,47 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {auth} from "../firebase";
+import {auth, db} from "../firebase";
+import {doc, getDoc} from "firebase/firestore";
 
 
 function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("")
         try{
-            await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            const userDocRef = doc(db, "users", user.uid)
+            const userDoc = await getDoc(userDocRef);
+            const role = userDoc.exists() ? userDoc.data().role : null;
+
+            if(role === "admin"){
+                navigate("/admin")
+            } else if(role === "participant") { //Update "Participant" later         
+                navigate("/participant")
+            }else if(role === "organizer") {
+                navigate("/organizer")
+            }else{
+                setError("User role not found. Please Contact Support")
+            }
+            console.log(user);
             console.log("User logged in successfully");
-            navigate("/admin");
+            // navigate("/admin");
+            
+
 
 
         }catch (error){
             console.log(error.message);
 
             //display error message on screen
+            setError("Invalid Credentials. Please try again.")
         }
     }
 

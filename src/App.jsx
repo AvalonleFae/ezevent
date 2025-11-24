@@ -5,9 +5,16 @@ import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
 import { useAuth } from './components/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
+import ParticipantPage from './pages/ParticipantPage'
 
 function App() {
-  const { user, loading } = useAuth()
+  const { user, role, loading } = useAuth()
+
+  const getLandingPath = () => {
+    if (role === 'participant') return '/participant'
+    if (role === 'organizer') return '/organizer'
+    return '/admin'
+  }
 
   if (loading) {
     return <div>Loading...</div>
@@ -21,18 +28,33 @@ function App() {
             <Routes>
               <Route
                 path="/"
-                element={user ? <Navigate to="/admin" /> : <LoginPage />}
+                element={user ? <Navigate to={getLandingPath()} /> : <LoginPage />}
               />
+              
               <Route
                 path="/login"
-                element={user ? <Navigate to="/admin" /> : <LoginPage />}
+                element={user ? <Navigate to={getLandingPath()} /> : <LoginPage />}
               />
-              <Route path="/signup" element={<SignUpPage />} />
+
+              <Route 
+              path="/signup" 
+              element={<SignUpPage />} 
+              />
+
               <Route
                 path="/admin"
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRoute allowedRoles={['admin']}>
                     <AdminPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/participant"
+                element={
+                  <ProtectedRoute allowedRoles={['participant']}>
+                    <ParticipantPage />
                   </ProtectedRoute>
                 }
               />
