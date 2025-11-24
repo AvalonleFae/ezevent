@@ -1,5 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { signOut } from 'firebase/auth'
+import { auth, db } from '../firebase'
+import { doc, getDoc } from 'firebase/firestore'
+import { useNavigate } from "react-router-dom";
 import '../css/Sidebar.css'
+
+
 
 const menuItems = {
   participant: [
@@ -19,13 +25,51 @@ const menuItems = {
 };
 
 export default function Sidebar({ role }) {
+
+    const navigate = useNavigate();
+    const [userData, setUserData] = useState({ name: '', role: '' });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      const fetchUserData = async () => {
+        try {
+          const currentUser = auth.currentUser;
+          if (currentUser) {
+            const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+            if (userDoc.exists()) {
+              setUserData({
+                name: userDoc.data().name || null,
+                role: userDoc.data().role || null
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchUserData();
+    }, []);
+
+  async function handleLogout() {
+    try{
+      await signOut(auth);
+      console.log("User logged out successfully!")
+      navigate("/login");
+    }catch (error) {
+      console.error("Error Logging out:", error.message)
+    }
+  }
+
   const items = menuItems[role] || [];
 
   return (
     <aside className="sidebar">
         <div className="user-profile">
-          <div className="user-name">John Doe</div>
-          <div className="user-role">Admin</div>
+          <div className="user-name">{userData.name}</div>
+          <div className="user-role">{userData.role}</div>
         </div>
       <ul>
         {items.map((item) => (
@@ -35,7 +79,7 @@ export default function Sidebar({ role }) {
         ))}
       </ul>
       <div className="sidebar-signout">
-        <a href="/signout">Sign Out</a>
+        <a onClick={handleLogout}>Sign Out</a>
       </div>
     </aside>
   );
