@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
-import {auth} from "../firebase";
+import {auth, db} from "../firebase";
 import { setDoc, doc } from "firebase/firestore";
 
 
@@ -11,8 +11,26 @@ function SignUpPage() {
     const [role, setRole] = useState("");
     const [name, setName] = useState("");
 
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        try{
+            await createUserWithEmailAndPassword(auth, email, password);
+            const user = auth.currentUser;
+            console.log(user);
+            if(user){
+                await setDoc(doc(db, "users", user.uid) , {
+                    email: user.email,
+                    name: name,
+                    role: role,
+                });
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
     return(
-        <form>
+        <form onSubmit={handleRegister}>
             <h3>Login</h3>
 
             <div className="mb-3">
