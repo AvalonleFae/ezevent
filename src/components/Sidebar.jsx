@@ -38,8 +38,8 @@ export default function Sidebar({ role }) {
             const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
             if (userDoc.exists()) {
               setUserData({
-                name: userDoc.data().name || 'User',
-                role: userDoc.data().role || 'participant'
+                name: userDoc.data().name || null,
+                role: userDoc.data().role || null
               });
             }
           }

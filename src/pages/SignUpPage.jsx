@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import React, { useState } from "react";
 import {auth, db} from "../firebase";
 import { setDoc, doc } from "firebase/firestore";
@@ -17,12 +17,15 @@ function SignUpPage() {
             await createUserWithEmailAndPassword(auth, email, password);
             const user = auth.currentUser;
             console.log(user);
+            console.log("User registered successfully");
             if(user){
                 await setDoc(doc(db, "users", user.uid) , {
+                    uid: user.uid,
                     email: user.email,
                     name: name,
                     role: role,
                 });
+                await signOut(auth);
             }
         } catch (error) {
             console.log(error.message);
@@ -31,7 +34,7 @@ function SignUpPage() {
 
     return(
         <form onSubmit={handleRegister}>
-            <h3>Login</h3>
+            <h3>Sign Up</h3>
 
             <div className="mb-3">
                 <label>Email Address</label>

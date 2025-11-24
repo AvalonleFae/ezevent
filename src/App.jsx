@@ -6,6 +6,7 @@ import SignUpPage from './pages/SignUpPage'
 import { useAuth } from './components/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import ParticipantPage from './pages/ParticipantPage'
+import OrganizerPage from './pages/OrganizerPage'
 
 function App() {
   const { user, role, loading } = useAuth()
@@ -55,6 +56,15 @@ function App() {
                 element={
                   <ProtectedRoute allowedRoles={['participant']}>
                     <ParticipantPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/organizer"
+                element={
+                  <ProtectedRoute allowedRoles={['organizer']}>
+                    <OrganizerPage />
                   </ProtectedRoute>
                 }
               />
