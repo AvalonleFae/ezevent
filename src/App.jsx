@@ -9,6 +9,8 @@ import ProtectedRoute from './components/ProtectedRoute'
 import ParticipantPage from './pages/ParticipantPage'
 import OrganizerPage from './pages/OrganizerPage'
 import AdminLayout from './layouts/AdminLayout'
+import CreateEvent from './pages/create_event.jsx'
+import ValidateOrganizerPage from './pages/ValidateOrganizerPage'
 
 function App() {
   const { user, role, loading } = useAuth()
@@ -75,6 +77,12 @@ function App() {
         </div>
       </div>
     </Router>
+  if (loading) {
+    return <div>Loading...</div>
+  } 
+
+  return (
+    <CreateEvent />
   )
 }
 
