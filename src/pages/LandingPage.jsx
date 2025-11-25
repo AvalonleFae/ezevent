@@ -55,12 +55,12 @@ export default function LandingPage() {
                         <div className="lp-card">
                             <img src="../src/assets/icons/test.jpg" alt="Easy Registration" />
                             <h3>Easy Registration</h3>
-                            <p>One-tap sign-up with QR code check-ins. Track your RSVPs and get reminders.</p>
+                            <p>One-tap sign-up with QR code check-ins.</p>
                         </div>
                         <div className="lp-card">
                             <img src="../src/assets/icons/test.jpg" alt="Organize Events" />
                             <h3>Organize Like a Pro</h3>
-                            <p>Create and manage events with capacity limits, analytics, and attendee tracking.</p>
+                            <p>Create and manage events with  analytics, and attendee tracking.</p>
                         </div>
                     </div>
                 </div>
