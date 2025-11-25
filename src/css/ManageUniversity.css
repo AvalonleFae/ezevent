@@ -56,8 +56,16 @@
   background-color: #f9f9f9;
 }
 
+
+
 .action-btn {
-  padding: 0.5rem 1rem;
+  display: inline-flex;    
+  align-items: center;         
+  justify-content: center;   
+  height: 36px;               
+  padding: 0 12px;             
+  line-height: 1;               
+  white-space: nowrap;         
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -65,6 +73,7 @@
   font-size: 0.9rem;
   margin-right: 0.5rem;
   transition: background-color 0.2s;
+  box-sizing: border-box;
 }
 
 .edit-btn,
@@ -73,13 +82,13 @@
   color: white;
 }
 
-.edit-btn:hover {
+/* .edit-btn:hover {
   background-color: #1d4ed8;
 }
 
 .delete-btn:hover {
   background-color: #dc2626;
-}
+} */
 
 .form-field {
   margin-bottom: 1.5rem;

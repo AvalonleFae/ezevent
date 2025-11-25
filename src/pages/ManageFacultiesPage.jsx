@@ -44,9 +44,21 @@ export default function ManageFacultiesPage() {
     }
   }, [universityId]);
 
+const isValidId = (value) => {
+  // Reject if it contains any lowercase a–z
+  return !/[a-z]/.test(value);
+  // Alternative stricter rule:
+  // return /^[A-Z0-9-]+$/.test(value);
+};
+
   const handleNewFaculty = async (e) => {
     e.preventDefault();
     if (!facultyId.trim() || !facultyName.trim()) {
+      return;
+    }
+
+      if(!isValidId(facultyId.trim())) {
+      window.alert('Faculty ID cannot contain lowercase letters.');
       return;
     }
 
@@ -67,6 +79,8 @@ export default function ManageFacultiesPage() {
 
       setFacultyId('');
       setFacultyName('');
+
+      window.alert('Faculty added successfully.');
     } catch (error) {
       console.error('Error adding faculty:', error);
     }
@@ -86,6 +100,8 @@ export default function ManageFacultiesPage() {
       await deleteDoc(facultyDoc);
 
       setFaculties((prev) => prev.filter((faculty) => faculty.id !== id));
+
+
     } catch (error) {
       console.error('Error deleting faculty:', error);
       alert('Failed to delete faculty. Please try again.');

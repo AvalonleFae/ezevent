@@ -31,9 +31,26 @@ export default function ManageUniversityPage() {
     fetchUniversities();
   }, []);
 
+
+const isValidId = (value) => {
+  // Reject if it contains any lowercase a–z
+  return !/[a-z]/.test(value);
+  // Alternative stricter rule:
+  // return /^[A-Z0-9-]+$/.test(value);
+};
+
+
   const handleNewUniversity = async (e) => {
     e.preventDefault();
-    if (!universityId.trim() || !universityName.trim()) {
+    if (!universityId.trim() || !universityName.trim() ) {
+      return;
+    }
+
+  // NEW: validation — reject lowercase
+
+
+  if(!isValidId(universityId.trim())) {
+      window.alert('University ID cannot contain lowercase letters.');
       return;
     }
 
@@ -51,9 +68,11 @@ export default function ManageUniversityPage() {
           universityName: universityName.trim()
         }
       ]);
-
+      window.alert('University added successfully.');
       setUniversityId('');
       setUniversityName('');
+
+
     } catch (error) {
       console.error('Error adding university:', error);
     }
