@@ -1,0 +1,187 @@
+.manage-faculties {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.faculties-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.back-btn {
+  padding: 0.5rem 1rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+  background-color: #5a6268;
+}
+
+.faculties-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #333;
+}
+
+.faculties-list-section {
+  margin-bottom: 3rem;
+}
+
+.faculties-list-section h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.faculties-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.faculties-table thead {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+}
+
+.faculties-table th,
+.faculties-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.faculties-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.faculties-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.add-faculty-section {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-faculty-section h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.form-field {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-control {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.action-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.primary-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.primary-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 86, 179, 0.2);
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 12px;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(200, 35, 51, 0.2);
+}
+
+@media (max-width: 768px) {
+  .manage-faculties {
+    padding: 1rem;
+  }
+
+  .faculties-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .faculties-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .faculties-table th,
+  .faculties-table td {
+    padding: 0.75rem;
+    font-size: 14px;
+  }
+
+  .add-faculty-section {
+    padding: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+}

@@ -1,5 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import {getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -18,4 +20,33 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+
+// Initialize Analytics only if in browser environment and config is present
+let analytics = null;
+if (typeof window !== 'undefined') {
+  try {
+    if (firebaseConfig && firebaseConfig.projectId) {
+      analytics = getAnalytics(app);
+    } else {
+      // Don't throw — analytics requires projectId and other config values
+      // Log a clear warning to help debugging missing env values
+      // (Common when running locally without an .env file)
+      // eslint-disable-next-line no-console
+      console.warn('Firebase analytics not initialized: missing firebaseConfig.projectId (set VITE_FIREBASE_PROJECT_ID in your .env)');
+    }
+  } catch (err) {
+    // Guard against the SDK throwing when config is incomplete
+    // eslint-disable-next-line no-console
+    console.warn('Firebase analytics initialization failed:', err && err.message ? err.message : err);
+    analytics = null;
+  }
+}
+
+//Initialize Auth
+export const auth=getAuth(app);
+
+//Initialize Firestore
+export const db=getFirestore(app);
+
+
+export { app, analytics };

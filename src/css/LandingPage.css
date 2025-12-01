@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+:root{
+  --ezevent-blue: #C1E4FF;
+  --ezevent-green: #E0FFD7;
+  --ezevent-white: #FFFFFF;
+}
+
+html, body, a, h1, h2, h3, p, div, span {
+  font-family: 'Inria Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Layout helpers */
+.lp-container{ max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+.lp-flex { display:flex; align-items:center; justify-content:space-between; }
+
+header.lp-header{ background: var(--ezevent-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.lp-header img{ height:48px; }
+.lp-nav a{ margin:0 8px; text-decoration:none; color:#1f2937; }
+
+.lp-hero{ background: linear-gradient(90deg,var(--ezevent-blue),#bfe6ff); padding:64px 0; text-align:center; }
+.lp-hero h1{ font-size:2.25rem; margin-bottom:12px; color:#374151}
+.lp-hero p{ font-size:1.125rem; color:#374151; max-width:680px; margin:0 auto 24px; }
+
+.lp-features{ padding:64px 0; background: var(--ezevent-white); }
+.lp-features .grid{ display:grid; grid-template-columns:1fr; gap:24px; }
+@media(min-width:768px){ .lp-features .grid{ grid-template-columns: repeat(3, 1fr); } }
+.lp-card{ background: var(--ezevent-green); padding:20px; border-radius:10px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); text-align:center;  }
+.lp-features { color: #374151;} 
+.lp-card img{ width:80px; height:80px; border-radius:50%; object-fit:cover; margin-bottom:12px; }
+
+.lp-about{ padding:64px 0; background: var(--ezevent-blue); text-align:center; color: #374151;}
+
+.lp-contact{ padding:64px 0; background: var(--ezevent-white); text-align:center; color: #374151;}
+.lp-contact a{ margin:0 10px; color:#2563eb; text-decoration:none; font-size:1.25rem; }
+
+footer.lp-footer{ background:#111827; color:white; padding:18px 0; text-align:center; }
+

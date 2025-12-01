@@ -1,0 +1,40 @@
+.events-container {
+  padding: 20px;
+}
+
+.events-container h1 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  text-align: center;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.event-card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.event-card h3 {
+  margin-bottom: 10px;
+  color: #4169E1;
+}
+
+.event-card p {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.event-card .auth-button {
+  margin-top: auto;
+}
