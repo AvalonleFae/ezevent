@@ -52,9 +52,15 @@ function SignUpPage() {
                 await setDoc(doc(db, "users", user.uid), userData);
 
                 // Navigate based on role
-                if (role === "participant") navigate("/participant/home");
-                else if (role === "organizer") navigate("/organizer");
-                else if (role === "admin") navigate("/admin");
+                if (role === "participant") {
+                    navigate("/participant/home");
+                } else if (role === "organizer") {
+                    // Send newly registered organizers to the organizer area
+                    // (root route inside OrganizerLayout shows their default page)
+                    navigate("/organizer/home");
+                } else if (role === "admin") {
+                    navigate("/admin");
+                }
             }
         } catch (error) {
             setError(error.message);
