@@ -15,7 +15,7 @@ export default function ProtectedRoute({ children, allowedRoles }) {
 
   if (allowedRoles && !allowedRoles.includes(role)) {
     const fallbackPath =
-      role === 'participant' ? '/participant/home' : role === 'admin' ? '/admin' : '/login'
+      role === 'participant' ? '/participant' : role === 'admin' ? '/admin' : '/login'
     return <Navigate to={fallbackPath} replace />
   }
 

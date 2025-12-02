@@ -14,19 +14,66 @@ function App() {
   const { user, role, loading } = useAuth()
 
   const getLandingPath = () => {
-    if (role === 'participant') return '/participant/home'
+    if (role === 'participant') return '/participant'
     if (role === 'organizer') return '/organizer'
-    if (role === 'admin') return '/admin'
-    return '/' // Return to landing page if role is not set
+    return '/admin'
   }
 
-  if (loading) {
-    return <div>Loading...</div>
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>
+  // }
 
   return (
     <Router>
-      <ParticipantsLayout />
+      <div className="app">
+        <div className="auth-wrapper">
+          <div className="auth-inner">
+            <Routes>
+              <Route
+                path="/"
+                element={user ? <Navigate to={getLandingPath()} /> : <LandingPage />}
+              />
+              
+              <Route
+                path="/login"
+                element={user ? <Navigate to={getLandingPath()} /> : <LoginPage />}
+              />
+
+              <Route 
+              path="/signup" 
+              element={<SignUpPage />} 
+              />
+
+              <Route
+                path="/admin/*"
+                element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <AdminLayout />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/participant"
+                element={
+                  <ProtectedRoute allowedRoles={['participant']}>
+                    <ParticipantPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/organizer"
+                element={
+                  <ProtectedRoute allowedRoles={['organizer']}>
+                    <OrganizerPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </div>
+        </div>
+      </div>
     </Router>
   )
 }
