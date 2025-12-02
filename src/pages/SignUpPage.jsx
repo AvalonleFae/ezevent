@@ -50,7 +50,7 @@ function SignUpPage() {
                         companyName: companyName,
                         position: position,
                         companyAddress: companyAddress,
-                        verified: false
+                        verified: "Pending"
                     };
                 }
 

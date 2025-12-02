@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, doc, getDocs, query, where, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
+import emailjs from '@emailjs/browser';
 import "../css/ValidateOrganizer.css";
 
 export default function ValidateOrganizer() {
@@ -8,6 +9,10 @@ export default function ValidateOrganizer() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedOrganizer, setSelectedOrganizer] = useState(null);
+
+  const SERVICE_ID = "service_ezevent"; 
+  const TEMPLATE_ID = "template_2ofdmnb";
+  const PUBLIC_KEY = "tbsCwOVG73gOBa1XX";
 
   useEffect(() => {
     const fetchOrganizers = async () => {
@@ -31,28 +36,56 @@ export default function ValidateOrganizer() {
       } finally {
         setLoading(false);
       }
+
+
+     
     };
     fetchOrganizers();
   }, []);
 
 
-  
 
-  const handleValidation = async (organizerId, currentStatus) => {
+
+  const handleValidation = async (organizerId, currentStatus, email, name) => {
     const newStatus = prompt(`Current: ${currentStatus}. Type 'accept' or 'decline':`).toLowerCase();
+    
+    if (newStatus !== 'accept' && newStatus !== 'decline') {
+      alert('Invalid status. Please type "accept" or "decline".');
+      return;
+    }
+    
+
+    let rejectionReason = '';
 
     if (newStatus === 'accept' || newStatus === 'decline') {
       const statusToSet = newStatus === 'accept' ? 'Accepted' : 'Declined';
+      
+     if (newStatus === 'decline') {
+        rejectionReason = prompt('Please provide a reason for declining the organizer:');
+        if (!rejectionReason) {
+          alert('Decline reason is required.');
+          return;
+        }
+     }
+      
       try {
         const organizerRef = doc(db, 'users', organizerId);
         await updateDoc(organizerRef, {
-          validationStatus: statusToSet,
-          validationTimestamp: serverTimestamp()
+          "organizer.verified": statusToSet,
+          "organizer.validationTimestamp": serverTimestamp()
         });
 
         setOrganizers(prev =>
           prev.map(org =>
-            org.id === organizerId ? { ...org, validationStatus: statusToSet } : org
+            org.id === organizerId 
+            ? { 
+                ...org, // 1. Keep the outer user data (id, email, name, etc.)
+                organizer: { 
+                    ...org.organizer, // 2. Keep the existing company info
+                    verified: statusToSet // 3. Update ONLY the verified status
+                } 
+              } 
+            : org
           )
         );
         alert(`Organizer ${statusToSet}.`);
@@ -60,98 +93,27 @@ export default function ValidateOrganizer() {
         console.error('Error:', error);
         alert('Failed to update status.');
       }
+
+       // 5. SEND EMAIL VIA EMAILJS (Client Side)
+      const emailParams = {
+        email: email,      
+        name: name,           
+        status: statusToSet,  
+        reason: rejectionReason || "All data correct."
+      };
+
+      await emailjs.send(SERVICE_ID, TEMPLATE_ID, emailParams, PUBLIC_KEY)
+        .then((response) => {
+          console.log('Email sent successfully!', response.status, response.text);
+        })
+        .catch((err) => {
+          console.error('Failed to send email. Error:', err);
+        });
+
     }
   };
 
   return (
-    // <div className="manage-organizers-container">
-
-    //   {/* 1. Page Header outside the card */}
-    //   <h2 className="page-title">Validate organizers</h2>
-
-    //   {/* 2. The Card Container */}
-    //   <div className="table-card">
-
-    //     {/* 3. Card Title */}
-    //     <div className="card-header">
-    //         <h3>Organizers List</h3>
-    //     </div>
-
-    //     {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-
-    //     {loading ? (
-    //       <p style={{textAlign: 'center'}}>Loading organizers...</p> 
-    //     ) : (
-    //       <table className="organizers-table">
-    //         <thead>
-    //           <tr>
-    //             <th>ID</th>
-    //             <th>Name</th>
-    //             <th>Company</th>
-    //             <th>Position</th>
-    //             <th >Status</th>
-    //             <th>Action</th>
-    //           </tr>
-    //         </thead>
-    //         <tbody>
-    //           {organizers.length === 0 ? (
-    //             <tr>
-    //               <td colSpan="6" style={{ textAlign: 'center', padding: '2rem' }}>
-    //                 No pending organizers found
-    //               </td>
-    //             </tr>
-    //           ) : (
-    //             organizers.map((organizer) => (
-    //               <tr key={organizer.id}>
-    //                 <td>{organizer.id.substring(0, 5)}...</td>
-    //                 <td>
-    //                     <strong>{organizer.name || 'N/A'}</strong><br/>
-    //                     <span style={{fontSize: '0.85em', color: '#888'}}>{organizer.email}</span>
-    //                 </td>
-    //                 <td>{organizer.companyName || 'N/A'}</td>
-    //                 <td>{organizer.position || 'N/A'}</td>
-    //                 <td>
-    //                   <span className={`status-tag ${organizer.validationStatus ? organizer.validationStatus.toLowerCase() : 'pending'}`}>
-    //                     {organizer.validationStatus || 'Pending'}
-    //                   </span>
-    //                 </td>
-
-    //                 <td>
-    //                   <div className="action-buttons">
-    //                     {/* Blue Button (View) */}
-    //                     <button
-    //                       className="btn btn-blue"
-    //                       onClick={() => handleViewDetails(organizer.id)}
-    //                     >
-    //                       View Details
-    //                     </button>
-
-    //                     {/* Red Button (Validate/Delete style) */}
-    //                     <button
-    //                       className="btn btn-red"
-    //                       onClick={() => handleValidation(organizer.id, organizer.validationStatus || 'Pending')}
-    //                     >
-    //                       Validate
-    //                     </button>
-    //                   </div>
-    //                 </td>
-    //               </tr>
-    //             ))
-    //           )}
-    //         </tbody>
-    //       </table>
-    //     )}
-    //   </div>
-
-    //   {/* Simple Details Section (kept as is) */}
-    //   {selectedOrganizer && (
-    //     <div style={{marginTop: '20px', padding: '20px', background: 'white', borderRadius: '8px', border: '1px solid #ddd'}}>
-    //       <h3>Details for {selectedOrganizer.name}</h3>
-    //       <pre>{JSON.stringify(selectedOrganizer, null, 2)}</pre>
-    //       <button className="btn btn-blue" onClick={() => setSelectedOrganizer(null)}>Close</button>
-    //     </div>
-    //   )}
-    // </div>
     <div className="manage-organizer">
       <h1>Manage Organizers</h1>
 
@@ -190,15 +152,18 @@ export default function ValidateOrganizer() {
                     <td>{organizer.organizer.companyAddress || 'N/A'}</td>
                     <td>{organizer.organizer.position || 'N/A'}</td>
                     <td>
-                      <span className={`status-tag ${organizer.validationStatus ? organizer.validationStatus.toLowerCase() : 'pending'}`}>
-                         {organizer.validationStatus || 'Pending'}
+                      <span className={`status-tag ${organizer.organizer.verified ? organizer.organizer.verified.toLowerCase() : 'pending'}`}>
+                         {organizer.organizer.verified || 'Pending'}
                        </span>
                        </td>
                     <td>
                       <button 
                         type="button"
                         className="action-btn edit-btn"
-                        onClick={() => handleValidation(organizer.id, organizer.validationStatus || 'Pending')}
+                        onClick={() => handleValidation(organizer.id, organizer.verified || 'Pending',
+                        organizer.email, 
+                        organizer.name, 
+                        )}
                       >
                         Validate
                       </button>
