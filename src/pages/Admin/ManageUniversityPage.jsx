@@ -35,8 +35,7 @@ export default function ManageUniversityPage() {
 const isValidId = (value) => {
   // Reject if it contains any lowercase a–z
   return !/[a-z]/.test(value);
-  // Alternative stricter rule:
-  // return /^[A-Z0-9-]+$/.test(value);
+
 };
 
 
