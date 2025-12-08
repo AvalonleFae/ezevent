@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import Topbar from '../components/Topbar';
-import testImage from '../assets/icons/test.jpg';
-import emailIcon from '../assets/icons/email.svg';
-import instagramIcon from '../assets/icons/instagram.svg';
-import facebookIcon from '../assets/icons/facebook.svg';
-import '../css/LandingPage.css'
+import Topbar from '../../components/Topbar';
+import testImage from '../../assets/icons/test.jpg';
+import emailIcon from '../../assets/icons/email.svg';
+import instagramIcon from '../../assets/icons/instagram.svg';
+import facebookIcon from '../../assets/icons/facebook.svg';
+import '../../css/LandingPage.css'
 
 export default function LandingPage() {
 	useEffect(() => {

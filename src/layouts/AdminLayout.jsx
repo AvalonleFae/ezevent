@@ -6,6 +6,8 @@ import {Routes, Route} from "react-router-dom";
 import "../css/AdminPage.css";
 import ValidateOrganizer from "../pages/Admin/ValidateOrganizer";
 import ViewParticipants from "../pages/Admin/ViewParticipantsPage";
+import ValidateEventPage from "../pages/Admin/ValidateEventPage";
+import ValidateEventDetails from "../pages/Admin/ValidateEventDetails";
 
 
 function AdminLayout() {
@@ -17,10 +19,12 @@ function AdminLayout() {
                 <Route path="" element={<AdminPage />} />
                 <Route path="management-report" element={<AdminPage />} />
                 <Route path="validate-organizers" element={<ValidateOrganizer />} />
-                <Route path="validate-events" element={<AdminPage />} />
+                <Route path="validate-events" element={<ValidateEventPage />} />
+                <Route path="validate-events/:id" element={<ValidateEventDetails />} />
                 <Route path="view-participants" element={<ViewParticipants />} />
                 <Route path="manage-universities" element={<ManageUniversityPage />} />
                 <Route path="manage-faculties/:universityId" element={<ManageFacultiesPage />} />      
+                
             </Routes>
 
             </div>
