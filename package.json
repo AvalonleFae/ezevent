@@ -13,10 +13,10 @@
     "@emailjs/browser": "^4.4.1",
     "firebase": "^12.6.0",
     "intl": "^1.2.5",
-    "react": "^19.2.0",
+    "react": "^19.2.1",
     "react-calendar": "^6.0.0",
     "react-datepicker": "^8.9.0",
-    "react-dom": "^19.2.0",
+    "react-dom": "^19.2.1",
     "react-router-dom": "^7.9.6"
   },
   "devDependencies": {
