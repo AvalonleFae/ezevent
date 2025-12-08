@@ -96,7 +96,7 @@ export default function ValidateEventDetails() {
             await updateDoc(eventRef, {
                 status: status, // 'Accepted' or 'Declined'
             });
-            setEventData(prev => ({ ...prev, verified: status }));
+            setEventData(prev => ({ ...prev, status: status }));
             console.log(`Event status updated to: ${status}`);
 
             // 2. SEND EMAIL VIA EMAILJS
@@ -149,8 +149,8 @@ export default function ValidateEventDetails() {
                 <p><strong>Date:</strong> {formatTimestamp(eventData.date)}</p>
                 <p><strong>Price:</strong> {eventData.Price}</p>
                 <p><strong>Current Status:</strong>
-                    <span style={{ fontWeight: 'bold', color: eventData.verified === 'Accepted' ? 'green' : eventData.verified === 'Declined' ? 'red' : 'orange' }}>
-                        {eventData.verified || 'pending'}
+                    <span style={{ fontWeight: 'bold', color: eventData.status === 'Accepted' ? 'green' : eventData.status === 'Declined' ? 'red' : 'orange' }}>
+                        {eventData.status || 'pending'}
                     </span>
                 </p>
             </div>
@@ -173,8 +173,8 @@ export default function ValidateEventDetails() {
                             {/* FIX: Use formatTimestamp for validationTimestamp rendering */}
                             <p><strong>Validation Timestamp:</strong> {formatTimestamp(userData.organizer.validationTimestamp)}</p>
                             <p><strong>Organizer Status:</strong>
-                                <span style={{ fontWeight: 'bold', color: userData.organizer.verified === 'Accepted' ? 'green' : 'orange' }}>
-                                    {userData.organizer.verified || 'pending'}
+                                <span style={{ fontWeight: 'bold', color: userData.organizer.status === 'Accepted' ? 'green' : 'orange' }}>
+                                    {userData.organizer.status || 'pending'}
                                 </span>
                             </p>
                         </div>
@@ -186,14 +186,14 @@ export default function ValidateEventDetails() {
             <div style={{ margin: '20px 0', padding: '15px', border: '1px solid #007bff', display: 'flex', gap: '10px' }}>
                 <button
                     onClick={() => handleVerify('Accepted')}
-                    disabled={isSubmitting || eventData.verified === 'Accepted'}
+                    disabled={isSubmitting || eventData.status === 'Accepted'}
                     style={{ padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', cursor: 'pointer' }}
                 >
                     {isSubmitting ? 'Verifying...' : 'Approve Event'}
                 </button>
                 <button
                     onClick={() => handleVerify('Declined')}
-                    disabled={isSubmitting || eventData.verified === 'Declined'}
+                    disabled={isSubmitting || eventData.status === 'Declined'}
                     style={{ padding: '10px 20px', backgroundColor: '#dc3545', color: 'white', border: 'none', cursor: 'pointer' }}
                 >
                     {isSubmitting ? 'Declining...' : 'Decline Event'}
