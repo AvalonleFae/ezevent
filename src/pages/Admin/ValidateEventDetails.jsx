@@ -94,7 +94,7 @@ export default function ValidateEventDetails() {
             // 1. Update Event Status
             const eventRef = doc(db, 'events', eventData.id);
             await updateDoc(eventRef, {
-                verified: status, // 'Accepted' or 'Declined'
+                status: status, // 'Accepted' or 'Declined'
             });
             setEventData(prev => ({ ...prev, verified: status }));
             console.log(`Event status updated to: ${status}`);
