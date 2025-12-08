@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { collection, doc, getDocs, query, where, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '../../firebase';
 import emailjs from '@emailjs/browser';
 import "../css/ViewParticipantsPage.css";
-import { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY } from "../emailjs-config";
+import { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY } from "../../emailjs-config";
 
 export default function ViewParticipants() {
   const [participant, setParticipant] = useState([]);

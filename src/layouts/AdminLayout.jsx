@@ -1,11 +1,11 @@
 import Sidebar from "../components/Sidebar";
-import AdminPage from "../pages/AdminPage";
-import ManageUniversityPage from "../pages/ManageUniversityPage";
-import ManageFacultiesPage from "../pages/ManageFacultiesPage";
+import AdminPage from "../pages/Admin/AdminPage";
+import ManageUniversityPage from "../pages/Admin/ManageUniversityPage";
+import ManageFacultiesPage from "../pages/Admin/ManageFacultiesPage";
 import {Routes, Route} from "react-router-dom";
 import "../css/AdminPage.css";
-import ValidateOrganizer from "../pages/ValidateOrganizer";
-import ViewParticipants from "../pages/ViewParticipantsPage";
+import ValidateOrganizer from "../pages/Admin/ValidateOrganizer";
+import ViewParticipants from "../pages/Admin/ViewParticipantsPage";
 
 
 function AdminLayout() {

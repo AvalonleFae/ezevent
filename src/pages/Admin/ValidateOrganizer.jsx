@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, doc, getDocs, query, where, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '../../firebase';
 import emailjs from '@emailjs/browser';
 import "../css/ValidateOrganizer.css";
 

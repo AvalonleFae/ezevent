@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, doc, deleteDoc, getDocs, serverTimestamp, setDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '../../firebase';
 import '../css/ManageUniversity.css';
 
 export default function ManageUniversityPage() {
