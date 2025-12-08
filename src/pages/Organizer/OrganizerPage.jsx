@@ -20,7 +20,7 @@ export default function OrganizerPage() {
           <EventsList
             collectionName='events'
             onClickAction={(event) => { console.log("Event clicked:", event.id) }}
-            ActionText="vIew Details"
+            ActionText="View Details"
          />
         </div>
 
