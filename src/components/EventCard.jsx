@@ -15,7 +15,7 @@ export default function EventCard({event, onClick, buttonText = "Register"}) {
     <div className="event-card">
 
       <div className="img-card">
-        /* <img src={event.imageUrl} alt={event.eventName} /> */
+      <img src={event.imageUrl} alt={event.eventName} />
       </div>
       
       <h3>{event.eventName}</h3>
