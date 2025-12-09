@@ -1,6 +1,6 @@
 import React from "react";
 import "../css/EventCard.css";
-import testImage from "../assets/icons/event.jpg";
+import testImage from "../assets/icons/sample.jpg";
 
 const formatDate = (dateObj) => {
   if (!dateObj) return "Date not specified";

@@ -137,36 +137,46 @@ export default function ValidateEventDetails() {
     return (
         <div className="validate-event-container">
             <h2>Validate Event Details</h2>
-            
+
             {/* Back Button */}
             <div className="back-btn-wrapper">
-                <button 
-                    type="button" 
+                <button
+                    type="button"
                     className="back-btn"
                     onClick={() => navigate('/admin/validate-events')}
                 >
                     Back
                 </button>
             </div>
-            
+
             <p className="details-line" style={{ fontWeight: 'bold' }}>Event ID: {eventData.id}</p>
 
 
             {/* Display Event Information */}
             <div className="event-details-card">
                 <h3>Event Information</h3>
+                {eventData.Image && ( 
+     
+                    <div className="event-image-wrapper">
+                        <p className="details-line"><strong>Event Image:</strong></p>
+                        <img
+                            src={eventData.Image}
+                            alt={`Image not Available`}
+                            className="event-image-preview"
+                        />
+                    </div>
+                )}
                 <p className="details-line"><strong>Event Name:</strong> {eventData.eventName}</p>
                 <p className="details-line"><strong>Description:</strong> {eventData.description}</p>
                 <p className="details-line"><strong>Date:</strong> {formatTimestamp(eventData.date)}</p>
                 <p className="details-line"><strong>Price:</strong> {eventData.Price}</p>
                 <p className="details-line">
                     <strong>Current Status:</strong>
-                    <span 
-                        className={`status-tag ${
-                            eventData.status === 'Accepted' ? 'status-accepted' : 
-                            eventData.status === 'Declined' ? 'status-declined' : 
-                            'status-pending'
-                        }`}
+                    <span
+                        className={`status-tag ${eventData.status === 'Accepted' ? 'status-accepted' :
+                                eventData.status === 'Declined' ? 'status-declined' :
+                                    'status-pending'
+                            }`}
                     >
                         {eventData.status || 'Pending'}
                     </span>
@@ -191,12 +201,11 @@ export default function ValidateEventDetails() {
                             <p className="details-line"><strong>Validation Timestamp:</strong> {formatTimestamp(userData.organizer.validationTimestamp)}</p>
                             <p className="details-line">
                                 <strong>Organizer Status:</strong>
-                                <span 
-                                    className={`status-tag ${
-                                        userData.organizer.status === 'Accepted' ? 'status-accepted' : 
-                                        userData.organizer.status === 'Declined' ? 'status-declined' : 
-                                        'status-pending'
-                                    }`}
+                                <span
+                                    className={`status-tag ${userData.organizer.status === 'Accepted' ? 'status-accepted' :
+                                            userData.organizer.status === 'Declined' ? 'status-declined' :
+                                                'status-pending'
+                                        }`}
                                 >
                                     {userData.organizer.status || 'Pending'}
                                 </span>
@@ -207,7 +216,7 @@ export default function ValidateEventDetails() {
             ) : (
                 <p>User data could not be loaded for the event organizer.</p>
             )}
-            
+
             {/* Action Buttons */}
             <div className="action-buttons-group">
                 <button
