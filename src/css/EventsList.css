@@ -1,5 +1,4 @@
 /* EventsLayout.css - Only layout concerns remain here */
-
 .events-container {
   display: flex;
   flex-direction: column; 

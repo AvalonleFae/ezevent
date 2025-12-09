@@ -1,6 +1,5 @@
 import React from 'react'
 import Sidebar from '../../components/Sidebar'
-import EventCard from '../../components/EventCard'
 import '../../css/OrganizerPage.css'
 import EventsList from '../../components/EventsList'
 
