@@ -15,12 +15,12 @@ admin.initializeApp();
 // 2. Initialize Stripe
 // ⚠️ REPLACE THIS with your Secret Key (starts with sk_test_...)
 // You can find this in Stripe Dashboard > Developers > API keys
-const stripe = require("stripe")(process.env.VITE_STRIPE_SECRET_KEY);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // 3. Webhook Secret
 // ⚠️ REPLACE THIS with your Webhook Secret (starts with whsec_...)
 // You get this AFTER you deploy the webhook and add it to Stripe Dashboard > Developers > Webhooks
-const endpointSecret = process.env.VITE_STRIPE_ENDPOINT_SECRET;
+const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
 
 // Set global options (optional, good for cost control)
 setGlobalOptions({ maxInstances: 10 });
@@ -31,7 +31,7 @@ setGlobalOptions({ maxInstances: 10 });
 exports.createStripeCheckout = onRequest({ cors: true }, async (req, res) => {
   try {
     // Receive data from your React Frontend
-    const { eventId, userId, userEmail } = req.body;
+    const { eventId, userId, userEmail, price } = req.body;
 
     if (!eventId || !userId) {
       return res.status(400).send("Missing eventId or userId");
@@ -52,7 +52,7 @@ exports.createStripeCheckout = onRequest({ cors: true }, async (req, res) => {
                 eventId: eventId
               }
             },
-            unit_amount: 2000, // 2000 cents = RM 20.00
+            unit_amount: price * 100, // Amount in cents
           },
           quantity: 1,
         },
@@ -69,6 +69,7 @@ exports.createStripeCheckout = onRequest({ cors: true }, async (req, res) => {
         userId: userId,
         userEmail: userEmail,
         eventId: eventId,
+        price: price,
         type: "event_registration"
       }
     });
@@ -113,7 +114,7 @@ exports.handleStripeWebhook = onRequest(async (req, res) => {
           userId: metadata.userId,
           userEmail: metadata.userEmail,
           eventId: metadata.eventId,
-          amountPaid: session.amount_total / 100,
+          amountPaid: metadata.price,
           currency: session.currency,
           paymentId: session.id,
           status: 'paid',

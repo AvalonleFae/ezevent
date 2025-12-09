@@ -25,7 +25,7 @@ export default function EventDetailsPage() {
     return new Date(dateObj).toLocaleDateString();
   };
 
- useEffect(() => {
+  useEffect(() => {
     const fetchEvent = async () => {
       setLoading(true);
       try {
@@ -35,22 +35,21 @@ export default function EventDetailsPage() {
         if (eventSnap.exists()) {
           const rawEvent = { id: eventSnap.id, ...eventSnap.data() };
           
-          // --- DEBUGGING LOGS ---
-          console.log("Fetched Event Data:", rawEvent);
-          console.log("Category Field:", rawEvent.category);
-          console.log("University Field:", rawEvent.university);
-          console.log("Faculty Field:", rawEvent.faculty);
-          // ----------------------
 
-          let categoryDisplay = rawEvent.category || "Category not specified";
-          let uniDisplay = rawEvent.university || "University not specified";
-          let facultyDisplay = rawEvent.faculty || "Faculty not specified";
+          const catId = rawEvent.categoryId;
+          const uniId = rawEvent.universityId;
+          const facId = rawEvent.facultyId;
+
+          // console.log("Resolved IDs:", { catId, uniId, facId }); // Debug log
+
+          let categoryDisplay = "Category not specified";
+          let uniDisplay = "University not specified";
+          let facultyDisplay = "Faculty not specified";
 
           // 1. Fetch Category Name
-          if (rawEvent.categoryId) {
+          if (catId) {
             try {
-                // Ensure this matches your DB collection name exactly
-                const catSnap = await getDoc(doc(db, "eventCategories", rawEvent.categoryId));
+                const catSnap = await getDoc(doc(db, "eventCategories", catId));
                 if (catSnap.exists()) {
                     categoryDisplay = catSnap.data().categoryName;
                 }
@@ -58,9 +57,9 @@ export default function EventDetailsPage() {
           }
 
           // 2. Fetch University Name
-          if (rawEvent.universityId) {
+          if (uniId) {
             try {
-                const uniSnap = await getDoc(doc(db, "universities", rawEvent.universityId));
+                const uniSnap = await getDoc(doc(db, "universities", uniId));
                 if (uniSnap.exists()) {
                     uniDisplay = uniSnap.data().universityName;
                 }
@@ -68,17 +67,14 @@ export default function EventDetailsPage() {
           }
 
           // 3. Fetch Faculty Name
-          if (rawEvent.universityId && rawEvent.facultyId) {
+          if (uniId && facId) {
             try {
-                // Note: The structure here assumes 'faculties' is a SUB-COLLECTION of the specific university
-                const facRef = doc(db, "universities", rawEvent.universityId, "faculties", rawEvent.facultyId);
+                const facRef = doc(db, "universities", uniId, "faculties", facId);
                 const facSnap = await getDoc(facRef);
                 
                 if (facSnap.exists()) {
                     facultyDisplay = facSnap.data().facultyName;
-                } else {
-                    console.log("Faculty document not found at path:", facRef.path);
-                }
+                } 
             } catch (err) { console.error("Error fetching faculty:", err); }
           }
 
@@ -120,13 +116,23 @@ export default function EventDetailsPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          price: event.price || 0,
           eventId: event.id,
           userId: user.uid,
           userEmail: user.email
         }),
       });
 
-      const data = await response.json();
+      // 1. Check if the response is NOT ok (e.g., 500 or 400)
+      if (!response.ok) {
+         // Read text first to see what went wrong, or handle safely
+         const errorText = await response.text();
+         console.error("Server Error:", errorText);
+         alert("Server error: " + response.statusText);
+         return; 
+      }
+
+      const data = await response.json(); 
 
       if (data.url) {
         window.location.href = data.url;
@@ -159,17 +165,17 @@ export default function EventDetailsPage() {
         <div className="event-content-grid">
 
           <div className="main-info">
-            {event.imageUrl && (
-              <img
-                src={event.imageUrl}
-                alt={event.eventName}
-                className="event-image"
+            {/* IMAGE SECTION ADDED HERE */}
+            {event.Image && (
+              <img 
+                src={event.Image} 
+                alt={event.eventName} 
+                className="event-image" 
               />
             )}
 
             <div className="info-row">
               <h3>Category</h3>
-              {/* Display the resolved name */}
               <p>{event.categoryName}</p>
             </div>
 
@@ -190,19 +196,16 @@ export default function EventDetailsPage() {
 
             <div className="info-row">
               <h3>Faculty</h3>
-              {/* Display the resolved name */}
               <p>{event.facultyName}</p>
             </div>
 
             <div className="info-row">
               <h3>University</h3>
-              {/* Display the resolved name */}
               <p>{event.universityName}</p>
             </div>
 
             <div className="info-row">
               <h3>Price</h3>
-              {/* Added currency manually since it wasn't in the event object, update if needed */}
               <p>{event.price ? `RM ${event.price}` : "Price not specified"}</p>
             </div>
 
