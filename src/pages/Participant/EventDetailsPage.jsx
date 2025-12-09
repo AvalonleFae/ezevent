@@ -3,7 +3,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../../firebase";
 import "../../css/EventDetailsPage.css";
-// Ensure you have this hook created or import 'auth' directly if you don't use a context
 import { useAuth } from "../../components/AuthContext"; 
 
 export default function EventDetailsPage() {
@@ -18,20 +17,78 @@ export default function EventDetailsPage() {
 
   const formatDate = (dateObj) => {
     if (!dateObj) return "Date not specified";
+    // Handle Firestore Timestamp
     if (dateObj.seconds) {
       return new Date(dateObj.seconds * 1000).toLocaleDateString();
     }
-    return dateObj;
+    // Handle standard Date string or object
+    return new Date(dateObj).toLocaleDateString();
   };
 
-  useEffect(() => {
+ useEffect(() => {
     const fetchEvent = async () => {
+      setLoading(true);
       try {
         const eventRef = doc(db, "events", id);
         const eventSnap = await getDoc(eventRef);
 
         if (eventSnap.exists()) {
-          setEvent({ id: eventSnap.id, ...eventSnap.data() });
+          const rawEvent = { id: eventSnap.id, ...eventSnap.data() };
+          
+          // --- DEBUGGING LOGS ---
+          console.log("Fetched Event Data:", rawEvent);
+          console.log("Category Field:", rawEvent.category);
+          console.log("University Field:", rawEvent.university);
+          console.log("Faculty Field:", rawEvent.faculty);
+          // ----------------------
+
+          let categoryDisplay = rawEvent.category || "Category not specified";
+          let uniDisplay = rawEvent.university || "University not specified";
+          let facultyDisplay = rawEvent.faculty || "Faculty not specified";
+
+          // 1. Fetch Category Name
+          if (rawEvent.categoryId) {
+            try {
+                // Ensure this matches your DB collection name exactly
+                const catSnap = await getDoc(doc(db, "eventCategories", rawEvent.categoryId));
+                if (catSnap.exists()) {
+                    categoryDisplay = catSnap.data().categoryName;
+                }
+            } catch (err) { console.error("Error fetching category:", err); }
+          }
+
+          // 2. Fetch University Name
+          if (rawEvent.universityId) {
+            try {
+                const uniSnap = await getDoc(doc(db, "universities", rawEvent.universityId));
+                if (uniSnap.exists()) {
+                    uniDisplay = uniSnap.data().universityName;
+                }
+            } catch (err) { console.error("Error fetching university:", err); }
+          }
+
+          // 3. Fetch Faculty Name
+          if (rawEvent.universityId && rawEvent.facultyId) {
+            try {
+                // Note: The structure here assumes 'faculties' is a SUB-COLLECTION of the specific university
+                const facRef = doc(db, "universities", rawEvent.universityId, "faculties", rawEvent.facultyId);
+                const facSnap = await getDoc(facRef);
+                
+                if (facSnap.exists()) {
+                    facultyDisplay = facSnap.data().facultyName;
+                } else {
+                    console.log("Faculty document not found at path:", facRef.path);
+                }
+            } catch (err) { console.error("Error fetching faculty:", err); }
+          }
+
+          setEvent({ 
+            ...rawEvent, 
+            categoryName: categoryDisplay,
+            universityName: uniDisplay,
+            facultyName: facultyDisplay
+          });
+
         } else {
           setEvent(null);
         }
@@ -45,18 +102,16 @@ export default function EventDetailsPage() {
     fetchEvent();
   }, [id]);
 
-  // --- FIXED FUNCTION ---
-  // removed the 'e' or 'event' argument so it doesn't shadow the state variable
   const handleRegistration = async () => {
-    
     if (!user) {
         alert("You must be logged in to register.");
         return;
     }
 
     try {
-      console.log("Initiating payment for Event ID:", event.id); // Now correctly logs the ID
+      console.log("Initiating payment for Event ID:", event.id);
 
+      // Verify this URL matches your deployed Cloud Function
       const functionUrl = "https://us-central1-ezevent-b494c.cloudfunctions.net/createStripeCheckout";
 
       const response = await fetch(functionUrl, {
@@ -65,7 +120,7 @@ export default function EventDetailsPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          eventId: event.id, // Uses the 'event' from useState
+          eventId: event.id,
           userId: user.uid,
           userEmail: user.email
         }),
@@ -114,7 +169,8 @@ export default function EventDetailsPage() {
 
             <div className="info-row">
               <h3>Category</h3>
-              <p>{event.category || "Category not specified"}</p>
+              {/* Display the resolved name */}
+              <p>{event.categoryName}</p>
             </div>
 
             <div className="info-row">
@@ -134,17 +190,20 @@ export default function EventDetailsPage() {
 
             <div className="info-row">
               <h3>Faculty</h3>
-              <p>{event.faculty || "Faculty not specified"}</p>
+              {/* Display the resolved name */}
+              <p>{event.facultyName}</p>
             </div>
 
             <div className="info-row">
               <h3>University</h3>
-              <p>{event.university || "University not specified"}</p>
+              {/* Display the resolved name */}
+              <p>{event.universityName}</p>
             </div>
 
             <div className="info-row">
               <h3>Price</h3>
-              <p>{event.price || "Price not specified"}</p>
+              {/* Added currency manually since it wasn't in the event object, update if needed */}
+              <p>{event.price ? `RM ${event.price}` : "Price not specified"}</p>
             </div>
 
             <div className="info-row">
