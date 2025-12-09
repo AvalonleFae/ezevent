@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import Topbar from '../../components/Topbar';
-import testImage from '../../assets/icons/test.jpg';
 import emailIcon from '../../assets/icons/email.svg';
 import instagramIcon from '../../assets/icons/instagram.svg';
 import facebookIcon from '../../assets/icons/facebook.svg';
@@ -34,17 +33,14 @@ export default function LandingPage() {
                     <h2>Why Choose EZEvent?</h2>
                     <div className="grid">
                         <div className="lp-card">
-                            <img src={testImage} alt="Discover Events" />
                             <h3>Discover Events</h3>
                             <p>Browse events by category, date, or university. Never miss out on fun or important gatherings.</p>
                         </div>
                         <div className="lp-card">
-                            <img src={testImage} alt="Easy Registration" />
                             <h3>Easy Registration</h3>
                             <p>One-tap sign-up with QR code check-ins.</p>
                         </div>
                         <div className="lp-card">
-                            <img src={testImage} alt="Organize Events" />
                             <h3>Organize Like a Pro</h3>
                             <p>Create and manage events with analytics, and attendee tracking.</p>
                         </div>
