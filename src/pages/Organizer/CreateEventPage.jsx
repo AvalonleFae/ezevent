@@ -1,7 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../css/CreateEvent.css';
 import { db, storage, auth } from '../../firebase';
-import { collection, addDoc, serverTimestamp, setDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
+import { 
+    collection, 
+    addDoc, 
+    serverTimestamp, 
+    setDoc, 
+    updateDoc, 
+    doc, 
+    getDoc, 
+    getDocs 
+} from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import QRCodeGenerator from '../../components/QRCodeGenerator';
 
@@ -12,6 +21,12 @@ export default function CreateEvent() {
     const [qrData, setQrData] = useState(null);
     const [pendingQrId, setPendingQrId] = useState(null);
     const [pendingEventId, setPendingEventId] = useState(null);
+    
+    // Data State
+    const [universities, setUniversities] = useState([]);
+    const [faculties, setFaculties] = useState([]);
+    const [categories, setCategories] = useState([]);
+
     const [form, setForm] = useState({
         eventName: '',
         date: '',
@@ -20,8 +35,67 @@ export default function CreateEvent() {
         address: '',
         category: '',
         description: '',
-        price: ''
+        afterRegistrationMessage: '', 
+        price: '',
+        numOfParticipants: ''
     });
+
+    // --- 1. Fetch Universities & Categories on Component Mount ---
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Fetch Universities
+                const uniSnapshot = await getDocs(collection(db, 'universities'));
+                const uniList = uniSnapshot.docs.map(doc => ({
+                    id: doc.id, 
+                    ...doc.data() 
+                }));
+                
+                // UPDATE 1: Add "Other" option manually
+                uniList.push({ id: 'Other', universityName: 'Other' });
+
+                setUniversities(uniList);
+
+                // Fetch Categories
+                const catSnapshot = await getDocs(collection(db, 'eventCategories'));
+                const catList = catSnapshot.docs.map(doc => ({
+                    id: doc.id, 
+                    ...doc.data() 
+                }));
+                setCategories(catList);
+
+            } catch (error) {
+                console.error("Error fetching initial data:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    // --- 2. Fetch Faculties when 'form.university' changes ---
+    useEffect(() => {
+        const fetchFaculties = async () => {
+            setFaculties([]);
+            if (!form.university) return;
+
+            // UPDATE 2: Do not fetch faculties if "Other" is selected
+            if (form.university === 'Other') return;
+
+            try {
+                const facultiesRef = collection(db, 'universities', form.university, 'faculties');
+                const querySnapshot = await getDocs(facultiesRef);
+                
+                const facultyList = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setFaculties(facultyList);
+            } catch (error) {
+                console.error("Error fetching faculties:", error);
+            }
+        };
+
+        fetchFaculties();
+    }, [form.university]);
 
     function handleImageChange(e) {
         const file = e.target.files && e.target.files[0];
@@ -30,87 +104,90 @@ export default function CreateEvent() {
         setImagePreview(url);
         setImageFile(file);
     }
-    // Generate correct local datetime without blocking the calendar
-    const now = new Date();
-    const offset = now.getTimezoneOffset();
+    
+    // UPDATE 3: Helper to get current time string for "min" attribute
+    const getMinDateTime = () => {
+        const now = new Date();
+        // Adjust for timezone to match the input format
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        return now.toISOString().slice(0, 16);
+    };
 
-    // Local time in correct YYYY-MM-DDTHH:MM format
-    const localNow = new Date(now.getTime() - offset * 60000)
-    .toISOString()
-    .slice(0, 16);
-
-    // Min value (1 minute earlier so the calendar opens normally)
-    const minDate = new Date(now.getTime() - offset * 60000 - 60000)
-    .toISOString()
-    .slice(0, 16);
-
+    const minDate = getMinDateTime();
 
     async function handleSubmit(e) {
         e.preventDefault();
         setSubmitting(true);
-        // Require authentication to create/upload events
         const user = auth.currentUser;
         if (!user) {
             alert('You must be signed in to create an event.');
             setSubmitting(false);
             return;
         }
+
+        // UPDATE 4: Validate that date is not in the past
+        const selectedDate = new Date(form.date);
+        const currentDate = new Date();
+        if (selectedDate < currentDate) {
+            alert('Please select a future date and time.');
+            setSubmitting(false);
+            return;
+        }
+
         try {
             const eventData = {
                 eventName: form.eventName,
                 date: form.date ? new Date(form.date) : null,
-                universityid: form.university,
-                facultyid: form.faculty,
+                universityId: form.university,
+                facultyId: form.faculty, // This will be empty string if "Other" was selected
                 address: form.address,
-                categoryid: form.category,
+                categoryId: form.category,
                 status: 'pending',
                 description: form.description,
+                afterRegistrationMessage: form.afterRegistrationMessage, 
                 createdAt: serverTimestamp(),
                 price: form.price,
                 QR: '',
-                noparticipants: 0,
+                numOfParticipants: form.numOfParticipants ? Number(form.numOfParticipants) : 0, 
             };
 
-            // If an image file was selected, upload it to Firebase Storage
             if (imageFile) {
                 const filename = `${Date.now()}_${imageFile.name}`;
-                // Store images under a user-scoped folder to match typical storage rules
                 const imgRef = storageRef(storage, `events/${user.uid}/${filename}`);
                 await uploadBytes(imgRef, imageFile);
                 const downloadURL = await getDownloadURL(imgRef);
                 eventData.Image = downloadURL;
             }
 
-            // 1. FIX: Standardize event owner ID to 'userid' (all lowercase)
-            eventData.userid = user.uid;
+            eventData.userId = user.uid;
 
-            // Write to Firestore 'events' collection
             const docRef = await addDoc(collection(db, 'events'), eventData);
-            // eslint-disable-next-line no-console
-            console.log('Event created with ID:', docRef.id);
-
-            // Generate Unique QR ID
+            
             const qrDocRef = doc(collection(db, 'QR'));
             const qrId = qrDocRef.id;
             
-            // Update the event to reference this QR ID
-            try {
-                await updateDoc(docRef, { QR: qrId });
-            } catch (e) {
-                console.error('Failed to set event QR ref:', e);
-            }
+            await updateDoc(docRef, { QR: qrId });
 
             setPendingQrId(qrId);
             setPendingEventId(docRef.id);
 
             alert('Event created successfully');
-
-            // Optionally reset form
-            setForm({ eventName: '', date: '', university: '', faculty: '', address: '', category: '', description: '',price: '' });
+            
+            setForm({ 
+                eventName: '', 
+                date: '', 
+                university: '', 
+                faculty: '', 
+                address: '', 
+                category: '', 
+                description: '', 
+                afterRegistrationMessage: '', 
+                price: '',
+                numOfParticipants: ''
+            });
             setImagePreview(null);
             setImageFile(null);
         } catch (err) {
-            // eslint-disable-next-line no-console
             console.error('Failed to create event:', err);
             alert('Failed to create event: ' + (err.message || err));
         } finally {
@@ -118,7 +195,6 @@ export default function CreateEvent() {
         }
     }
 
-    // helper to convert dataURL to Blob
     function dataURLtoBlob(dataurl) {
         const arr = dataurl.split(',');
         const mime = arr[0].match(/:(.*?);/)[1];
@@ -131,40 +207,30 @@ export default function CreateEvent() {
         return new Blob([u8arr], { type: mime });
     }
 
-    //Upload QR Image to Firebase Storage
     async function handleQrDataUrl(dataUrl) {
         try {
             const user = auth.currentUser;
             if (!user || !pendingQrId || !pendingEventId) return;
 
-            // Verify the current user is the owner of the pending event
             const eventSnap = await getDoc(doc(db, 'events', pendingEventId));
             if (!eventSnap.exists()) {
                 alert('Related event not found.');
-                setPendingQrId(null);
-                setPendingEventId(null);
-                return;
+                setPendingQrId(null); setPendingEventId(null); return;
             }
             const eventData = eventSnap.data();
-            // 2. FIX: Check consistency with the lowercase field
-            if (eventData.userid !== user.uid) { 
+            if (eventData.userId !== user.uid) { 
                 alert('You are not the owner of this event. QR upload cancelled.');
-                setPendingQrId(null);
-                setPendingEventId(null);
-                return;
+                setPendingQrId(null); setPendingEventId(null); return;
             }
 
             const blob = dataURLtoBlob(dataUrl);
-            // Upload QR image to Storage with QR ID as filename under owner's folder
             const qrRef = storageRef(storage, `qrcodes/${user.uid}/${pendingQrId}.png`);
             await uploadBytes(qrRef, blob);
             const downloadURL = await getDownloadURL(qrRef);
             
-            // 3. FIX: Standardize QR document fields to 'userid' and 'eventid' (all lowercase)
             await setDoc(doc(db, 'QR', pendingQrId), {
-                image: downloadURL,
-                eventid: pendingEventId,
-                userid: user.uid,
+                eventId: pendingEventId,
+                userId: user.uid,
                 imageQR: downloadURL,
                 QRId: pendingQrId,
                 createdAt: serverTimestamp(),
@@ -199,36 +265,51 @@ export default function CreateEvent() {
             <label className="ce-field">
                 <span className="ce-label">Date</span>
                 <input
-                className="ce-input"
-                type="datetime-local"
-                value={form.date || localNow}
-                onChange={(e) => setForm({ ...form, date: e.target.value })}
-                min={minDate}
-                required
+                    className="ce-input"
+                    type="datetime-local"
+                    value={form.date}
+                    onChange={(e) => setForm({ ...form, date: e.target.value })}
+                    min={minDate} // Uses the calculated minimum date
+                    required
                 />
                 <small className="ce-hint">DD/MM/YYYY</small>
             </label>
 
                 <div className="ce-field ce-select-grid">
                     <div>
-                        <span className="ce-label">Location</span>
-                        <select className="ce-select" value={form.university} onChange={(e) => setForm({ ...form, university: e.target.value })} required>
-                            <option value="" disabled className="placeholder-option" hidden >Select University</option>
-                            <option>UKM</option>
-                            <option>UPM</option>
-                            <option>UTM</option>
-                            <option>UM</option>
+                        <span className="ce-label">Location (University)</span>
+                        <select 
+                            className="ce-select" 
+                            value={form.university} 
+                            onChange={(e) => {
+                                setForm({ ...form, university: e.target.value, faculty: '' });
+                            }} 
                             required
+                        >
+                            <option value="" disabled className="placeholder-option" hidden>Select University</option>
+                            {universities.map((uni) => (
+                                <option key={uni.id} value={uni.id}>
+                                    {uni.universityName || uni.id}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     <div>
                         <span className="ce-label">Faculty</span>
-                        <select className="ce-select" value={form.faculty} onChange={(e) => setForm({ ...form, faculty: e.target.value })} required>
-                            <option value="" disabled className="placeholder-option" hidden >Select Faculty</option>
-                            <option>FTSM</option>
-                            <option>FST</option>
-                            <option>FPI</option>
-                            required
+                        <select 
+                            className="ce-select" 
+                            value={form.faculty} 
+                            onChange={(e) => setForm({ ...form, faculty: e.target.value })} 
+                            // Disable if no university selected, OR if University is "Other"
+                            disabled={!form.university || form.university === 'Other'}
+                            required={form.university !== 'Other'}
+                        >
+                            <option value="" disabled className="placeholder-option" hidden>Select Faculty</option>
+                            {faculties.map((fac) => (
+                                <option key={fac.id} value={fac.id}>
+                                    {fac.facultyName || fac.id}
+                                </option>
+                            ))}
                         </select>
                     </div>
                 </div>
@@ -240,18 +321,53 @@ export default function CreateEvent() {
 
                 <label className="ce-field">
                     <span className="ce-label">Category</span>
-                    <select className="ce-select" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} required>
+                    <select 
+                        className="ce-select" 
+                        value={form.category} 
+                        onChange={(e) => setForm({ ...form, category: e.target.value })} 
+                        required
+                    >
                         <option value="" disabled className="placeholder-option" hidden >Select Category</option>
-                        <option>Sport</option>
-                        <option>Academic</option>
-                        <option>Cultural</option>
-                        <option>Others</option>
+                        {categories.map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                                {cat.categoryName || cat.id}
+                            </option>
+                        ))}
                     </select>
                 </label>
 
                 <label className="ce-field">
-                    <span className="ce-label">Description</span>
-                    <textarea className="ce-textarea" placeholder="Value" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+                    <span className="ce-label">Description (Optional)</span>
+                    <textarea 
+                        className="ce-textarea" 
+                        placeholder="Value" 
+                        value={form.description} 
+                        onChange={(e) => setForm({ ...form, description: e.target.value })} 
+                        required 
+                    />
+                </label>
+
+                <label className="ce-field">
+                    <span className="ce-label">After Registration Message (Optional)</span>
+                    <textarea 
+                        className="ce-textarea" 
+                        placeholder="Info to show after users register (e.g. WhatsApp Link)" 
+                        value={form.afterRegistrationMessage} 
+                        onChange={(e) => setForm({ ...form, afterRegistrationMessage: e.target.value })} 
+                        required 
+                    />
+                </label>
+
+                <label className="ce-field">
+                    <span className="ce-label">Max Participants</span>
+                    <input 
+                        className="ce-input" 
+                        type="number" 
+                        placeholder="0" 
+                        value={form.numOfParticipants} 
+                        onChange={(e) => setForm({ ...form, numOfParticipants: e.target.value })} 
+                        required 
+                    />
                 </label>
 
                 <label className="ce-field">
@@ -281,12 +397,6 @@ export default function CreateEvent() {
                     <QRCodeGenerator value={pendingQrId} size={300} onDataUrl={handleQrDataUrl} />
                 </div>
             )}
-            {/* {qrData && (
-                <div className="ce-qr">
-                    <h3>Event QR</h3>
-                    <img src={qrData} alt="Event QR" style={{ width: 300, height: 300 }} />
-                </div>
-            )} */}
         </div>
     );
 }
