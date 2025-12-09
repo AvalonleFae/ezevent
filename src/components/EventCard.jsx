@@ -31,7 +31,7 @@ export default function EventCard({event, onClick, buttonText = "Register"}) {
       <p>{event.description}</p>
 
       <p> 
-        <strong>Price:</strong> {event.price}
+        <strong>Price:</strong> {event.price || "Free"}
       </p>
 
       <button
