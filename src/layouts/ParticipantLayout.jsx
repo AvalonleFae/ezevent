@@ -1,6 +1,7 @@
 import Sidebar from "../components/Sidebar";
 import { Routes, Route } from "react-router-dom";
 import ViewEventsPage from "../pages/ViewEventPage";
+import EventDetailsPage from "../pages/User/EventDetailsPage";
 import "../css/ParticipantPage.css";
 
 function ParticipantsLayout() {
@@ -10,17 +11,9 @@ function ParticipantsLayout() {
 
       <div className="participant-content">
         <Routes>
-          <Route path="" element={<ViewEventsPage />} />
+          <Route index element={<ViewEventsPage />} />
           <Route path="events" element={<ViewEventsPage />} />
-          <Route
-            path="registered"
-            element={
-              <div>
-                <h1>My Registrations</h1>
-                <p>Coming soon...</p>
-              </div>
-            }
-          />
+          <Route path="/events/:id" element={<EventDetailsPage />} />
         </Routes>
       </div>
     </div>

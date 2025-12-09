@@ -30,6 +30,10 @@ export default function EventCard({event, onClick, buttonText = "Register"}) {
       
       <p>{event.description}</p>
 
+      <p> 
+        <strong>Price:</strong> {event.price}
+      </p>
+
       <button
         className="auth-button"
         onClick={() => onClick(event)}

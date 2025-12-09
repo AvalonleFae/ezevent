@@ -1,11 +1,13 @@
 import React from "react";
 import EventsList from "../components/EventsList";
+import { useNavigate } from "react-router-dom";
 
+export default function ViewEventPage() { 
 
-export default function ViewEventsPage() { 
-
+  const navigate = useNavigate();
   const handleClick = (event) => {
     console.log("Event clicked:", event.id);
+    navigate(`/participant/events/${event.id}`);
   }
   return (
     <div>
@@ -13,7 +15,7 @@ export default function ViewEventsPage() {
       <EventsList
         collectionName="events"
         onClickAction={handleClick}
-        ActionText="Register"
+        ActionText="View Event"
       />
     </div>
   )
