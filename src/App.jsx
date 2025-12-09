@@ -10,8 +10,8 @@ import ProtectedRoute from './components/ProtectedRoute'
 import AdminLayout from './layouts/AdminLayout'
 import ParticipantsLayout from './layouts/ParticipantLayout'
 import OrganizerLayout from './layouts/OrganizerLayout'
-import CreateEvent from './pages/Organizer/CreateEventPage'
 import CreateEventPage from './pages/Organizer/CreateEventPage'
+import EventDashboard from './pages/Organizer/EventDashboard'
 
 function App() {
   const { user, role, loading } = useAuth()

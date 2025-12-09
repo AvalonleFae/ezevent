@@ -1,0 +1,221 @@
+/* --- 1. Global Setup and Color Palette --- */
+:root {
+  --bg-color: #f7e9d7; /* Light beige/yellow background */
+  --pink-card: #f890b0; /* Main attendance card pink */
+  --grey-card: #e6e6fa; /* Stats card light purple/grey */
+  --stats-text: #6a5acd; /* Purple-ish color for stats numbers */
+  --brown-button: #8b4513; /* Darker brown for buttons */
+  --button-hover: #a0522d;
+  --text-dark: #333333;
+  --text-light: #ffffff;
+  --placeholder-border: #cccccc;
+}
+
+/* Global Container */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: var(--bg-color);
+  font-family: Arial, sans-serif;
+}
+
+/* Back Arrow and Header */
+.back-arrow {
+  align-self: flex-start;
+  font-size: 30px;
+  color: var(--text-dark);
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.event-header {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--text-dark);
+  margin-bottom: 30px;
+}
+
+/* --- 2. Dashboard Cards (Copied from previous styling) --- */
+
+/* Main Attendance Card (Pink) */
+.attendance-card-pink {
+  width: 90%;
+  max-width: 400px;
+  background-color: var(--pink-card);
+  border-radius: 25px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  box-shadow: 
+    0 8px 15px rgba(0, 0, 0, 0.1),
+    inset 0 -5px 10px rgba(0, 0, 0, 0.1),
+    inset 0 5px 10px rgba(255, 255, 255, 0.3);
+}
+
+.attendance-rate {
+  font-size: 60px;
+  font-weight: 900;
+  color: var(--text-light);
+  line-height: 1;
+}
+
+.attendance-label {
+  font-size: 16px;
+  color: var(--text-light);
+  margin-top: 5px;
+}
+
+/* Stats Cards Row (Grey) */
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  max-width: 400px;
+  margin-bottom: 50px;
+  gap: 15px;
+}
+
+.stats-card {
+  flex: 1;
+  background-color: var(--grey-card);
+  border-radius: 25px;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 
+    0 5px 10px rgba(0, 0, 0, 0.1),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.05),
+    inset 0 3px 5px rgba(255, 255, 255, 0.3);
+  text-align: center;
+}
+
+.stats-number {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--stats-text);
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+.stats-label {
+  font-size: 14px;
+  color: var(--stats-text);
+  font-weight: 500;
+}
+
+/* --- 3. Action Buttons --- */
+.action-buttons {
+  width: 90%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.action-button-brown {
+  background-color: var(--brown-button);
+  color: var(--text-light);
+  border: none;
+  border-radius: 15px;
+  padding: 15px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.action-button-brown:hover {
+  background-color: var(--button-hover);
+}
+
+.action-button-brown:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* --- 4. QR Code View Styles --- */
+
+.viewqr-container {
+    width: 90%;
+    max-width: 400px;
+    margin-top: 30px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.viewqr-container hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+
+.viewqr-container h2 {
+    font-size: 20px;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Messaging Styles */
+.loading-message, .no-qrs {
+    text-align: center;
+    color: #888;
+    padding: 15px;
+    font-style: italic;
+}
+
+/* QR Grid Layout */
+.qr-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.qr-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.qr-item img {
+    width: 120px;
+    height: 120px;
+    border-radius: 4px;
+    object-fit: contain;
+    margin-bottom: 8px;
+}
+
+.qr-placeholder {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #f9f9f9;
+    border: 2px dashed var(--placeholder-border);
+    border-radius: 4px;
+    color: #aaa;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.qr-meta {
+    font-size: 12px;
+    color: #666;
+}

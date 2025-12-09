@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../../css/CreateEvent.css';
 import { db, storage, auth } from '../../firebase';
-import { collection, addDoc, serverTimestamp, setDoc, updateDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, setDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import QRCodeGenerator from '../../components/QRCodeGenerator';
 
@@ -11,6 +11,7 @@ export default function CreateEvent() {
     const [submitting, setSubmitting] = useState(false);
     const [qrData, setQrData] = useState(null);
     const [pendingQrId, setPendingQrId] = useState(null);
+    const [pendingEventId, setPendingEventId] = useState(null);
     const [form, setForm] = useState({
         eventName: '',
         date: '',
@@ -80,7 +81,7 @@ export default function CreateEvent() {
                 eventData.Image = downloadURL;
             }
 
-            // include owner id so you can enforce rules and query by owner
+            // 1. FIX: Standardize event owner ID to 'userid' (all lowercase)
             eventData.userid = user.uid;
 
             // Write to Firestore 'events' collection
@@ -100,6 +101,7 @@ export default function CreateEvent() {
             }
 
             setPendingQrId(qrId);
+            setPendingEventId(docRef.id);
 
             alert('Event created successfully');
 
@@ -133,20 +135,44 @@ export default function CreateEvent() {
     async function handleQrDataUrl(dataUrl) {
         try {
             const user = auth.currentUser;
-            if (!user || !pendingQrId) return;
+            if (!user || !pendingQrId || !pendingEventId) return;
+
+            // Verify the current user is the owner of the pending event
+            const eventSnap = await getDoc(doc(db, 'events', pendingEventId));
+            if (!eventSnap.exists()) {
+                alert('Related event not found.');
+                setPendingQrId(null);
+                setPendingEventId(null);
+                return;
+            }
+            const eventData = eventSnap.data();
+            // 2. FIX: Check consistency with the lowercase field
+            if (eventData.userid !== user.uid) { 
+                alert('You are not the owner of this event. QR upload cancelled.');
+                setPendingQrId(null);
+                setPendingEventId(null);
+                return;
+            }
+
             const blob = dataURLtoBlob(dataUrl);
-            // Upload QR image to Storage with QR ID as filename
+            // Upload QR image to Storage with QR ID as filename under owner's folder
             const qrRef = storageRef(storage, `qrcodes/${user.uid}/${pendingQrId}.png`);
             await uploadBytes(qrRef, blob);
             const downloadURL = await getDownloadURL(qrRef);
-            // Save QR document with its own ID to firestore
+            
+            // 3. FIX: Standardize QR document fields to 'userid' and 'eventid' (all lowercase)
             await setDoc(doc(db, 'QR', pendingQrId), {
+                image: downloadURL,
+                eventid: pendingEventId,
+                userid: user.uid,
                 imageQR: downloadURL,
                 QRId: pendingQrId,
                 createdAt: serverTimestamp(),
             });
+            
             setQrData(downloadURL);
             setPendingQrId(null);
+            setPendingEventId(null);
         } catch (e) {
             console.error('Failed uploading QR to storage:', e);
         }
@@ -255,12 +281,12 @@ export default function CreateEvent() {
                     <QRCodeGenerator value={pendingQrId} size={300} onDataUrl={handleQrDataUrl} />
                 </div>
             )}
-            {qrData && (
+            {/* {qrData && (
                 <div className="ce-qr">
                     <h3>Event QR</h3>
                     <img src={qrData} alt="Event QR" style={{ width: 300, height: 300 }} />
                 </div>
-            )}
+            )} */}
         </div>
     );
 }
