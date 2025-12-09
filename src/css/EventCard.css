@@ -12,7 +12,6 @@
   height: auto; /* Ensures all cards in a row are the same height */
   width: 100%;
   box-sizing: border-box; /* Includes padding in width calculation */
-  margin-top: 20px;
 }
 
 /* Hover effect */
@@ -45,8 +44,12 @@
 
 /* The Action Button */
 .event-card button.auth-button {
-  margin-top: 24px; /* Pushes button to the bottom */
-  background-color: #2563eb; /* Primary Blue */
+  
+  /* --- ADD/UPDATE THIS LINE --- */
+  margin-top: auto; /* Pushes the button down to the bottom edge of the card */
+  /* -------------------------- */
+  
+  background-color: #2563eb; 
   color: white;
   border: none;
   padding: 12px 20px;
@@ -59,18 +62,19 @@
 }
 
 .img-card {
-  height: 220px;
-  aspect-ratio: 16 / 9;
-  border-radius: 8px;
+  width: 100%;       /* Allow it to shrink/grow with the card */
+  height: 220px;     /* Keep the fixed height */
+  /* Remove aspect-ratio here; let the grid control the width */
   margin: 0 0 16px 0;
   overflow: hidden;
-}
-.img-card img {
-  width: 100%;
-  height: 100%; 
-  object-fit: contain;
+  border-radius: 8px;
 }
 
+.img-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Changed from 'contain' to 'cover' so it fills the box nicely */
+}
 .event-card button.auth-button:hover {
   background-color: #1d4ed8; /* Darker blue */
 }

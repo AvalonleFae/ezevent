@@ -2,6 +2,7 @@
   --bg: #FEF6DF;
   --card: #fff3e0;
   --muted: #7d5a3a;
+  scrollbar-width:false;
 }
 
 .ce-root{ min-height:100vh; background:var(--bg); padding:24px; font-family: 'Inria Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }

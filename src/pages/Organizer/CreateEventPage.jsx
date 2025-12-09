@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import '../../css/CreateEvent.css';
 import { db, storage, auth } from '../../firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, setDoc, updateDoc, doc } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import QRCodeGenerator from '../../components/QRCodeGenerator';
 
 export default function CreateEvent() {
     const [imagePreview, setImagePreview] = useState(null);
     const [imageFile, setImageFile] = useState(null);
     const [submitting, setSubmitting] = useState(false);
+    const [qrData, setQrData] = useState(null);
+    const [pendingQrId, setPendingQrId] = useState(null);
     const [form, setForm] = useState({
         eventName: '',
         date: '',
@@ -61,8 +64,14 @@ export default function CreateEvent() {
                 categoryid: form.category,
                 status: 'pending',
                 description: form.description,
+<<<<<<< HEAD
                 createdAt: serverTimestamp(),
                 price: form.price
+=======
+                QR: '',
+                noparticipants: 0,
+                createdAt: serverTimestamp()
+>>>>>>> d721474ff29d7c3a5ab174bbcf9f747bc3539d31
             };
 
             // If an image file was selected, upload it to Firebase Storage
@@ -82,7 +91,22 @@ export default function CreateEvent() {
             const docRef = await addDoc(collection(db, 'events'), eventData);
             // eslint-disable-next-line no-console
             console.log('Event created with ID:', docRef.id);
+
+            // Generate Unique QR ID
+            const qrDocRef = doc(collection(db, 'QR'));
+            const qrId = qrDocRef.id;
+            
+            // Update the event to reference this QR ID
+            try {
+                await updateDoc(docRef, { QR: qrId });
+            } catch (e) {
+                console.error('Failed to set event QR ref:', e);
+            }
+
+            setPendingQrId(qrId);
+
             alert('Event created successfully');
+
             // Optionally reset form
             setForm({ eventName: '', date: '', university: '', faculty: '', address: '', category: '', description: '',price: '' });
             setImagePreview(null);
@@ -96,10 +120,45 @@ export default function CreateEvent() {
         }
     }
 
+    // helper to convert dataURL to Blob
+    function dataURLtoBlob(dataurl) {
+        const arr = dataurl.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+    }
+
+    //Upload QR Image to Firebase Storage
+    async function handleQrDataUrl(dataUrl) {
+        try {
+            const user = auth.currentUser;
+            if (!user || !pendingQrId) return;
+            const blob = dataURLtoBlob(dataUrl);
+            // Upload QR image to Storage with QR ID as filename
+            const qrRef = storageRef(storage, `qrcodes/${user.uid}/${pendingQrId}.png`);
+            await uploadBytes(qrRef, blob);
+            const downloadURL = await getDownloadURL(qrRef);
+            // Save QR document with its own ID to firestore
+            await setDoc(doc(db, 'QR', pendingQrId), {
+                imageQR: downloadURL,
+                QRId: pendingQrId,
+                createdAt: serverTimestamp(),
+            });
+            setQrData(downloadURL);
+            setPendingQrId(null);
+        } catch (e) {
+            console.error('Failed uploading QR to storage:', e);
+        }
+    }
+
     return (
         <div className="ce-root">
             <header className="ce-header">
-                <button type="button" className="ce-back" aria-label="Back">←</button>
                 <h1>Create A Event</h1>
             </header>
 
@@ -194,6 +253,18 @@ export default function CreateEvent() {
                     <button type="submit" className="ce-submit" disabled={submitting}>{submitting ? 'Submitting...' : 'Submit'}</button>
                 </div>
             </form>
+            {pendingQrId && (
+                <div className="ce-qr">
+                    <h3>Generating QR…</h3>
+                    <QRCodeGenerator value={pendingQrId} size={300} onDataUrl={handleQrDataUrl} />
+                </div>
+            )}
+            {qrData && (
+                <div className="ce-qr">
+                    <h3>Event QR</h3>
+                    <img src={qrData} alt="Event QR" style={{ width: 300, height: 300 }} />
+                </div>
+            )}
         </div>
     );
 }
