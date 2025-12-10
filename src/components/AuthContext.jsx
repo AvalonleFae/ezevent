@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
           if (userDoc.exists()) {
             const userData = userDoc.data();
             setRole(userData.role);
-            if (userData.role === 'organizer' && userData.organizer) {
+            if (userData.role === 'organizer' || userData.organizer) {
               setIsOrganizerVerified(userData.organizer.verified === 'Accepted');
             } else {
               setIsOrganizerVerified(false);

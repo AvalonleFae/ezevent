@@ -75,21 +75,22 @@ export default function EventsList({
                         
                         // 2. Filter: Must be Future Date AND Not in Registered List
                         eventsData = rawEvents.filter(event => {
-                            // A. Check Date
+                            // Check A: Event Status MUST be Accepted 🆕
+                            if (event.status !== 'Accepted') return false; 
+
+
+                            // Check C: Event Date
                             if (!event.date) return false; 
-                            
                             let eventDate;
                             if (typeof event.date.toDate === 'function') {
-                                eventDate = event.date.toDate(); // Handle Firestore Timestamp
+                                eventDate = event.date.toDate(); 
                             } else {
-                                eventDate = new Date(event.date); // Handle String/Date
+                                eventDate = new Date(event.date); 
                             }
-
                             if (eventDate <= currentDate) return false; // Hide past events
 
-                            // B. Check Registration Status
-                            // If the event ID is in the registered list, hide it (return false)
-                            if (registeredEventIds.includes(event.id)) return false;
+                            // Check D: Registration Status
+                            if (registeredEventIds.includes(event.id)) return false; // Hide already registered events
 
                             return true;
                         });
@@ -130,6 +131,7 @@ export default function EventsList({
                             key={event.id}
                             event={event}
                             onClick={onClickAction}
+                            userRole={userRole}
                             buttonText={ActionText}
                         />
                     ))}
