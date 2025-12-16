@@ -10,7 +10,8 @@ import '../css/Sidebar.css'
 const menuItems = {
   participant: [
     { label: "View Events", path: "/participant/events" },
-    { label: "My Registrations", path: "/participant/registered" }
+    { label: "My Registrations", path: "/participant/registered" },
+    { label: "Scan Attendance QR", path: "/participant/scan-attendance"}
   ],
   admin: [
     { label: "Management Report", path: "/admin/management-report" },

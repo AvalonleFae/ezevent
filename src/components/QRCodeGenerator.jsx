@@ -42,6 +42,7 @@ function QRCodeGenerator({ value, size = 200, onDataUrl }) {
         level="H"
         bgColor="#FFFFFF"
         fgColor="#000000"
+        includeMargin={true} // <--- ADD THIS LINE
       />
       <p style={{ marginTop: '10px', wordBreak: 'break-all' }}>Data: {displayValue}</p>
     </div>
