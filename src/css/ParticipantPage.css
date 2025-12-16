@@ -1,15 +1,15 @@
+:root {
+  --sidebar-width: 90px; 
+  --page-bg: #e8f5fb; 
+  --content-bg: #fff;
+  --primary-accent: #4169E1;
+  --secondary-accent: #008CBA;
+  --text-color: #333;
+}
+
 body {
-  background-color: var(--content-bg, #FEF6DF);
-}
-.participant-container {
-  width: 100%;
-  min-height: 100vh;
+  background: linear-gradient(to bottom, #c2e0f4 0%, #e8f5fb 70%, #ffffff 100%);
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: var(--page-bg, #FEF6DF);
-  font-family: Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  color: var(--text-color, #333);
 }
 
 .participant-container {
@@ -18,26 +18,34 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: var(--page-bg, #FEF6DF);
   font-family: Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  color: var(--text-color, #333);
-  /* removed position: relative here to ensure ::before was positioned correctly */
+  color: var(--text-color);
+  display: flex; 
+}
+.participant-sidebar {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background-color: #f0f8ff; 
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05); 
+    z-index: 10; 
+    padding-top: 20px; 
+    color: var(--primary-accent); 
 }
 
-/* --------------------------------
-   CONTENT AREA
-----------------------------------*/
 .participant-content {
   flex: 1;
   padding: 2.5rem;
   overflow-y: auto;
-  margin-left: 90px; /* space for the left sidebar */
-  background-color: var(--content-bg, #FEF6DF);
+  margin-left: var(--sidebar-width); 
+  background-color: transparent; 
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  scrollbar-width: thin; /* Firefox */
+  
 }
 
 .participant-header {
@@ -61,20 +69,20 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  background: rgba(0,0,0,0.03);
+  background: rgba(65, 105, 225, 0.1); 
 }
 
 .participant-profile h1 {
   font-size: 1.6rem;
   margin: 0;
-  color: #6b5344;
+  color: var(--secondary-accent); 
   font-weight: 600;
 }
 
 .participant-divider {
   width: 100%;
   height: 2px;
-  background-color: rgba(127, 70, 0, 0.8);
+  background-color: var(--primary-accent); 
   margin-bottom: 1.5rem;
   border-radius: 2px;
 }
@@ -94,7 +102,7 @@ body {
 }
 
 .create-event-btn {
-  --btn-bg: #8b6f47;
+  --btn-bg: var(--primary-accent);
   background-color: var(--btn-bg);
   color: #fff;
   border: none;
@@ -104,15 +112,14 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.18s ease, transform 0.12s ease;
-  box-shadow: 0 6px 18px rgba(139,111,71,0.08);
+  box-shadow: 0 6px 18px rgba(65, 105, 225, 0.2); 
 }
 
 .create-event-btn:hover {
-  background-color: #7a5f3f;
+  background-color: #3152C7; 
   transform: translateY(-1px);
 }
 
-/* Card helper for content sections */
 .participant-card {
   background: #fff;
   border-radius: 12px;
@@ -122,16 +129,13 @@ body {
   box-shadow: 0 8px 24px rgba(0,0,0,0.06);
 }
 
-/* hide scrollbar for Webkit browsers while preserving scroll functionality */
 .participant-content::-webkit-scrollbar { height: 8px; width: 8px; }
 .participant-content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 8px; }
 .participant-content::-webkit-scrollbar-track { background: transparent; }
 
-/* Utility and responsive tweaks */
 @media (max-width: 900px) {
   .participant-content { margin-left: 0; padding: 1.25rem; }
   .profile-icon { width: 44px; height: 44px; }
   .participant-profile h1 { font-size: 1.2rem; }
   .participant-card { max-width: 100%; padding: 1rem; }
 }
-
