@@ -4,6 +4,7 @@ import ViewEventsPage from "../pages/ViewEventPage";
 import EventDetailsPage from "../pages/Participant/EventDetailsPage";
 import ParticipantPage from "../pages/Participant/ParticipantPage";
 import "../css/ParticipantPage.css";
+import SuccessPage from "../pages/Participant/SuccessPage";
 
 function ParticipantsLayout() {
   return (
@@ -14,6 +15,7 @@ function ParticipantsLayout() {
         <Routes>
           <Route path="" element={<ParticipantPage />} />
           <Route path="events" element={<ParticipantPage />} />
+           <Route path="events/success" element={<SuccessPage />} />
           <Route path="/events/:id" element={<EventDetailsPage />} />
           <Route
             path="registered"

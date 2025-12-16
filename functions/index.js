@@ -33,26 +33,35 @@ exports.createStripeCheckout = onRequest({ cors: true }, async (req, res) => {
     // Receive data from your React Frontend
     const { eventId, userId, userEmail, price } = req.body;
 
-    if (!eventId || !userId) {
-      return res.status(400).send("Missing eventId or userId");
+    if (!eventId || !userId || !userEmail) { // Added userEmail check
+      return res.status(400).send("Missing eventId, userId, or userEmail");
     }
 
     // Create the session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
+      
+
+      // This ensures Stripe sends the receipt/invoice to the correct person
+      customer_email: userEmail, 
+
+      // This tells Stripe to generate a PDF invoice for this one-time payment
+      invoice_creation: {
+        enabled: true,
+      },
+
       line_items: [
         {
           price_data: {
-            currency: "myr", // Malaysian Ringgit
+            currency: "myr", 
             product_data: {
               name: "Event Registration Ticket",
               description: "Standard Entry",
-              // Optional: You can add product-level metadata here too
               metadata: {
                 eventId: eventId
               }
             },
-            unit_amount: price * 100, // Amount in cents
+            unit_amount: price * 100, 
           },
           quantity: 1,
         },
@@ -60,11 +69,9 @@ exports.createStripeCheckout = onRequest({ cors: true }, async (req, res) => {
       mode: "payment",
 
       // URLs where Stripe will redirect the user
-      // ⚠️ CHANGE THESE to your production URL when you deploy your site (e.g., https://myapp.com/success)
-      success_url: "http://localhost:5173/success",
-      cancel_url: "http://localhost:5173/cancel",
+      success_url: "http://localhost:5173/participant/events/success",
+      cancel_url: `http://localhost:5173/participant/events/${eventId}`,
 
-      // ⚠️ CRITICAL: Attach Metadata so the Webhook knows who paid for what
       metadata: {
         userId: userId,
         userEmail: userEmail,
@@ -74,7 +81,6 @@ exports.createStripeCheckout = onRequest({ cors: true }, async (req, res) => {
       }
     });
 
-    // Send the URL back to the frontend so it can redirect
     res.json({ url: session.url });
 
   } catch (error) {
@@ -96,7 +102,7 @@ exports.handleStripeWebhook = onRequest(async (req, res) => {
   try {
     event = stripe.webhooks.constructEvent(req.rawBody, signature, endpointSecret);
   } catch (err) {
-    console.error(`⚠️ Webhook signature verification failed.`, err.message);
+    console.error(`Webhook signature verification failed.`, err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
@@ -105,7 +111,7 @@ exports.handleStripeWebhook = onRequest(async (req, res) => {
     const session = event.data.object;
     const metadata = session.metadata;
 
-    console.log("📦 Webhook Metadata received:", metadata);
+    console.log("Webhook Metadata received:", metadata);
 
     if (metadata && metadata.type === 'event_registration') {
       try {
@@ -128,22 +134,22 @@ exports.handleStripeWebhook = onRequest(async (req, res) => {
           createdAt: admin.firestore.FieldValue.serverTimestamp()
         });
 
-        console.log(`✅ SUCCESS: Data saved for User ${metadata.userId}`);
+        console.log(`SUCCESS: Data saved for User ${metadata.userId}`);
         
-        // 🛑 FIX: Send success response immediately
+        // FIX: Send success response immediately
         return res.status(200).json({ received: true });
 
       } catch (error) {
-        console.error("❌ FIRESTORE WRITE ERROR:", error);
+        console.error("FIRESTORE WRITE ERROR:", error);
         return res.status(500).send("Database Error");
       }
     } else {
-      console.log("⚠️ Metadata missing or type incorrect");
-      // 🛑 FIX: Even if we ignore it, we must tell Stripe we received it
+      console.log("Metadata missing or type incorrect");
+      // FIX: Even if we ignore it, we must tell Stripe we received it
       return res.status(200).end();
     }
   }
 
-  // 🛑 FIX: Handle other event types not explicitly caught above
+
   return res.status(200).end();
 });
