@@ -1,37 +1,46 @@
 import React, { useState } from 'react';
 import { Scanner } from '@yudiel/react-qr-scanner';
-import { 
-  getFirestore, 
-  collection, 
-  query, 
-  where, 
-  getDocs, 
-  updateDoc, 
-  serverTimestamp, 
-  doc, 
-  getDoc 
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  updateDoc,
+  serverTimestamp,
+  doc,
+  getDoc
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import '../css/QRScanner.css';
 
 const AttendanceScanner = () => {
   const [scanResult, setScanResult] = useState(null);
-  const [status, setStatus] = useState('idle'); // idle, processing, success, error, permission-denied
+  const [status, setStatus] = useState('idle');
   const [message, setMessage] = useState('');
+
+  // NEW: State to control camera visibility
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
 
   const db = getFirestore();
   const auth = getAuth();
+  const navigate = useNavigate();
 
   const handleScan = async (result) => {
     if (result && result.length > 0 && status === 'idle') {
       const scannedQrId = result[0].rawValue;
       setScanResult(scannedQrId);
+
+      // Optional: Close camera immediately upon scan to save resources/battery
+      // setIsCameraOpen(false); 
+
       processAttendance(scannedQrId);
     }
   };
 
   const handleError = (error) => {
     console.error("Scanner Error:", error);
-    // Check for specific permission errors
     if (error?.name === 'NotAllowedError' || error?.name === 'PermissionDeniedError') {
       setStatus('permission-denied');
       setMessage("Camera permission was denied. Please update your browser settings.");
@@ -40,7 +49,7 @@ const AttendanceScanner = () => {
     }
   };
 
-  const processAttendance = async (qrId) => {
+ const processAttendance = async (qrId) => {
     setStatus('processing');
     setMessage('Verifying QR code...');
 
@@ -48,23 +57,36 @@ const AttendanceScanner = () => {
       const currentUser = auth.currentUser;
       if (!currentUser) throw new Error("You must be logged in to scan.");
 
-      // --- STEP 1: Look up Event ---
+      // STEP 1: Look up QR Code to get Event ID
       const qrDocRef = doc(db, 'QR', qrId);
       const qrSnapshot = await getDoc(qrDocRef);
 
       if (!qrSnapshot.exists()) throw new Error("Invalid QR Code.");
-      
+
       const qrData = qrSnapshot.data();
       const eventId = qrData.eventId;
 
       if (!eventId) throw new Error("QR Code is not linked to any event.");
-      
-      setMessage('Finding your registration...');
 
-      // --- STEP 2: Find Registration ---
+      // --- NEW STEP: Fetch Event Details to get the Name ---
+      // We assume your collection is named 'events' and the field is 'title'
+      const eventDocRef = doc(db, 'events', eventId); 
+      const eventSnapshot = await getDoc(eventDocRef);
+      
+      let eventName = eventId; // Fallback to ID if name isn't found
+      if (eventSnapshot.exists()) {
+        const eventData = eventSnapshot.data();
+        // Check if your field is named 'title', 'name', or 'eventName'
+        eventName = eventData.title || eventData.name || eventData.eventName || eventId;
+      }
+      // -----------------------------------------------------
+
+      setMessage(`Checking registration for: ${eventName}...`);
+
+      // STEP 2: Find Registration
       const registrationsRef = collection(db, 'registrations');
       const q = query(
-        registrationsRef, 
+        registrationsRef,
         where("eventId", "==", eventId),
         where("userId", "==", currentUser.uid)
       );
@@ -74,8 +96,8 @@ const AttendanceScanner = () => {
       if (registrationSnapshot.empty) throw new Error("You are not registered for this event.");
 
       const registrationDoc = registrationSnapshot.docs[0];
-      
-      // --- STEP 3: Find Attendance Sub-collection ---
+
+      // STEP 3: Find Attendance Sub-collection
       const attendanceRef = collection(db, `registrations/${registrationDoc.id}/attendance`);
       const attendanceSnapshot = await getDocs(attendanceRef);
 
@@ -83,26 +105,31 @@ const AttendanceScanner = () => {
 
       const attendanceDoc = attendanceSnapshot.docs[0];
 
-      // --- STEP 4: Check Previous Check-in ---
+      // STEP 4: Check Previous Check-in
       if (attendanceDoc.data().status === 'present') {
         setStatus('success');
-        setMessage(`Already checked in: ${qrData.eventId}`);
+        // UPDATED: Uses eventName instead of eventId
+        setMessage(`Already checked in: ${eventName}`);
+        setIsCameraOpen(false);
         return;
       }
 
-      // --- STEP 5: Update Status ---
+      // STEP 5: Update Status
       await updateDoc(attendanceDoc.ref, {
         status: "present",
         checkInTime: serverTimestamp()
       });
 
       setStatus('success');
-      setMessage(`Success! Checked in for Event ID: ${eventId}`);
+      // UPDATED: Uses eventName instead of eventId
+      setMessage(`Success! Checked in for: ${eventName}`);
+      setIsCameraOpen(false);
 
     } catch (error) {
       console.error("Attendance Error:", error);
       setStatus('error');
       setMessage(error.message);
+      setIsCameraOpen(false);
     }
   };
 
@@ -110,87 +137,105 @@ const AttendanceScanner = () => {
     setScanResult(null);
     setStatus('idle');
     setMessage('');
+    setIsCameraOpen(true); // Re-open camera for retry
+  };
+
+  const navigateHistory = () => {
+    navigate('/participant/history');
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 max-w-md mx-auto">
-      <h2 className="text-xl font-bold mb-4">Scan Event QR</h2>
+    <div className="scanner-container">
+      <div className="scanner-card">
+        <button onClick={() => navigate(-1)} className="back-button">
+          ⬅ Back
+        </button>
+        <h2 className="scanner-title">Scan Event QR</h2>
 
-      {/* ERROR: Permission Denied State */}
-      {status === 'permission-denied' && (
-        <div className="p-6 bg-yellow-50 text-yellow-800 rounded-lg border border-yellow-200 text-center w-full">
-           <div className="text-4xl mb-2">📷</div>
-           <p className="font-bold">Camera Access Needed</p>
-           <p className="text-sm mt-2">
-             We cannot access your camera. Please click the lock icon 🔒 in your address bar and allow camera access.
-           </p>
-           <button 
-             onClick={() => window.location.reload()}
-             className="mt-4 px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
-           >
-             Reload Page
-           </button>
-        </div>
-      )}
+        {/* ERROR: Permission Denied State */}
+        {status === 'permission-denied' && (
+          <div className="status-box permission">
+            <div style={{ fontSize: '2rem', marginBottom: '10px' }}>📷</div>
+            <p><strong>Camera Access Needed</strong></p>
+            <p style={{ fontSize: '0.9rem', marginTop: '5px' }}>
+              Please allow camera access in your browser URL bar.
+            </p>
+            <button onClick={() => window.location.reload()} className="action-btn btn-reload">
+              Reload Page
+            </button>
+          </div>
+        )}
 
-      {/* QR Scanner */}
-      {(status === 'idle' || status === 'processing') && (
-        <div className="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-300 relative">
-           <Scanner 
-              onScan={handleScan} 
+        {/* 1. START STATE: Button to open Scanner */}
+        {!isCameraOpen && status === 'idle' && (
+          <div className="start-scan-container" style={{ textAlign: 'center', padding: '2rem' }}>
+            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>📷</div>
+            <p style={{ marginBottom: '1.5rem', color: '#666' }}>
+              Ready to check in? Click below to activate your camera.
+            </p>
+            <button
+              onClick={() => setIsCameraOpen(true)}
+              className="action-btn"
+              style={{ backgroundColor: '#007bff', color: 'white', padding: '12px 24px' }}
+            >
+              Open Scanner
+            </button>
+          </div>
+        )}
+
+        {/* 2. SCANNING STATE: Actual Camera UI */}
+        {isCameraOpen && (status === 'idle' || status === 'processing') && (
+          <div className="scanner-window">
+            <Scanner
+              onScan={handleScan}
               onError={handleError}
-              // Force usage of rear camera (environment)
-              constraints={{ 
-                facingMode: 'environment' 
-              }}
+              constraints={{ facingMode: 'environment' }}
               components={{
                 audio: false,
                 finder: true,
               }}
-          />
-          <p className="absolute bottom-4 left-0 right-0 text-center text-white text-sm bg-black/50 py-1">
-            Align QR code within frame
-          </p>
+              styles={{
+                container: { width: '100%', height: '100%' },
+                video: { objectFit: 'cover' }
+              }}
+            />
+            <p className="scanner-overlay-text">
+              Align QR code within frame
+            </p>
+          </div>
+        )}
+
+        {/* 3. RESULT STATES: Processing, Success, or Error */}
+        <div className="status-area">
+
+          {status === 'processing' && (
+            <div className="status-box processing">
+              <p><strong>Processing...</strong></p>
+              <p style={{ fontSize: '0.9rem' }}>{message}</p>
+            </div>
+          )}
+
+          {status === 'success' && (
+            <div className="status-box success">
+              <p><strong>Check-in Verified!</strong></p>
+              <p>{message}</p>
+              <button onClick={navigateHistory} className="action-btn btn-success">
+                Go to Event History
+              </button>
+              {/* Optional: Add a button to scan another */}
+            </div>
+          )}
+
+          {status === 'error' && (
+            <div className="status-box error">
+              <p><strong>Check-in Failed</strong></p>
+              <p style={{ fontSize: '0.8rem', fontFamily: 'monospace', margin: '10px 0' }}>{message}</p>
+              <button onClick={resetScanner} className="action-btn btn-error">
+                Try Again
+              </button>
+            </div>
+          )}
         </div>
-      )}
-
-      {/* Status Messages */}
-      <div className="mt-6 text-center w-full">
-        
-        {status === 'processing' && (
-          <div className="p-4 bg-blue-50 text-blue-800 rounded-lg animate-pulse border border-blue-200">
-            <p className="font-semibold">Processing...</p>
-            <p className="text-sm">{message}</p>
-          </div>
-        )}
-
-        {status === 'success' && (
-          <div className="p-6 bg-green-50 text-green-800 rounded-lg border border-green-200 shadow-sm">
-            <div className="text-4xl mb-2"></div>
-            <p className="font-bold text-lg">Check-in Verified!</p>
-            <p className="text-sm mt-1 mb-4 opacity-80">{message}</p>
-            <button 
-              onClick={resetScanner}
-              className="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 font-medium transition-colors"
-            >
-              Scan Another Event
-            </button>
-          </div>
-        )}
-
-        {status === 'error' && (
-          <div className="p-6 bg-red-50 text-red-800 rounded-lg border border-red-200 shadow-sm">
-             <div className="text-4xl mb-2"></div>
-            <p className="font-bold text-lg">Check-in Failed</p>
-            <p className="text-sm mt-1 mb-4 font-mono bg-red-100 p-2 rounded">{message}</p>
-            <button 
-              onClick={resetScanner}
-              className="w-full py-2 bg-red-600 text-white rounded hover:bg-red-700 font-medium transition-colors"
-            >
-              Try Again
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
