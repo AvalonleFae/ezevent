@@ -1,0 +1,46 @@
+.success-page-container {
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+  margin-left: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: linear-gradient(to bottom, #c2e0f4 0%, #e8f5fb 70%, #ffffff 100%);
+  padding: 40px 20px;
+}
+
+.success-message-box {
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  border-radius: 50px;
+  padding: 40px 40px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  margin-top: 50px;
+  text-align: center;
+}
+
+.success-text {
+  font-size: 20px;
+  line-height: 1.6;
+  margin: 0 auto; 
+}
+
+.back-button {
+  width: 100%;
+  max-width: 350px;
+  background: #4169E1;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  margin: 40px auto 20px;
+  box-shadow: 0 6px 15px rgba(65, 105, 225, 0.4);
+  display: block;
+}
