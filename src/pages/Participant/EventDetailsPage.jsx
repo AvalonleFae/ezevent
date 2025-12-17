@@ -3,7 +3,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { db } from "../../firebase";
 import "../../css/EventDetailsPage.css";
-import { useAuth } from "../../components/AuthContext"; 
+import { useAuth } from "../../components/AuthContext";
 
 export default function EventDetailsPage() {
   const { id } = useParams();
@@ -35,7 +35,7 @@ export default function EventDetailsPage() {
 
         if (eventSnap.exists()) {
           const rawEvent = { id: eventSnap.id, ...eventSnap.data() };
-          
+
           const catId = rawEvent.categoryId;
           const uniId = rawEvent.universityId;
           const facId = rawEvent.facultyId;
@@ -63,8 +63,8 @@ export default function EventDetailsPage() {
             if (facSnap.exists()) facultyDisplay = facSnap.data().facultyName;
           }
 
-          setEvent({ 
-            ...rawEvent, 
+          setEvent({
+            ...rawEvent,
             categoryName: categoryDisplay,
             universityName: uniDisplay,
             facultyName: facultyDisplay
@@ -85,8 +85,8 @@ export default function EventDetailsPage() {
 
   const handleRegistration = async () => {
     if (!user) {
-        alert("You must be logged in to register.");
-        return;
+      alert("You must be logged in to register.");
+      return;
     }
 
     try {
@@ -103,12 +103,12 @@ export default function EventDetailsPage() {
       });
 
       if (!response.ok) {
-          const errorText = await response.text();
-          alert("Server error: " + response.statusText);
-          return; 
+        const errorText = await response.text();
+        alert("Server error: " + response.statusText);
+        return;
       }
 
-      const data = await response.json(); 
+      const data = await response.json();
       if (data.url) {
         window.location.href = data.url;
       } else {
@@ -142,10 +142,10 @@ export default function EventDetailsPage() {
         <div className="event-content-grid">
           <div className="main-info">
             {event.Image && (
-              <img 
-                src={event.Image} 
-                alt={event.eventName} 
-                className="event-image" 
+              <img
+                src={event.Image}
+                alt={event.eventName}
+                className="event-image"
               />
             )}
 
@@ -192,9 +192,14 @@ export default function EventDetailsPage() {
         </div>
 
         {isHistoryMode ? (
-          <button onClick={handleViewReceipt} className="register-event-button" style={{ backgroundColor: '#283fa7ff' }}>
-            View Official Receipt & Ticket
-          </button>
+          <div className="info-row">
+            <h3>Important Message for Registered Participants</h3>
+            <p>{event.afterRegistrationMessage   || "Location not specified"}</p>
+            <button onClick={handleViewReceipt} className="register-event-button" style={{ backgroundColor: '#283fa7ff' }}>
+              View Official Receipt & Ticket
+            </button>
+          </div>
+
         ) : (
           <button onClick={handleRegistration} className="register-event-button">
             Register for Event

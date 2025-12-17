@@ -54,7 +54,7 @@ const SuccessPage = () => {
         {/* Display the After Registration Message */}
         {message && (
           <div>
-            <p style={{ whiteSpace: 'pre-wrap' }}>{message}</p>
+            <p>{message}</p>
           </div>
         )}
 
