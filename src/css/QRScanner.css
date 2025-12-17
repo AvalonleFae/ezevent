@@ -116,3 +116,48 @@
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s;
 }
+
+.status-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.status-desc {
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.status-subtext {
+  font-size: 0.9rem;
+}
+
+.error-detail {
+  font-size: 0.8rem;
+  font-family: monospace;
+  margin: 10px 0;
+}
+
+/* --- Start Scan Screen --- */
+.start-scan-container {
+  text-align: center;
+  padding: 2rem;
+}
+
+.start-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.start-text {
+  margin-bottom: 1.5rem;
+  color: #666;
+}
+
+
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 24px; /* Specific padding for the start button */
+}
+

@@ -19,8 +19,6 @@ const AttendanceScanner = () => {
   const [scanResult, setScanResult] = useState(null);
   const [status, setStatus] = useState('idle');
   const [message, setMessage] = useState('');
-
-  // NEW: State to control camera visibility
   const [isCameraOpen, setIsCameraOpen] = useState(false);
 
   const db = getFirestore();
@@ -31,10 +29,6 @@ const AttendanceScanner = () => {
     if (result && result.length > 0 && status === 'idle') {
       const scannedQrId = result[0].rawValue;
       setScanResult(scannedQrId);
-
-      // Optional: Close camera immediately upon scan to save resources/battery
-      // setIsCameraOpen(false); 
-
       processAttendance(scannedQrId);
     }
   };
@@ -68,22 +62,19 @@ const AttendanceScanner = () => {
 
       if (!eventId) throw new Error("QR Code is not linked to any event.");
 
-      // --- NEW STEP: Fetch Event Details to get the Name ---
-      // We assume your collection is named 'events' and the field is 'title'
+      // STEP 2: Fetch Event Details
       const eventDocRef = doc(db, 'events', eventId); 
       const eventSnapshot = await getDoc(eventDocRef);
       
-      let eventName = eventId; // Fallback to ID if name isn't found
+      let eventName = eventId;
       if (eventSnapshot.exists()) {
         const eventData = eventSnapshot.data();
-        // Check if your field is named 'title', 'name', or 'eventName'
         eventName = eventData.title || eventData.name || eventData.eventName || eventId;
       }
-      // -----------------------------------------------------
 
       setMessage(`Checking registration for: ${eventName}...`);
 
-      // STEP 2: Find Registration
+      // STEP 3: Find Registration
       const registrationsRef = collection(db, 'registrations');
       const q = query(
         registrationsRef,
@@ -97,7 +88,7 @@ const AttendanceScanner = () => {
 
       const registrationDoc = registrationSnapshot.docs[0];
 
-      // STEP 3: Find Attendance Sub-collection
+      // STEP 4: Find Attendance Sub-collection
       const attendanceRef = collection(db, `registrations/${registrationDoc.id}/attendance`);
       const attendanceSnapshot = await getDocs(attendanceRef);
 
@@ -105,23 +96,21 @@ const AttendanceScanner = () => {
 
       const attendanceDoc = attendanceSnapshot.docs[0];
 
-      // STEP 4: Check Previous Check-in
+      // STEP 5: Check Previous Check-in
       if (attendanceDoc.data().status === 'present') {
         setStatus('success');
-        // UPDATED: Uses eventName instead of eventId
         setMessage(`Already checked in: ${eventName}`);
         setIsCameraOpen(false);
         return;
       }
 
-      // STEP 5: Update Status
+      // STEP 6: Update Status
       await updateDoc(attendanceDoc.ref, {
         status: "present",
         checkInTime: serverTimestamp()
       });
 
       setStatus('success');
-      // UPDATED: Uses eventName instead of eventId
       setMessage(`Success! Checked in for: ${eventName}`);
       setIsCameraOpen(false);
 
@@ -137,7 +126,7 @@ const AttendanceScanner = () => {
     setScanResult(null);
     setStatus('idle');
     setMessage('');
-    setIsCameraOpen(true); // Re-open camera for retry
+    setIsCameraOpen(true);
   };
 
   const navigateHistory = () => {
@@ -155,9 +144,9 @@ const AttendanceScanner = () => {
         {/* ERROR: Permission Denied State */}
         {status === 'permission-denied' && (
           <div className="status-box permission">
-            <div style={{ fontSize: '2rem', marginBottom: '10px' }}>📷</div>
+            <div className="status-icon">📷</div>
             <p><strong>Camera Access Needed</strong></p>
-            <p style={{ fontSize: '0.9rem', marginTop: '5px' }}>
+            <p className="status-desc">
               Please allow camera access in your browser URL bar.
             </p>
             <button onClick={() => window.location.reload()} className="action-btn btn-reload">
@@ -168,15 +157,14 @@ const AttendanceScanner = () => {
 
         {/* 1. START STATE: Button to open Scanner */}
         {!isCameraOpen && status === 'idle' && (
-          <div className="start-scan-container" style={{ textAlign: 'center', padding: '2rem' }}>
-            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>📷</div>
-            <p style={{ marginBottom: '1.5rem', color: '#666' }}>
+          <div className="start-scan-container">
+            <div className="start-icon">📷</div>
+            <p className="start-text">
               Ready to check in? Click below to activate your camera.
             </p>
             <button
               onClick={() => setIsCameraOpen(true)}
-              className="action-btn"
-              style={{ backgroundColor: '#007bff', color: 'white', padding: '12px 24px' }}
+              className="action-btn btn-primary"
             >
               Open Scanner
             </button>
@@ -194,6 +182,7 @@ const AttendanceScanner = () => {
                 audio: false,
                 finder: true,
               }}
+              // This prop is specific to the library and often requires inline objects
               styles={{
                 container: { width: '100%', height: '100%' },
                 video: { objectFit: 'cover' }
@@ -211,7 +200,7 @@ const AttendanceScanner = () => {
           {status === 'processing' && (
             <div className="status-box processing">
               <p><strong>Processing...</strong></p>
-              <p style={{ fontSize: '0.9rem' }}>{message}</p>
+              <p className="status-subtext">{message}</p>
             </div>
           )}
 
@@ -222,14 +211,13 @@ const AttendanceScanner = () => {
               <button onClick={navigateHistory} className="action-btn btn-success">
                 Go to Event History
               </button>
-              {/* Optional: Add a button to scan another */}
             </div>
           )}
 
           {status === 'error' && (
             <div className="status-box error">
               <p><strong>Check-in Failed</strong></p>
-              <p style={{ fontSize: '0.8rem', fontFamily: 'monospace', margin: '10px 0' }}>{message}</p>
+              <p className="error-detail">{message}</p>
               <button onClick={resetScanner} className="action-btn btn-error">
                 Try Again
               </button>
