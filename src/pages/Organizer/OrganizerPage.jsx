@@ -1,5 +1,4 @@
 import React from 'react'
-import Sidebar from '../../components/Sidebar'
 import '../../css/OrganizerPage.css'
 import EventsList from '../../components/EventsList'
 import { useNavigate } from 'react-router-dom'
@@ -9,32 +8,32 @@ export default function OrganizerPage() {
 
   const navigate = useNavigate();
 
-  const {user} = useAuth()
+  const { user } = useAuth()
 
   const handleGoToEventDashboard = (event) => {
     navigate(`/organizer/my-event/${event.id}/dashboard`);
   };
 
   return (
-    <div className="organizer-container">
-      <main className="organizer-content">
-        <div className="organizer-header">
-          <div className="organizer-profile">
-            <h1>My Events</h1>
-          </div>
-          <div className="organizer-divider"></div>
-        </div>
 
-        <div className="organizer-main">
-          <EventsList
-            collectionName="events"
-            onClickAction={handleGoToEventDashboard}
-            ActionText="View Details"
-            userRole="organizer"
-            userId={user ? user.uid : ""}
-          />
+    <>
+      <div className="organizer-header">
+        <div className="organizer-profile">
+          <h1>My Events</h1>
         </div>
-      </main>
-    </div>
+        <div className="organizer-divider"></div>
+      </div>
+
+      <div className="organizer-main">
+        <EventsList
+          collectionName="events"
+          onClickAction={handleGoToEventDashboard}
+          ActionText="View Details"
+          userRole="organizer"
+          userId={user ? user.uid : ""}
+        />
+      </div>
+    </>
+
   )
 }

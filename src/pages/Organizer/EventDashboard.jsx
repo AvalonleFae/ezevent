@@ -4,9 +4,11 @@ import { collection, query, where, getDocs, orderBy, doc, getDoc } from 'firebas
 import { db, auth } from '../../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useParams } from 'react-router-dom';
+import { useNavigate, NavLink, useLocation } from "react-router-dom";
 
-export default function EventDashboard() {
+export default function EventDashboard({ }) {
     const { id } = useParams(); // Matches route parameter :id
+    const navigate = useNavigate();
 
     // --- State Management ---
     const [eventName, setEventName] = useState("Loading...");
@@ -79,13 +81,8 @@ export default function EventDashboard() {
     // --- JSX RENDER ---
     return (
         <div className="dashboard-container">
-            {/* Back Arrow */}
-            <div className="back-arrow" onClick={() => console.log('Go back')}>&larr;</div>
-
             {/* Event Name Header */}
-            <header className="event-header">
-                ({eventName})
-            </header>
+            <header className="event-header">{eventName}</header>
 
             {/* --- Main Dashboard View --- */}
             {viewMode === 'dashboard' && (
@@ -112,19 +109,17 @@ export default function EventDashboard() {
 
             {/* Action Buttons */}
             <div className="action-buttons">
-                <button className="action-button-brown" onClick={() => console.log('View Attendance List')}>
+                <button className="action-button-brown" onClick={() => navigate(`/organizer/my-event/${id}/attendance-list`, { state: { eventName } })}>
                     Attendance List
                 </button>
                 <button className="action-button-brown" onClick={() => console.log('Generate Report')}>
                     Generate Report
                 </button>
-                {/* Button toggles the view */}
                 <button className="action-button-brown" onClick={() => setViewMode(viewMode === 'dashboard' ? 'qr' : 'dashboard')}>
                     {viewMode === 'dashboard' ? 'View QR' : 'Back to Dashboard'}
                 </button>
             </div>
 
-            {/* --- QR Code Display Section (Visible when 'View QR' is clicked) --- */}
             {viewMode === 'qr' && (
                 <div className="viewqr-container">
                     <h2>Your Event QR Codes</h2>
@@ -135,7 +130,6 @@ export default function EventDashboard() {
                     <div className="qr-grid">
                         {qrDocs.map((doc) => (
                             <div className="qr-item" key={doc.id}>
-                                {/* CHANGED: doc.image -> doc.imageQR matches your DB field */}
                                 {doc.imageQR ? (
                                     <img src={doc.imageQR} alt={`QR ${doc.id}`} />
                                 ) : (

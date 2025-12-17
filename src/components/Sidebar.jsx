@@ -11,7 +11,7 @@ const menuItems = {
   participant: [
     { label: "View Events", path: "/participant/events" },
     { label: "My Event History", path: "/participant/history" },
-    { label: "Scan Attendance QR", path: "/participant/scan-attendance"}
+    { label: "Scan Attendance QR", path: "/participant/scan-attendance" }
   ],
   admin: [
     { label: "Management Report", path: "/admin/management-report" },
@@ -30,45 +30,45 @@ const menuItems = {
 // Sidebar component
 export default function Sidebar({ role }) {
 
-   
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [userData, setUserData] = useState({ name: '', role: '' });  // State to hold user data
-    const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [userData, setUserData] = useState({ name: '', role: '' });  // State to hold user data
+  const [loading, setLoading] = useState(true);
 
 
-    // Fetch user data on component mount
-    useEffect(() => {
-      // Function to fetch user data from Firestore
-      const fetchUserData = async () => {
-        try {
-          const currentUser = auth.currentUser;
-          if (currentUser) {
-            const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-            if (userDoc.exists()) {
-              setUserData({
-                name: userDoc.data().name || null,
-                role: userDoc.data().role || null
-              });
-            }
+  // Fetch user data on component mount
+  useEffect(() => {
+    // Function to fetch user data from Firestore
+    const fetchUserData = async () => {
+      try {
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+          const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+          if (userDoc.exists()) {
+            setUserData({
+              name: userDoc.data().name || null,
+              role: userDoc.data().role || null
+            });
           }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        } finally {
-          setLoading(false);
         }
-      };
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      fetchUserData();
-    }, []);
+    fetchUserData();
+  }, []);
 
   // Handle user logout
   async function handleLogout() {
-    try{
+    try {
       await signOut(auth);
       console.log("User logged out successfully!")
       navigate("/");
-    }catch (error) {
+    } catch (error) {
       console.error("Error Logging out:", error.message)
     }
   }
@@ -95,14 +95,14 @@ export default function Sidebar({ role }) {
 
   return (
     <aside className="sidebar">
-        <div className="user-profile">
-          <div className="user-name">{userData.name}</div>
-          <div className="user-role">{userData.role}</div>
-        </div>
+      <div className="user-profile">
+        <div className="user-name">{userData.name}</div>
+        <div className="user-role">{userData.role}</div>
+      </div>
       <ul>
         {items.map((item) => (
           <li key={item.path}>
-            <NavLink 
+            <NavLink
               to={item.path}
               className={(navData) => getActiveClassName(navData, item.path)}
             >
