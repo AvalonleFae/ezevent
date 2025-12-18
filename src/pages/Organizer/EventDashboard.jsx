@@ -15,8 +15,8 @@ export default function EventDashboard({ }) {
     const [qrDocs, setQrDocs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [attendanceStats, setAttendanceStats] = useState({
-        totalAttendees: 150,
-        totalAbsence: 25,
+        totalAttendees: 0,
+        totalAbsence: 0,
         attendancePercentage: "0.00%",
     });
 
@@ -37,12 +37,54 @@ export default function EventDashboard({ }) {
                 // Load both event details and QR data
                 fetchEventDetails(id);
                 loadEventData(currentUser.uid, id);
+                fetchAttendanceStats(id);
             } else {
                 setQrDocs([]);
             }
         });
         return () => unsub();
     }, [id]);
+
+    async function fetchAttendanceStats(currentEventId) {
+        let presentCount = 0;
+        let absentCount = 0;
+
+        try {
+            const regQuery = query(collection(db, 'registrations'), where('eventId', '==', currentEventId));
+            const regSnap = await getDocs(regQuery);
+
+            for (const regDoc of regSnap.docs) {
+                const attendanceSub = collection(db, 'registrations', regDoc.id, 'attendance');
+                const attendanceSnap = await getDocs(attendanceSub);
+
+                let statusFound = false;
+                attendanceSnap.forEach((doc) => {
+                    const data = doc.data();
+                    if (data.eventId === currentEventId && data.status === 'present') {
+                        presentCount++;
+                        statusFound = true;
+                    }
+                });
+                if (!statusFound) {
+                    absentCount++;
+                }
+            }
+
+            const totalParticipants = presentCount + absentCount;
+            const attendancePercentage = totalParticipants > 0
+                ? ((presentCount / totalParticipants) * 100).toFixed(2) + "%"
+                : "0.00%";
+
+            setAttendanceStats({
+                totalAttendees: presentCount,
+                totalAbsence: absentCount,
+                attendancePercentage: attendancePercentage,
+            });
+
+        } catch (error) {
+            console.error("Error fetching attendance stats:", error);
+        }
+    }
 
     async function fetchEventDetails(eventId) {
 
