@@ -1,0 +1,211 @@
+import React, { useEffect, useState } from 'react';
+import { Bar, Pie } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+} from 'chart.js';
+import { doc, collection, getDocs, query, where, getDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../../css/Report.css';
+
+// Register Chart.js components
+ChartJS.register(Title, Tooltip, Legend, ArcElement, BarElement, CategoryScale, LinearScale);
+
+const ReportPage = () => {
+    const { id } = useParams(); // eventId
+    const navigate = useNavigate();
+    const [ageData, setAgeData] = useState({ labels: [], datasets: [] });
+    const [genderData, setGenderData] = useState({ labels: [], datasets: [] });
+    const [institutionData, setInstitutionData] = useState({ labels: [], datasets: [] });
+
+    useEffect(() => {
+        const fetchReportData = async () => {
+            try {
+                const regQuery = query(collection(db, 'registrations'), where('eventId', '==', id));
+                const regSnap = await getDocs(regQuery);
+
+                let ages = {
+                    'Under 20': 0,
+                    '20-29': 0,
+                    '30-39': 0,
+                    '40-49': 0,
+                    '50+': 0
+                };
+                let genders = {
+                    'Male': 0,
+                    'Female': 0,
+                };
+                let institutions = {
+                    'UKM': 0,
+                    'UPM': 0,
+                    'UTM': 0,
+                    'UM': 0,
+                };
+
+                const userIds = regSnap.docs.map(doc => doc.data().userId);
+                const userPromises = userIds
+                    .filter(uid => uid)
+                    .map(uid => getDoc(doc(db, 'users', uid)));
+                const userSnapshots = await Promise.all(userPromises);
+
+                userSnapshots.forEach(docSnap => {
+                    if (docSnap.exists()) {
+                        const userData = docSnap.data();
+                        const { age, gender, participant } = userData;
+                        const institution = participant?.institution || 'Unknown';
+
+                        // Age distribution
+                        const ageNum = parseInt(age);
+                        if (!isNaN(ageNum)) {
+                            let ageGroup = 'Unknown';
+                            if (ageNum < 20) ageGroup = 'Under 20';
+                            else if (ageNum < 30) ageGroup = '20-29';
+                            else if (ageNum < 40) ageGroup = '30-39';
+                            else if (ageNum < 50) ageGroup = '40-49';
+                            else ageGroup = '50+';
+
+                            if (ages[ageGroup] !== undefined) {
+                                ages[ageGroup]++;
+                            }
+                        }
+
+                        // Gender distribution
+                        genders[gender || 'Unknown'] = (genders[gender || 'Unknown'] || 0) + 1;
+
+                        // Institution distribution
+                        institutions[institution || 'Unknown'] = (institutions[institution || 'Unknown'] || 0) + 1;
+                    }
+                });
+
+                const ageLabels = ['Under 20', '20-29', '30-39', '40-49', '50+'];
+                const ageValues = ageLabels.map(label => ages[label]);
+
+                setAgeData({
+                    labels: ageLabels,
+                    datasets: [
+                        {
+                            label: 'Participants by Age',
+                            data: ageValues,
+                            backgroundColor: '#8B5E3C',
+                        },
+                    ],
+                });
+
+                const genderLabels = ['Female', 'Male'];
+                const genderValues = genderLabels.map(label => genders[label]);
+
+                setGenderData({
+                    labels: genderLabels,
+                    datasets: [
+                        {
+                            label: 'Gender',
+                            data: genderValues,
+                            backgroundColor: ['#FF6384', '#36A2EB'],
+                        },
+                    ],
+                });
+
+                const InsLabels = ['UKM', 'UPM', 'UTM', 'UM'];
+                const InsValues = InsLabels.map(label => institutions[label]);
+
+                setInstitutionData({
+                    labels: InsLabels,
+                    datasets: [
+                        {
+                            label: 'Institution',
+                            data: InsValues,
+                            backgroundColor: ['#c5cc00ff', '#4A6741', '#2C3E50', '#BF360C'],
+                        },
+                    ],
+                });
+            } catch (err) {
+                console.error('Error fetching report data:', err);
+            }
+        };
+
+        fetchReportData();
+    }, [id]);
+
+    return (
+        <div className="report-container">
+            <header className="report-header">
+                <h2>Event Insights</h2>
+                <button className="back-button" onClick={() => navigate(-1)}>
+                    &larr; Back to Dashboard
+                </button>
+            </header>
+
+            {/* Summary Statistics */}
+            <div className="report-summary-row">
+                <div className="summary-card">
+                    <span className="stat-value">{Object.values(ageData.datasets[0]?.data || []).reduce((a, b) => a + b, 0)}</span>
+                    <span className="stat-label">Total Registered</span>
+                </div>
+                {/* You can add more stat cards here if needed */}
+            </div>
+
+            <div className="report-charts-grid">
+                <div className="chart-section">
+                    <h3>Age Distribution</h3>
+                    <div className="chart-wrapper">
+                        {ageData.labels.length > 0 ? (
+                            <Bar
+                                data={ageData}
+                                options={{
+                                    maintainAspectRatio: false,
+                                    plugins: { legend: { display: false } },
+                                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                                }}
+                            />
+                        ) : (
+                            <p>Loading age chart...</p>
+                        )}
+                    </div>
+                </div>
+
+                <div className="chart-section">
+                    <h3>Gender Distribution</h3>
+                    <div className="chart-wrapper">
+                        {genderData.labels.length > 0 ? (
+                            <Pie
+                                data={genderData}
+                                options={{
+                                    maintainAspectRatio: false,
+                                    plugins: { legend: { position: 'bottom' } }
+                                }}
+                            />
+                        ) : (
+                            <p>Loading gender chart...</p>
+                        )}
+                    </div>
+                </div>
+
+                <div className="chart-section">
+                    <h3>Institution Distribution</h3>
+                    <div className="chart-wrapper">
+                        {institutionData.labels.length > 0 ? (
+                            <Pie
+                                data={institutionData}
+                                options={{
+                                    maintainAspectRatio: false,
+                                    plugins: { legend: { position: 'bottom' } }
+                                }}
+                            />
+                        ) : (
+                            <p>Loading institution chart...</p>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default ReportPage;

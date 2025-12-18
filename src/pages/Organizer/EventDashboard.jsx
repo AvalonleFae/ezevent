@@ -4,9 +4,11 @@ import { collection, query, where, getDocs, orderBy, doc, getDoc } from 'firebas
 import { db, auth } from '../../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function EventDashboard() {
     const { id } = useParams(); // Matches route parameter :id
+    const navigate = useNavigate();
 
     // --- State Management ---
     const [eventName, setEventName] = useState("Loading...");
@@ -115,7 +117,7 @@ export default function EventDashboard() {
                 <button className="action-button-brown" onClick={() => console.log('View Attendance List')}>
                     Attendance List
                 </button>
-                <button className="action-button-brown" onClick={() => console.log('Generate Report')}>
+                <button className="action-button-brown" onClick={() => navigate(`/organizer/my-event/${id}/report`, { state: { eventName } })}>
                     Generate Report
                 </button>
                 {/* Button toggles the view */}
