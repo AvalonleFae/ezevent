@@ -1,6 +1,7 @@
 body {
-  background-color: var(--content-bg, #FEF6DF);
+  background-color: var(--content-bg, #f7e9d7);
 }
+
 .organizer-container {
   display: flex;
   width: 100%;
@@ -8,22 +9,24 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: var(--page-bg, #FEF6DF);
+  background-color: var(--page-bg, #f7e9d7);
   font-family: Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
   color: var(--text-color, #333);
 }
 
 .organizer-content {
   flex: 1;
-  padding: 2.5rem;
+  /* padding: 2.5rem; */
   overflow-y: auto;
-  margin-left: 90px; /* space for the left sidebar */
-  background-color: var(--content-bg, #FEF6DF);
+  margin-left: 260px;
+  /* space for the left sidebar (250px + 10px) */
+  background-color: var(--content-bg, #f7e9d7);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  scrollbar-width: thin; /* Firefox */
+  scrollbar-width: thin;
+  /* Firefox */
 }
 
 .organizer-header {
@@ -37,7 +40,7 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 0.75rem;
+  margin: 16px;
 }
 
 .profile-icon {
@@ -47,7 +50,7 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  background: rgba(0,0,0,0.03);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .organizer-profile h1 {
@@ -90,7 +93,7 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.18s ease, transform 0.12s ease;
-  box-shadow: 0 6px 18px rgba(139,111,71,0.08);
+  box-shadow: 0 6px 18px rgba(139, 111, 71, 0.08);
 }
 
 .create-event-btn:hover {
@@ -105,19 +108,42 @@ body {
   padding: 1.25rem;
   width: 100%;
   max-width: 780px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 /* hide scrollbar for Webkit browsers while preserving scroll functionality */
-.organizer-content::-webkit-scrollbar { height: 8px; width: 8px; }
-.organizer-content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 8px; }
-.organizer-content::-webkit-scrollbar-track { background: transparent; }
+.organizer-content::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.organizer-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+}
+
+.organizer-content::-webkit-scrollbar-track {
+  background: transparent;
+}
 
 /* Utility and responsive tweaks */
 @media (max-width: 900px) {
-  .organizer-content { margin-left: 0; padding: 1.25rem; }
-  .profile-icon { width: 44px; height: 44px; }
-  .organizer-profile h1 { font-size: 1.2rem; }
-  .organizer-card { max-width: 100%; padding: 1rem; }
-}
+  .organizer-content {
+    margin-left: 0;
+    padding: 1.25rem;
+  }
 
+  .profile-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .organizer-profile h1 {
+    font-size: 1.2rem;
+  }
+
+  .organizer-card {
+    max-width: 100%;
+    padding: 1rem;
+  }
+}

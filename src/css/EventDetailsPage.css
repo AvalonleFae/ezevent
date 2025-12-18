@@ -16,6 +16,12 @@
     width: 100%;
     padding: 20px;
   }
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: #f7e9d7;
+  padding: 40px 20px;
 }
 
 .event-details-card {
@@ -25,6 +31,27 @@
   padding: 0;
   background: transparent;
   box-shadow: none;
+  max-width: 1000px;
+  background: white;
+  border-radius: 50px;
+  padding: 40px 40px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  margin-top: 50px;
+
+}
+
+.event-details-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: #f0f8ff;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+  z-index: 10;
+  padding-top: 20px;
+  color: var(--primary-accent);
 }
 
 .top-actions-bar {
@@ -65,6 +92,12 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
+.main-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  /* Space between the detail boxes */
 }
 
 .event-image {
@@ -75,6 +108,13 @@
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 20px;
+  max-width: 100%;
+  max-height: 1000px;
+  object-fit: contain;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   display: block;
   /*center the image */
   margin-left: auto;
@@ -105,6 +145,29 @@
   font-size: 16px;
   line-height: 1.6;
   margin: 0;
+.main-info>div {
+  width: 100%;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px dashed #e0e0e0;
+}
+
+.event-details-card h3 {
+  font-size: 20px;
+  color: #008CBA;
+  margin-bottom: 5px;
+  font-weight: 700;
+  padding-bottom: 5px;
+  border-bottom: none;
+}
+
+.main-info p {
+  color: #225f73;
+  font-size: 20px;
+  line-height: 1.5;
+  margin-top: 5px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: 500;
 }
 
 .register-event-button {
@@ -119,8 +182,49 @@
   transition: background 0.2s;
   margin-top: 40px;
   display: inline-block;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  margin: 40px auto 20px;
+  box-shadow: 0 6px 15px rgba(65, 105, 225, 0.4);
+  display: block;
+  /* Ensure button centers correctly */
 }
 
 .register-event-button:hover {
   background: #3152C7;
+  box-shadow: 0 8px 18px rgba(65, 105, 225, 0.6);
+}
+
+/* Filter Container */
+.history-filter-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
+/* Base Button Style */
+.history-filter-btn {
+  padding: 8px 16px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+/* Active State (Selected) */
+.history-filter-btn.active {
+  background-color: #007bff;
+  /* Primary Blue */
+  color: #fff;
+  border-color: #007bff;
+}
+
+/* Hover State (Only if not active) */
+.history-filter-btn:not(.active):hover {
+  background-color: #e2e6ea;
+  border-color: #adb5bd;
 }

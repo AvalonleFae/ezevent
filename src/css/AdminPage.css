@@ -21,6 +21,7 @@
   color: #333;
   margin: 0;
 }
+
 .events-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -31,11 +32,10 @@
   background: white;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
   transition: 0.2s ease;
 }
 
 .event-card:hover {
   transform: translateY(-4px);
 }
-

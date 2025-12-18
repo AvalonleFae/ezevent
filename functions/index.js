@@ -13,13 +13,9 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 
 // 2. Initialize Stripe
-// ⚠️ REPLACE THIS with your Secret Key (starts with sk_test_...)
-// You can find this in Stripe Dashboard > Developers > API keys
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // 3. Webhook Secret
-// ⚠️ REPLACE THIS with your Webhook Secret (starts with whsec_...)
-// You get this AFTER you deploy the webhook and add it to Stripe Dashboard > Developers > Webhooks
 const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
 
 // Set global options (optional, good for cost control)
@@ -69,7 +65,7 @@ exports.createStripeCheckout = onRequest({ cors: true }, async (req, res) => {
       mode: "payment",
 
       // URLs where Stripe will redirect the user
-      success_url: "http://localhost:5173/participant/events/success",
+      success_url: `http://localhost:5173/participant/events/success?eventId=${eventId}`,
       cancel_url: `http://localhost:5173/participant/events/${eventId}`,
 
       metadata: {

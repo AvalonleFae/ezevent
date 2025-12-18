@@ -10,7 +10,9 @@ export default function EventsList({
     onClickAction,
     ActionText,
     userId,
-    userRole
+    userRole,
+    categoryFilter = "all", // Used for Available Events
+    timeFilter = "all"      // Used for Event History
 }) {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -24,25 +26,51 @@ export default function EventsList({
                 let eventsData = [];
                 const eventsCollection = collection(db, "events");
                 
+
                 if (userRole === "participant" && (location.pathname.includes("registration") || location.pathname.includes("history"))) {
                     const regQuery = query(
-                    collection(db, "registrations"), 
-                    where("userId", "==", userId)
-                );
-                const regSnapshot = await getDocs(regQuery);
-                const registeredEventIds = regSnapshot.docs.map(doc => doc.data().eventId);
-                if (registeredEventIds.length === 0) {
-                    setEvents([]);
-                    setLoading(false);
-                    return;
+                        collection(db, "registrations"), 
+                        where("userId", "==", userId)
+                    );
+                    const regSnapshot = await getDocs(regQuery);
+                    const registeredEventIds = regSnapshot.docs.map(doc => doc.data().eventId);
+                    
+                    if (registeredEventIds.length === 0) {
+                        setEvents([]);
+                        setLoading(false);
+                        return;
+                    }
+                    
+                    const eventSnapshot = await getDocs(eventsCollection);
+                    eventsData = eventSnapshot.docs
+                        .map(doc => ({ id: doc.id, ...doc.data() }))
+                        .filter(event => registeredEventIds.includes(event.id));
+
+
+                    if (timeFilter !== "all") {
+                        const currentDate = new Date();
+                        
+                        eventsData = eventsData.filter(event => {
+                            if (!event.date) return false;
+
+                            let eventDate;
+                            if (typeof event.date.toDate === 'function') {
+                                eventDate = event.date.toDate(); 
+                            } else {
+                                eventDate = new Date(event.date); 
+                            }
+
+                            if (timeFilter === "upcoming") {
+                                return eventDate >= currentDate;
+                            } else if (timeFilter === "past") {
+                                return eventDate < currentDate;
+                            }
+                            return true;
+                        });
+                    }
                 }
-                const eventSnapshot = await getDocs(eventsCollection);
-                eventsData = eventSnapshot.docs
-                .map(doc => ({ id: doc.id, ...doc.data() }))
-                .filter(event => registeredEventIds.includes(event.id));
-}
                 
-                // --- 2. ALL OTHER CASES (Organizer, Admin, Participant on Home) ---
+
                 else {
                     const snapshot = await getDocs(eventsCollection);
                     let rawEvents = snapshot.docs.map((doc) => ({
@@ -51,14 +79,12 @@ export default function EventsList({
                     }));
 
                     // Logic: Organizer
-                    // UPDATED: Changed from event.ownerId to event.userId based on your DB screenshot
                     if (userRole === "organizer") {
                         eventsData = rawEvents.filter(event => event.userId === userId);
                     }
 
                     // Logic: Participant (Available Events)
                     else if (userRole === "participant") {
-                        // 1. Fetch the user's existing registrations
                         const regQuery = query(
                             collection(db, "registrations"), 
                             where("userId", "==", userId)
@@ -68,13 +94,11 @@ export default function EventsList({
 
                         const currentDate = new Date();
                         
-                        // 2. Filter: Must be Future Date AND Not in Registered List
                         eventsData = rawEvents.filter(event => {
-                            // Check A: Event Status MUST be Accepted 🆕
+                            // Check A: Event Status MUST be Accepted
                             if (event.status !== 'Accepted') return false; 
 
-
-                            // Check C: Event Date
+                            // Check B: Event Date (Hide past events)
                             if (!event.date) return false; 
                             let eventDate;
                             if (typeof event.date.toDate === 'function') {
@@ -82,10 +106,15 @@ export default function EventsList({
                             } else {
                                 eventDate = new Date(event.date); 
                             }
-                            if (eventDate <= currentDate) return false; // Hide past events
+                            if (eventDate <= currentDate) return false; 
 
-                            // Check D: Registration Status
-                            if (registeredEventIds.includes(event.id)) return false; // Hide already registered events
+                            // Check C: Registration Status (Hide already registered)
+                            if (registeredEventIds.includes(event.id)) return false; 
+
+                            // Check D: Category Filter
+                            if (categoryFilter !== "all" && event.categoryId !== categoryFilter) {
+                                return false;
+                            }
 
                             return true;
                         });
@@ -111,7 +140,7 @@ export default function EventsList({
         };
 
         fetchEvents();
-    }, [collectionName, userId, userRole, location.pathname]); 
+    }, [collectionName, userId, userRole, location.pathname, categoryFilter, timeFilter]); // Added both filters to dependencies
 
     if (loading) return <p>Loading events...</p>;
 
