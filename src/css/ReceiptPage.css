@@ -9,6 +9,13 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 2.5rem;
+  gap: 1rem;
+}
+
+@media (max-width: 480px) {
+  .receipt-actions {
+    flex-direction: column;
+  }
 }
 
 .receipt-card {
@@ -21,7 +28,6 @@
 }
 
 .receipt-card::before {
-  content: 'AUTHORIZATION';
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -38,6 +44,15 @@
   margin-bottom: 4rem;
   border-bottom: 1px solid rgba(255, 64, 64, 0.3);
   padding-bottom: 2rem;
+  gap: 1rem;
+}
+
+@media (max-width: 480px) {
+  .receipt-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 }
 
 .brand h2 {
@@ -75,7 +90,7 @@
 .event-title {
   font-family: 'Bebas Neue', cursive;
   font-size: 3rem;
-  color: white;
+  color: var(--text-white);
   margin-bottom: 2rem;
 }
 
@@ -94,7 +109,7 @@
 
 .detail-item p {
   font-size: 1.2rem;
-  color: white;
+  color: var(--text-white);
   font-weight: 600;
 }
 
@@ -106,7 +121,7 @@
 }
 
 .payment-table {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.03);
   padding: 2rem;
   border-left: 4px solid var(--neon-cyan);
 }
@@ -118,12 +133,14 @@
 }
 
 .payment-row span {
-  color: var(--text-gray);
+  color: var(--neon-cyan);
   font-family: 'Bebas Neue', cursive;
 }
 
 .payment-row p {
-  color: white;
+  color: var(--text-white);
+  word-break: break-all;
+  text-align: right;
 }
 
 .mono {
@@ -161,29 +178,186 @@
 }
 
 @media print {
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 10pt;
+  }
 
   .halftone-bg,
-  .receipt-actions {
+  .receipt-actions,
+  .sidebar,
+  .topbar,
+  body::before {
     display: none !important;
   }
 
+  .receipt-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
   .receipt-card {
+    background: white !important;
     border: 1px solid #000 !important;
     color: #000 !important;
     box-shadow: none !important;
+    clip-path: none !important;
+    padding: 1.5rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .receipt-card::before {
+    font-size: 3rem !important;
+    color: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .brand h2 {
+    font-size: 2rem !important;
+    color: black !important;
+  }
+
+  .event-title {
+    font-size: 2.2rem !important;
+    color: black !important;
+    text-shadow: none !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .detail-item p,
+  .payment-row p,
+  .receipt-footer p,
+  .status-badge {
+    color: black !important;
+    text-shadow: none !important;
+    font-size: 11pt !important;
+  }
+
+  .receipt-header {
+    margin-bottom: 2rem !important;
+    padding-bottom: 1rem !important;
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .status-badge {
+    border: 1px solid #000 !important;
+    background: white !important;
+    padding: 2px 8px !important;
+    font-size: 10pt !important;
+  }
+
+  .payment-table {
+    background: #f9f9f9 !important;
+    border: 1px solid #eee !important;
+    color: black !important;
+    padding: 1.2rem !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .payment-row {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    gap: 1rem !important;
+    margin-bottom: 0.8rem !important;
+  }
+
+  .payment-row p {
+    text-align: right !important;
+    word-break: break-all !important;
+    max-width: 70% !important;
+    margin: 0 !important;
+  }
+
+  .payment-row span {
+    color: black !important;
+    font-family: 'Bebas Neue', bold !important;
+  }
+
+  .payment-row.total p {
+    color: black !important;
+    text-shadow: none !important;
+    font-size: 1.8rem !important;
+    max-width: 100% !important;
+  }
+
+  .receipt-divider {
+    margin: 2rem 0 !important;
+    border-top: 1px dashed #000 !important;
+    background: none !important;
+  }
+
+  .receipt-footer {
+    margin-top: 2rem !important;
   }
 }
 
 @media (max-width: 600px) {
+  .receipt-container {
+    padding: 1rem;
+  }
+
+  .receipt-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
   .receipt-card {
-    padding: 2rem;
+    padding: 1.5rem;
+    clip-path: none;
+  }
+
+  .receipt-card::before {
+    font-size: 3rem;
+    top: 0.5rem;
+    right: 0.5rem;
+    opacity: 0.05;
+  }
+
+  .receipt-header {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .brand h2 {
+    font-size: 2rem;
   }
 
   .event-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
   }
 
   .detail-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .payment-table {
+    padding: 1rem;
+  }
+
+  .payment-row.total p {
+    font-size: 1.8rem;
+  }
+
+  .receipt-footer {
+    margin-top: 2rem;
+    text-align: center;
   }
 }

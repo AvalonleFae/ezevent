@@ -32,23 +32,23 @@ export default function ManageUniversityPage() {
   }, []);
 
 
-const isValidId = (value) => {
-  // Reject if it contains any lowercase a–z
-  return !/[a-z]/.test(value);
+  const isValidId = (value) => {
+    // Reject if it contains any lowercase a–z
+    return !/[a-z]/.test(value);
 
-};
+  };
 
 
   const handleNewUniversity = async (e) => {
     e.preventDefault();
-    if (!universityId.trim() || !universityName.trim() ) {
+    if (!universityId.trim() || !universityName.trim()) {
       return;
     }
 
-  // NEW: validation — reject lowercase
+    // NEW: validation — reject lowercase
 
 
-  if(!isValidId(universityId.trim())) {
+    if (!isValidId(universityId.trim())) {
       window.alert('University ID cannot contain lowercase letters.');
       return;
     }
@@ -125,17 +125,17 @@ const isValidId = (value) => {
               ) : (
                 universities.map((university) => (
                   <tr key={university.id}>
-                    <td>{university.id}</td>
-                    <td>{university.universityName || 'N/A'}</td>
-                    <td>
-                      <button 
-                        type="button" 
+                    <td data-label="ID">{university.id}</td>
+                    <td data-label="University Name">{university.universityName || 'N/A'}</td>
+                    <td data-label="Action">
+                      <button
+                        type="button"
                         className="action-btn edit-btn"
                         onClick={() => navigate(`/admin/manage-faculties/${university.id}`)}
                       >
                         Faculties
                       </button>
-                      <button 
+                      <button
                         type="button"
                         className="action-btn delete-btn"
                         onClick={() => handleDelete(university.id, university.universityName)}

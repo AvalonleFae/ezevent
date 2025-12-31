@@ -44,7 +44,7 @@ export default function ParticipantPage() {
       {/* Filter Container */}
       <div className="filter-container">
         <label htmlFor="category-select" className="filter-label">
-          EXPLORE BY SECTOR:
+          EXPLORE BY CATEGORY:
         </label>
         <select
           id="category-select"
@@ -52,7 +52,7 @@ export default function ParticipantPage() {
           onChange={(e) => setSelectedCategory(e.target.value)}
           className="filter-select"
         >
-          <option value="all">ALL SECTORS</option>
+          <option value="all">ALL CATEGORIES</option>
           {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>
               {cat.name.toUpperCase()}

@@ -45,7 +45,7 @@ export default function ReceiptPage() {
   if (loading) return (
     <div className="receipt-loading">
       <div className="halftone-bg"></div>
-      <div className="loading-glitch">ENCRYPTING RECEIPT...</div>
+      <div className="loading-glitch">LOADING RECEIPT...</div>
     </div>
   );
 
@@ -82,11 +82,11 @@ export default function ReceiptPage() {
           <h3 className="event-title text-glow">{data.eventName.toUpperCase()}</h3>
           <div className="detail-grid">
             <div className="detail-item">
-              <span>DEPLOYMENT DATE</span>
+              <span>DATE</span>
               <p>{new Date(data.date?.seconds * 1000).toLocaleDateString()}</p>
             </div>
             <div className="detail-item">
-              <span>LOCATION SECTOR</span>
+              <span>LOCATION</span>
               <p>{data.address?.toUpperCase() || "CAMPUS SECTOR"}</p>
             </div>
           </div>

@@ -46,8 +46,8 @@
 }
 
 .filter-select {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #121212;
+  border: 1px solid rgba(255, 255, 255, 0.56);
   padding: 0.8rem 2.5rem 0.8rem 1.2rem;
   color: white;
   font-family: 'Inter', sans-serif;
@@ -61,6 +61,12 @@
   min-width: 250px;
 }
 
+.filter-select option {
+  background: #121212;
+  color: white;
+  padding: 10px;
+}
+
 .filter-select:focus {
   outline: none;
   border-color: var(--primary-red);
@@ -70,6 +76,7 @@
 @media (max-width: 768px) {
   .participant-header h1 {
     font-size: 3rem;
+    text-align: center;
   }
 
   .filter-container {

@@ -58,7 +58,7 @@ export default function OrganizerChatList() {
   if (loading) return (
     <div className="chat-list-container">
       <div className="halftone-bg"></div>
-      <p className="loading-glitch">ENCRYPTING COMMS...</p>
+      <p className="loading-glitch">LOADING...</p>
     </div>
   );
 
@@ -66,7 +66,7 @@ export default function OrganizerChatList() {
     <div className="chat-list-container">
       <div className="halftone-bg"></div>
       <div className="participant-header">
-        <h1 className="tbhx-header">OPERATIONAL <span className="text-glow">COMMS</span></h1>
+        <h1 className="tbhx-header">MESSAGES</h1>
         <div className="header-accent"></div>
       </div>
 

@@ -1,156 +1,144 @@
 .manage-faculties {
   padding: 2rem;
-  /* Updated: Use 98% width to fit more columns comfortably */
-  max-width: 98%; 
+  max-width: 98%;
   margin: 0 auto;
 }
 
 .manage-faculties h1 {
-  color: #333;
+  color: var(--text-white);
   margin-bottom: 2rem;
   font-size: 2rem;
   font-weight: 600;
 }
+
+.faculties-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
 .back-btn {
-  padding: 0.5rem 1rem;
-  background-color: #6c757d;
-  color: white;
+  background: var(--text-gray);
+  color: #000;
   border: none;
+  padding: 0.5rem 1.5rem;
   border-radius: 4px;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.1rem;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
+  transition: all 0.3s;
 }
 
 .back-btn:hover {
-  background-color: #5a6268;
+  background: white;
+  transform: translateX(-5px);
 }
 
-.faculties-header h1 {
-  margin: 0;
-  font-size: 2rem;
-  color: #333;
+.faculties-list-section,
+.add-faculty-section {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.faculties-list-section {
-  margin-bottom: 3rem;
-}
-
-.faculties-list-section h2 {
+.faculties-list-section h2,
+.add-faculty-section h2 {
+  color: var(--text-white);
+  margin-bottom: 1.5rem;
   font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 1rem;
+  font-weight: 600;
 }
 
 .faculties-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  overflow: hidden;
+  margin-top: 1rem;
 }
 
 .faculties-table thead {
-  background-color: #f8f9fa;
-  font-weight: 600;
-  color: #333;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.faculties-table th,
-.faculties-table td {
+.faculties-table th {
   padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid #dee2e6;
+  font-weight: 600;
+  color: var(--neon-cyan);
+  border-bottom: 2px solid var(--neon-cyan);
+}
+
+.faculties-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-white);
 }
 
 .faculties-table tbody tr:hover {
-  background-color: #f9f9f9;
+  background-color: rgba(255, 255, 255, 0.03);
 }
 
-.faculties-table tbody tr:last-child td {
-  border-bottom: none;
+.action-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  transition: all 0.2s;
 }
 
-.add-faculty-section {
-  background-color: #f9f9f9;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.delete-btn {
+  background-color: var(--primary-red);
+  color: #fff;
 }
 
-.add-faculty-section h2 {
-  font-size: 1.5rem;
-  color: #333;
-  margin-top: 0;
-  margin-bottom: 1.5rem;
+.action-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
 }
 
 .form-field {
   margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column;
 }
 
 .form-field label {
+  display: block;
   margin-bottom: 0.5rem;
+  color: var(--text-white);
   font-weight: 500;
-  color: #333;
 }
 
 .form-control {
+  width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
-  font-size: 14px;
-  font-family: inherit;
-  transition: border-color 0.3s;
+  color: white;
+  font-size: 1rem;
 }
 
 .form-control:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  border-color: var(--neon-cyan);
 }
 
 .form-actions {
   display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.action-btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.3s;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
 }
 
 .primary-btn {
-  background-color: #007bff;
-  color: white;
-}
-
-.primary-btn:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 86, 179, 0.2);
-}
-
-.delete-btn {
-  background-color: #dc3545;
-  color: white;
-  padding: 0.5rem 1rem;
-  font-size: 12px;
-}
-
-.delete-btn:hover {
-  background-color: #c82333;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(200, 35, 51, 0.2);
+  background-color: var(--neon-cyan);
+  color: #000;
+  padding: 0.75rem 2rem;
 }
 
 @media (max-width: 768px) {
@@ -160,25 +148,59 @@
 
   .faculties-header {
     flex-direction: column;
-    align-items: flex-start;
+    gap: 1rem;
+    align-items: stretch;
   }
 
-  .faculties-header h1 {
-    font-size: 1.5rem;
+  .back-btn {
+    width: 100%;
+    text-align: center;
   }
 
+  .faculties-table,
+  .faculties-table thead,
+  .faculties-table tbody,
   .faculties-table th,
+  .faculties-table td,
+  .faculties-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .faculties-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .faculties-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
   .faculties-table td {
-    padding: 0.75rem;
-    font-size: 14px;
+    border: none;
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
   }
 
-  .add-faculty-section {
-    padding: 1.5rem;
+  .faculties-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    font-size: 0.8rem;
   }
 
-  .form-actions {
-    flex-direction: column;
+  .faculties-table td:last-child {
+    justify-content: center;
+    padding-top: 1rem;
   }
 
   .action-btn {

@@ -148,6 +148,10 @@
     font-size: 3rem;
   }
 
+  .tbhx-header {
+    text-align: center;
+  }
+
   .ce-select-grid {
     grid-template-columns: 1fr;
   }

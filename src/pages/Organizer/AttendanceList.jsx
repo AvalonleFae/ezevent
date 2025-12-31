@@ -80,9 +80,6 @@ const AttendanceList = () => {
                 value={filterText}
                 onChange={e => setFilterText(e.target.value)}
             />
-            <button className="action-button-CSV" onClick={exportToCSV}>
-                EXPORT CSV
-            </button>
         </div>
     );
 
@@ -135,6 +132,9 @@ const AttendanceList = () => {
                 subHeaderComponent={subHeaderComponent}
                 theme="tbhxTheme"
             />
+            <button className="action-button-CSV" onClick={exportToCSV}>
+                EXPORT CSV
+            </button>
         </div>
     );
 };

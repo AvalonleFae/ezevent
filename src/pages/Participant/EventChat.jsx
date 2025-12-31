@@ -80,7 +80,7 @@ export default function EventChat() {
   if (authLoading) return (
     <div className="chat-window-loading">
       <div className="halftone-bg"></div>
-      <p className="loading-glitch">CONNECTING CHANNELS...</p>
+      <p className="loading-glitch">LOADING...</p>
     </div>
   );
 

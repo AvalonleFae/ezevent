@@ -135,7 +135,7 @@ const AttendanceScanner = () => {
     <div className="scanner-container">
       <div className="halftone-bg"></div>
       <div className="scanner-card">
-        <button onClick={() => navigate(-1)} className="tbhx-button secondary back-button">
+        <button onClick={() => navigate('/participant')} className="tbhx-button secondary back-button">
           &larr; BACK
         </button>
         <h2 className="tbhx-header">QR <span className="text-glow">SCANNER</span></h2>
@@ -165,7 +165,7 @@ const AttendanceScanner = () => {
               onClick={() => setIsCameraOpen(true)}
               className="tbhx-button"
             >
-              INITIALIZE SCANNER
+              SCAN NOW
             </button>
           </div>
         )}
@@ -186,9 +186,6 @@ const AttendanceScanner = () => {
                 video: { objectFit: 'cover' }
               }}
             />
-            <p className="scanner-overlay-text">
-              ALIGN TOKEN WITHIN SENSOR FRAME
-            </p>
           </div>
         )}
 

@@ -1,112 +1,170 @@
 .manage-organizer {
   padding: 2rem;
-  /* Updated: Use 98% width to fit more columns comfortably */
-  max-width: 98%; 
+  max-width: 98%;
   margin: 0 auto;
 }
 
 .manage-organizer h1 {
-  color: #333;
+  color: var(--text-white);
   margin-bottom: 2rem;
   font-size: 2rem;
   font-weight: 600;
 }
 
 .organizer-list-section {
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .organizer-list-section h2 {
-  color: #333;
+  color: var(--text-white);
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
   font-weight: 600;
 }
 
-/* Updated: Removed overflow/scroll settings */
-.table-container {
-  width: 100%;
-  overflow-x: visible; 
-}
-
 .organizer-table {
   width: 100%;
   border-collapse: collapse;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
   margin-top: 1rem;
-  /* Updated: Forces table to respect 100% width and not expand */
-  table-layout: fixed; 
+}
+
+.table-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: var(--neon-cyan);
+  border-radius: 3px;
 }
 
 .organizer-table thead {
-  background-color: #f5f5f5;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .organizer-table th {
   padding: 1rem;
   text-align: left;
   font-weight: 600;
-  color: #333;
-  border-bottom: 2px solid #ddd;
-  white-space: nowrap; /* Keep headers on one line */
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: var(--neon-cyan);
+  border-bottom: 2px solid var(--neon-cyan);
 }
-
-/* Optional: Define specific widths for critical columns to ensure layout looks good */
-.organizer-table th:nth-child(1) { width: 10%; } /* ID */
-.organizer-table th:nth-child(2) { width: 15%; } /* Email */
-.organizer-table th:last-child { width: 120px; } /* Action Button */
 
 .organizer-table td {
   padding: 1rem;
-  border-bottom: 1px solid #e5e5e5;
-  color: #555;
-  vertical-align: top; /* Aligns text to top when wrapping occurs */
-  
-  /* Updated: CRITICAL settings to force text wrapping */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-white);
   word-wrap: break-word;
   overflow-wrap: break-word;
-  word-break: break-all; /* Ensures long IDs break to the next line */
 }
 
 .organizer-table tbody tr:hover {
-  background-color: #f9f9f9;
-}
-
-.organizer-table td:first-child {
-  font-size: 0.85rem; 
-  color: #777;
-}
-
-/* Ensure the button column doesn't wrap weirdly */
-.organizer-table td:last-child {
-  white-space: nowrap;
-  word-break: normal; /* Don't break the button text */
+  background-color: rgba(255, 255, 255, 0.03);
 }
 
 .action-btn {
-  display: inline-flex;    
-  align-items: center;         
-  justify-content: center;   
-  height: 36px;               
-  padding: 0 12px;             
-  line-height: 1;               
-  white-space: nowrap;         
+  padding: 0.5rem 1rem;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-weight: 500;
-  font-size: 0.9rem;
-  margin-right: 0.5rem;
-  transition: background-color 0.2s;
-  box-sizing: border-box;
+  font-weight: 600;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  transition: all 0.2s;
 }
 
-/* Status colors (optional, keeping your original logic valid) */
-.status-tag.accepted { color: green; font-weight: bold; }
-.status-tag.declined { color: red; font-weight: bold; }
-.status-tag.pending { color: orange; font-weight: bold; }
+.edit-btn {
+  background-color: var(--neon-cyan);
+  color: #000;
+}
+
+.status-tag.accepted {
+  color: #00ff00;
+  font-weight: bold;
+}
+
+.status-tag.declined {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+.status-tag.pending {
+  color: #ffff00;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .manage-organizer {
+    padding: 1rem;
+  }
+
+  .manage-organizer h1 {
+    text-align: center;
+  }
+
+  .organizer-table,
+  .organizer-table thead,
+  .organizer-table tbody,
+  .organizer-table th,
+  .organizer-table td,
+  .organizer-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .organizer-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .organizer-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .organizer-table td {
+    border: none;
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
+  }
+
+  .organizer-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+  }
+
+  .organizer-table td:last-child {
+    justify-content: center;
+    padding-top: 1rem;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+}

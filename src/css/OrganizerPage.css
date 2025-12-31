@@ -14,6 +14,7 @@
   font-size: 5rem;
   margin: 0;
   color: var(--text-white);
+  white-space: nowrap;
 }
 
 .text-glow {
@@ -23,11 +24,11 @@
 
 .header-accent {
   position: absolute;
-  bottom: 0;
+  bottom: -4px;
   left: 0;
-  width: 150px;
+  width: 386px;
   height: 4px;
-  background: var(--primary-red);
+  background: var(--text-white);
   transform: skewX(-20deg);
 }
 
@@ -44,4 +45,31 @@
   color: var(--text-white);
   border-left: 5px solid var(--primary-red);
   padding-left: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .organizer-page-root {
+    padding: 1.5rem;
+  }
+
+  .organizer-header-section h1 {
+    text-align: center;
+  }
+
+  .organizer-header-section {
+    margin-bottom: 2rem;
+  }
+
+  .organizer-header-section h1 {
+    font-size: 2.5rem;
+    white-space: normal;
+  }
+
+  .organizer-header-section h1 span {
+    display: block;
+  }
+
+  .section-title h2 {
+    font-size: 1.8rem;
+  }
 }

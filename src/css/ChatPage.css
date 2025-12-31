@@ -81,7 +81,16 @@
   background: var(--bg-dark);
   border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
-  margin-left: 280px;
+  /* margin-left: 280px;  Removed fixed margin here as it's handled by main-content or media queries */
+}
+
+@media (max-width: 768px) {
+  .chat-window {
+    margin-left: 0;
+    margin-top: 80px;
+    /* Clear the hamburger menu with extra room */
+    height: calc(100vh - 80px);
+  }
 }
 
 .chat-header {
@@ -179,11 +188,46 @@
 }
 
 @media (max-width: 768px) {
-  .chat-window {
-    height: calc(100vh - 5rem);
+  .chat-list-container {
+    padding: 6rem 1rem 2rem 1rem;
+  }
+
+  .participant-header {
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid var(--primary-red);
+  }
+
+  .participant-header h1 {
+    font-size: 2.5rem;
+    text-align: center;
+  }
+
+  .chat-card {
+    padding: 1rem;
+  }
+
+  .chat-card-info h3 {
+    font-size: 1.5rem;
+  }
+
+  .chat-header {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .messages-container {
+    padding: 1.5rem;
+    gap: 1rem;
   }
 
   .message-bubble {
     max-width: 90%;
+    padding: 1rem;
+    word-break: break-all;
+  }
+
+  .input-row button {
+    padding: 0 1.5rem;
   }
 }

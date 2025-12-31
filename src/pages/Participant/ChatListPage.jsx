@@ -46,7 +46,7 @@ export default function ChatListPage() {
   if (loading) return (
     <div className="chat-list-container">
       <div className="halftone-bg"></div>
-      <p className="loading-glitch">DECRYPTING CHANNELS...</p>
+      <p className="loading-glitch">LOADING MESSAGES...</p>
     </div>
   );
 
@@ -54,7 +54,7 @@ export default function ChatListPage() {
     <div className="chat-list-container">
       <div className="halftone-bg"></div>
       <div className="participant-header">
-        <h1 className="tbhx-header">MISSION <span className="text-glow">CHANNELS</span></h1>
+        <h1 className="tbhx-header">CHAT <span className="text-glow">CHANNELS</span></h1>
         <p>RE-ESTABLISH CONTACT WITH SECTOR COORDINATORS</p>
         <div className="header-accent"></div>
       </div>
@@ -62,7 +62,7 @@ export default function ChatListPage() {
       <div className="chat-grid">
         {registeredEvents.length === 0 ? (
           <div className="no-chats">
-            <p>NO ACTIVE DEPLOYMENTS FOUND.</p>
+            <p>NO ACTIVE CHAT CHANNELS FOUND.</p>
             <button className="tbhx-button" onClick={() => navigate("/participant/events")}>BROWSE MISSIONS</button>
           </div>
         ) : (

@@ -147,19 +147,19 @@ export default function ValidateOrganizer() {
                 ) : (
                   organizers.map((organizer) => (
                     <tr key={organizer.id}>
-                      <td>{organizer.id}</td>
-                      <td>{organizer.email || 'N/A'}</td>
-                      <td>{organizer.name || 'N/A'}</td>
-                      <td>{organizer.phoneNumber || 'N/A'}</td>
-                      <td>{organizer.organizer.companyName || 'N/A'}</td>
-                      <td>{organizer.organizer.companyAddress || 'N/A'}</td>
-                      <td>{organizer.organizer.position || 'N/A'}</td>
-                      <td>
+                      <td data-label="ID">{organizer.id}</td>
+                      <td data-label="Email">{organizer.email || 'N/A'}</td>
+                      <td data-label="Name">{organizer.name || 'N/A'}</td>
+                      <td data-label="Phone">{organizer.phoneNumber || 'N/A'}</td>
+                      <td data-label="Company">{organizer.organizer.companyName || 'N/A'}</td>
+                      <td data-label="Address">{organizer.organizer.companyAddress || 'N/A'}</td>
+                      <td data-label="Position">{organizer.organizer.position || 'N/A'}</td>
+                      <td data-label="Status">
                         <span className={`status-tag ${organizer.organizer.verified ? organizer.organizer.verified.toLowerCase() : 'pending'}`}>
                           {organizer.organizer.verified || 'Pending'}
                         </span>
                       </td>
-                      <td>
+                      <td data-label="Action">
                         <button
                           type="button"
                           className="action-btn edit-btn"

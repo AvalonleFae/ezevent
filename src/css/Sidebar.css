@@ -1,6 +1,6 @@
 .sidebar {
   width: 280px;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(15px);
   padding: 2rem 1rem;
   height: 100vh;
@@ -11,8 +11,23 @@
   color: var(--text-white);
   display: flex;
   flex-direction: column;
-  z-index: 1000;
+  z-index: 1001;
   clip-path: polygon(0 0, 100% 0, 95% 100%, 0 100%);
+  transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    width: 250px;
+    clip-path: none;
+    /* simpler for mobile */
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5);
+  }
 }
 
 .user-profile {
@@ -74,7 +89,7 @@
 .sidebar a.active {
   background: var(--text-white);
   color: var(--bg-black);
-  transform: translateX(15px) skewX(-10deg);
+  transform: translateX(15px) skewX(-1deg);
   box-shadow: -5px 0 20px rgba(255, 255, 255, 0.2);
 }
 
@@ -92,4 +107,74 @@
 .sidebar-signout a:hover {
   background: var(--primary-red);
   color: white;
+}
+
+/* Mobile Toggle Button */
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: 45px;
+  height: 45px;
+  background: var(--primary-red);
+  border: none;
+  z-index: 1002;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  box-shadow: 0 0 15px var(--primary-red-glow);
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+}
+
+.sidebar-toggle span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .sidebar-toggle {
+    display: flex;
+  }
+
+  /* Hamburger to X animation */
+  .sidebar-toggle.open span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .sidebar-toggle.open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .sidebar-toggle.open span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

@@ -75,14 +75,14 @@ export default function ViewParticipants() {
                 ) : (
                   participant.map((participant) => (
                     <tr key={participant.id}>
-                      <td>{participant.id}</td>
-                      <td>{participant.email || 'N/A'}</td>
-                      <td>{participant.name || 'N/A'}</td>
-                      <td>{participant.age || 'N/A'}</td>
-                      <td>{participant.phoneNumber || 'N/A'}</td>
-                      <td>{participant.gender || 'N/A'}</td>
-                      <td>{participant.participant.institution || 'N/A'}</td>
-                      <td>{participant.participant.matricNumber || 'N/A'}</td>
+                      <td data-label="ID">{participant.id}</td>
+                      <td data-label="Email">{participant.email || 'N/A'}</td>
+                      <td data-label="Name">{participant.name || 'N/A'}</td>
+                      <td data-label="Age">{participant.age || 'N/A'}</td>
+                      <td data-label="Phone">{participant.phoneNumber || 'N/A'}</td>
+                      <td data-label="Gender">{participant.gender || 'N/A'}</td>
+                      <td data-label="Institution">{participant.participant.institution || 'N/A'}</td>
+                      <td data-label="Matric No">{participant.participant.matricNumber || 'N/A'}</td>
                     </tr>
                   ))
                 )}

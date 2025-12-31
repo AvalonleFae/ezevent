@@ -28,8 +28,8 @@
 
 .search-input {
     flex: 1;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.699);
     padding: 1rem;
     color: white;
     font-family: 'Inter', sans-serif;
@@ -38,9 +38,9 @@
 
 .search-input:focus {
     outline: none;
-    border-color: var(--primary-red);
+    border-color: var(--neon-cyan);
     background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 15px var(--primary-red-glow);
+    box-shadow: 0 0 15px var(--neon-cyan-glow);
 }
 
 .action-button-CSV {
@@ -53,6 +53,9 @@
     cursor: pointer;
     transition: all 0.3s ease;
     clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    display: block;
+    margin: 20px auto;
+    width: 200px;
 }
 
 .action-button-CSV:hover {

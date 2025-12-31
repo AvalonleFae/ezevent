@@ -77,3 +77,36 @@
 .topbar-link-primary::after {
   display: none;
 }
+
+@media (max-width: 768px) {
+  .topbar {
+    height: 60px;
+  }
+
+  .topbar-container {
+    padding: 0 1rem;
+  }
+
+  .topbar-logo img {
+    height: 35px;
+  }
+
+  .topbar-nav {
+    gap: 1rem;
+  }
+
+  .topbar-link {
+    font-size: 0.9rem;
+  }
+
+  .topbar-link-primary {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar-link:not(.topbar-link-primary):not(:first-child) {
+    display: none;
+  }
+}

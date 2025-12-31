@@ -390,7 +390,7 @@ export default function CreateEvent() {
 
                 <div className="ce-actions">
                     <button type="submit" className="tbhx-button ce-submit" disabled={submitting}>
-                        {submitting ? 'UPLOADING...' : 'DEPLOY EVENT'}
+                        {submitting ? 'UPLOADING...' : 'CREATE EVENT'}
                     </button>
                 </div>
             </form>

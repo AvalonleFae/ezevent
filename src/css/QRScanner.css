@@ -119,11 +119,50 @@
 }
 
 @media (max-width: 600px) {
+  .scanner-container {
+    padding: 1rem;
+  }
+
   .scanner-card {
-    padding: 2.5rem 1.5rem;
+    padding: 3.5rem 1.5rem 2rem 1.5rem;
+    clip-path: none;
+    border-width: 1px;
+  }
+
+  .back-button {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.9rem !important;
+    z-index: 10;
   }
 
   .scanner-title {
     font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .start-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .start-text {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .status-box {
+    margin-top: 2rem;
+    padding: 1.5rem;
+  }
+
+  .status-box strong {
+    font-size: 1.5rem;
+  }
+
+  .status-area {
+    margin-top: 1rem;
   }
 }

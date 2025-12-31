@@ -64,6 +64,8 @@ export default function Sidebar({ role }) {
     fetchUserData();
   }, []);
 
+  const [isOpen, setIsOpen] = useState(false);
+
   // Handle user logout
   async function handleLogout() {
     try {
@@ -96,26 +98,41 @@ export default function Sidebar({ role }) {
   };
 
   return (
-    <aside className="sidebar">
-      <div className="user-profile">
-        <div className="user-name">{userData.name}</div>
-        <div className="user-role">{userData.role}</div>
-      </div>
-      <ul>
-        {items.map((item) => (
-          <li key={item.path}>
-            <NavLink
-              to={item.path}
-              className={(navData) => getActiveClassName(navData, item.path)}
-            >
-              {item.label}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
-      <div className="sidebar-signout">
-        <a onClick={handleLogout}>Sign Out</a>
-      </div>
-    </aside>
+    <>
+      <button
+        className={`sidebar-toggle ${isOpen ? 'open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
+        <div className="user-profile">
+          <div className="user-name">{userData.name}</div>
+          <div className="user-role">{userData.role}</div>
+        </div>
+        <ul>
+          {items.map((item) => (
+            <li key={item.path}>
+              <NavLink
+                to={item.path}
+                className={(navData) => getActiveClassName(navData, item.path)}
+                onClick={() => setIsOpen(false)}
+              >
+                {item.label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+        <div className="sidebar-signout">
+          <a onClick={handleLogout}>Sign Out</a>
+        </div>
+      </aside>
+
+      {isOpen && <div className="sidebar-overlay" onClick={() => setIsOpen(false)}></div>}
+    </>
   );
 }

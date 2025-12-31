@@ -44,12 +44,12 @@ export default function ManageFacultiesPage() {
     }
   }, [universityId]);
 
-const isValidId = (value) => {
-  // Reject if it contains any lowercase a–z
-  return !/[a-z]/.test(value);
-  // Alternative stricter rule:
-  // return /^[A-Z0-9-]+$/.test(value);
-};
+  const isValidId = (value) => {
+    // Reject if it contains any lowercase a–z
+    return !/[a-z]/.test(value);
+    // Alternative stricter rule:
+    // return /^[A-Z0-9-]+$/.test(value);
+  };
 
   const handleNewFaculty = async (e) => {
     e.preventDefault();
@@ -57,7 +57,7 @@ const isValidId = (value) => {
       return;
     }
 
-      if(!isValidId(facultyId.trim())) {
+    if (!isValidId(facultyId.trim())) {
       window.alert('Faculty ID cannot contain lowercase letters.');
       return;
     }
@@ -117,14 +117,14 @@ const isValidId = (value) => {
       <h1>Manage Faculties - {universityName}</h1>
       <div className="faculties-header">
         <br></br>
-        <button 
-          type="button" 
+        <button
+          type="button"
           className="back-btn"
           onClick={handleBackToUniversities}
         >
           Back to Universities
         </button>
-        
+
       </div>
 
       <section className="faculties-list-section">
@@ -150,10 +150,10 @@ const isValidId = (value) => {
               ) : (
                 faculties.map((faculty) => (
                   <tr key={faculty.id}>
-                    <td>{faculty.id}</td>
-                    <td>{faculty.facultyName || 'N/A'}</td>
-                    <td>
-                      <button 
+                    <td data-label="ID">{faculty.id}</td>
+                    <td data-label="Faculty Name">{faculty.facultyName || 'N/A'}</td>
+                    <td data-label="Action">
+                      <button
                         type="button"
                         className="action-btn delete-btn"
                         onClick={() => handleDelete(faculty.id, faculty.facultyName)}

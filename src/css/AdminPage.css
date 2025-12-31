@@ -11,14 +11,26 @@
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
-  margin-left: 250px;
-
+  margin-left: 280px;
+  /* matched with index.css */
   min-height: 100vh;
   color: #333;
+  transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .admin-content {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .admin-content h1 {
+    text-align: center;
+  }
 }
 
 .admin-content h1 {
-  color: #333;
+  color: #ffffff;
   margin: 0;
 }
 
