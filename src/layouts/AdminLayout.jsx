@@ -9,7 +9,6 @@ import ViewParticipants from "../pages/Admin/ViewParticipantsPage";
 import ValidateEventPage from "../pages/Admin/ValidateEventPage";
 import ValidateEventDetails from "../pages/Admin/ValidateEventDetails";
 
-
 function AdminLayout() {
     return (
         <div className="admin-container">
