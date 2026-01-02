@@ -149,7 +149,7 @@ export default function SignUpPage() {
                                     <select name="institution" value={formData.institution} onChange={handleChange} required>
                                         <option value="">SELECT UNI</option>
                                         {universities.map(uni => (
-                                            <option key={uni.id} value={uni.universityName || uni.id}>{uni.universityName || uni.id}</option>
+                                            <option key={uni.id} value={uni.id}>{uni.universityName || uni.id}</option>
                                         ))}
                                     </select>
                                 </div>

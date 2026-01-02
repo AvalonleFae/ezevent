@@ -30,7 +30,7 @@ export default function KPICards({ metrics }) {
       bgColor: '#E8F5E9'
     },
     {
-      title: 'Pending Event Validation',
+      title: 'Pending Event Validations',
       value: pendingEventValidations,
       color: '#FF6B6B',
       bgColor: '#FFEBEE'

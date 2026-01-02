@@ -6,24 +6,21 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function UserRoleChart({ userStats }) {
   const data = {
-    labels: ['Participants', 'Organizers', 'Admins'],
+    labels: ['Participants', 'Organizers'],
     datasets: [
       {
         label: 'Users by Role',
         data: [
           userStats.participants || 0,
-          userStats.organizers || 0,
-          userStats.admins || 0
+          userStats.organizers || 0
         ],
         backgroundColor: [
           'rgba(75, 192, 192, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 99, 132, 0.6)'
+          'rgba(54, 162, 235, 0.6)'
         ],
         borderColor: [
           'rgba(75, 192, 192, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 99, 132, 1)'
+          'rgba(54, 162, 235, 1)'
         ],
         borderWidth: 2
       }
