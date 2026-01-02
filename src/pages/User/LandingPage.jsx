@@ -26,7 +26,7 @@ export default function LandingPage() {
                 <div className="hero-bg-text">EZEVENT</div>
                 <div className="lp-container">
                     <h1 className="tbhx-header"><span className="text-glow">EZEvent</span></h1>
-                    <p className="hero-subtitle">AGGRESSIVE EVENT MANAGEMENT. FUTURISTIC COMMUNITY.</p>
+                    <p className="hero-subtitle">EVENT MANAGEMENT. FUTURISTIC COMMUNITY.</p>
                     <button className="tbhx-button">EXPLORE NOW</button>
                 </div>
             </section>
@@ -48,7 +48,7 @@ export default function LandingPage() {
                         <div className="tbhx-card feature-card">
                             <span className="card-num">03</span>
                             <h3>Connect</h3>
-                            <p>Engage with your campus community through aggressive networking tools.</p>
+                            <p>Engage with your campus community through our networking tools.</p>
                         </div>
                     </div>
                 </div>

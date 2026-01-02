@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { auth, db } from '../../firebase'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword} from 'firebase/auth'
 import { doc, setDoc, collection, getDocs } from 'firebase/firestore'
 import { useNavigate, Link } from "react-router-dom";
 import '../../css/LoginPage.css'
@@ -25,6 +25,7 @@ export default function SignUpPage() {
 
     const [universities, setUniversities] = useState([]);
     const [error, setError] = useState('');
+    const [showSuccess, setShowSuccess] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -72,7 +73,12 @@ export default function SignUpPage() {
             }
 
             await setDoc(doc(db, 'users', user.uid), userData);
-            navigate(formData.role === 'organizer' ? '/organizer' : '/participant/events');
+            
+            // Show success popup
+            setShowSuccess(true);
+            
+            
+
         } catch (err) {
             setError(err.message);
         }
@@ -88,6 +94,7 @@ export default function SignUpPage() {
 
                 <h2>REGISTER ACCOUNT</h2>
                 {error && <div className="error-message">{error}</div>}
+                {showSuccess && <div className="success-message">Account created successfully!</div>}
 
                 <form onSubmit={handleSignUp}>
                     <div className="form-group">
@@ -139,10 +146,10 @@ export default function SignUpPage() {
                             <div className="form-row">
                                 <div className="form-group">
                                     <label>INSTITUTION</label>
-                                    <select name="institution" onChange={handleChange} required>
+                                    <select name="institution" value={formData.institution} onChange={handleChange} required>
                                         <option value="">SELECT UNI</option>
                                         {universities.map(uni => (
-                                            <option key={uni.id} value={uni.name}>{uni.name}</option>
+                                            <option key={uni.id} value={uni.universityName || uni.id}>{uni.universityName || uni.id}</option>
                                         ))}
                                     </select>
                                 </div>

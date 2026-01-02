@@ -53,12 +53,16 @@ function App() {
         <Route 
           path="/signup" 
           element={
-            <div className="app auth-wrapper">
-              <div className="auth-inner">
-                <SignUpPage />
+            user && role ? (
+              <Navigate to={getLandingPath()} replace />
+            ) : (
+              <div className="app auth-wrapper">
+                <div className="auth-inner">
+                  <SignUpPage />
+                </div>
               </div>
-            </div>
-          } 
+            )
+          }
         />
 
         <Route

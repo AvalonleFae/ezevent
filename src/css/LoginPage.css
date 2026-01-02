@@ -102,6 +102,16 @@
     text-align: center;
 }
 
+.success-message {
+    background: rgba(0, 255, 0, 0.1);
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    padding: 0.8rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
 .logo-section {
     text-align: center;
     margin-bottom: 2rem;
