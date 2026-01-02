@@ -108,7 +108,7 @@ export default function GenderDemographicsChart({ participantsData }) {
 
   return (
     <div className="chart-container">
-      <h3 className="chart-title">Gender Demographics</h3>
+      <h3 className="chart-title">Participant Gender Demographics</h3>
       <div className="chart-wrapper">
         <Pie data={data} options={options} />
       </div>

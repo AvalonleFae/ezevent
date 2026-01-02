@@ -122,6 +122,72 @@ export default function EventDashboard({ }) {
         }
     }
 
+    // Download QR code as image
+    const downloadQRCode = async (imageUrl, qrId) => {
+        try {
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `QRCode_${qrId.substring(0, 8)}_${eventName.replace(/\s+/g, '_')}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Error downloading QR code:", error);
+            alert("Failed to download QR code. Please try again.");
+        }
+    };
+
+    // Print QR code
+    const printQRCode = (imageUrl, qrId) => {
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            alert("Please allow pop-ups to print QR code");
+            return;
+        }
+
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>QR Code - ${qrId.substring(0, 8)}</title>
+                    <style>
+                        @media print {
+                            body { margin: 0; padding: 20px; }
+                            img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+                            .qr-info { text-align: center; margin-top: 20px; font-family: Arial, sans-serif; }
+                            .event-name { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+                            .qr-id { font-size: 14px; color: #666; }
+                        }
+                        body { margin: 0; padding: 20px; text-align: center; }
+                        img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+                        .qr-info { text-align: center; margin-top: 20px; font-family: Arial, sans-serif; }
+                        .event-name { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+                        .qr-id { font-size: 14px; color: #666; }
+                    </style>
+                </head>
+                <body>
+                    <img src="${imageUrl}" alt="QR Code" />
+                    <div class="qr-info">
+                        <div class="event-name">${eventName}</div>
+                        <div class="qr-id">QR ID: ${qrId.substring(0, 8)}</div>
+                    </div>
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            window.onafterprint = function() {
+                                window.close();
+                            };
+                        };
+                    </script>
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+    };
+
     // --- JSX RENDER ---
     return (
         <div className="dashboard-container-tbhx">
@@ -186,6 +252,17 @@ export default function EventDashboard({ }) {
                                     <div className="qr-placeholder">NO DATA</div>
                                 )}
                                 <div className="qr-meta">ID: {doc.id.substring(0, 8)}...</div>
+                                {doc.imageQR && (
+                                    <div className="qr-actions">
+                                        <button 
+                                            className="qr-action-btn print-btn"
+                                            onClick={() => printQRCode(doc.imageQR, doc.id)}
+                                            title="Print QR Code"
+                                        >
+                                            🖨 Print
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import '../../css/charts/KPICards.css';
 
 export default function KPICards({ metrics }) {
-  const { totalUsers, totalEvents, totalRegistrations, pendingValidations, totalParticipants, totalOrganizers } = metrics;
+  const { totalUsers, totalEvents, totalRegistrations, pendingValidations, pendingEventValidations, totalParticipants, totalOrganizers } = metrics;
 
   const kpiData = [
     {
@@ -30,8 +30,8 @@ export default function KPICards({ metrics }) {
       bgColor: '#E8F5E9'
     },
     {
-      title: 'Total Registrations',
-      value: totalRegistrations,
+      title: 'Pending Event Validation',
+      value: pendingEventValidations,
       color: '#FF6B6B',
       bgColor: '#FFEBEE'
     },
