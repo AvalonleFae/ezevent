@@ -1,25 +1,24 @@
 .participant-container-tbhx {
   width: 100%;
-  min-height: 100vh;
 }
 
 .participant-content {
-  padding: 2rem;
   width: 100%;
 }
 
 .participant-header {
-  margin-bottom: 4rem;
-  position: relative;
-  border-bottom: 4px solid var(--primary-red);
-  padding-bottom: 1rem;
+  margin-bottom: 3rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 1.5rem;
 }
 
 .participant-header h1 {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 5rem;
-  color: var(--text-white);
+  font-family: 'Roboto', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #fff;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 /* Category Filter Styling */
@@ -27,61 +26,59 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin-bottom: 4rem;
-  background: rgba(255, 64, 64, 0.05);
+  margin-bottom: 3rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
   padding: 1.5rem 2rem;
-  border-left: 5px solid var(--primary-red);
-  transform: skewX(-2deg);
-}
-
-.filter-container>* {
-  transform: skewX(2deg);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .filter-label {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 1.4rem;
-  color: var(--text-white);
-  letter-spacing: 1px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
 }
 
 .filter-select {
-  background: #121212;
-  border: 1px solid rgba(255, 255, 255, 0.56);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   padding: 0.8rem 2.5rem 0.8rem 1.2rem;
   color: white;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FF4040' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1.2rem;
   min-width: 250px;
+  border-radius: 10px;
 }
 
 .filter-select option {
-  background: #121212;
+  background: #1e293b;
   color: white;
   padding: 10px;
 }
 
 .filter-select:focus {
   outline: none;
-  border-color: var(--primary-red);
-  box-shadow: 0 0 15px var(--primary-red-glow);
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 @media (max-width: 768px) {
   .participant-header h1 {
-    font-size: 3rem;
-    text-align: center;
+    font-size: 2.5rem;
   }
 
   .filter-container {
     flex-direction: column;
     align-items: flex-start;
+    padding: 1.2rem;
   }
 
   .filter-select {

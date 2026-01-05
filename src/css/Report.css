@@ -1,5 +1,4 @@
 .report-container-tbhx {
-    padding: 2rem;
     width: 100%;
 }
 
@@ -8,70 +7,85 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 3rem;
-    border-bottom: 2px solid var(--primary-red);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     padding-bottom: 1.5rem;
 }
 
 .report-header-tbhx h2 {
-    font-size: 4rem;
+    font-family: 'Roboto', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
     margin: 0;
-    line-height: 1;
-}
-
-.back-btn {
-    font-size: 1rem;
-    padding: 0.8rem 2rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
 }
 
 .report-summary-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
     margin-bottom: 3rem;
 }
 
 .summary-card {
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .summary-card .stat-label {
-    font-family: 'Bebas Neue', cursive;
-    font-size: 1.2rem;
-    color: var(--text-gray);
-    letter-spacing: 2px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.75rem;
 }
 
 .summary-card .stat-value {
-    font-family: 'Bebas Neue', cursive;
-    font-size: 5rem;
-    color: var(--primary-red);
+    font-family: 'Roboto', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #ffffff;
     line-height: 1;
-    text-shadow: 0 0 15px var(--primary-red-glow);
-}
-
-.summary-card.highlighted .stat-value {
-    color: var(--neon-cyan);
-    text-shadow: 0 0 20px var(--neon-cyan-glow);
 }
 
 .chart-section {
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
 }
 
 .chart-section h3 {
-    font-size: 2rem;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
     margin-bottom: 2rem;
-    color: var(--text-white);
-    text-transform: uppercase;
-    border-left: 4px solid var(--primary-red);
-    padding-left: 1.5rem;
+    color: #fff;
+    padding-left: 1.2rem;
+    border-left: 5px solid #ffffff;
 }
 
 .sales-chart-wrapper {
-    height: 400px;
+    height: 450px;
     position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 2rem;
 }
 
 .report-charts-grid {
@@ -82,59 +96,33 @@
 }
 
 .chart-wrapper {
-    height: 350px;
+    height: 400px;
     position: relative;
-}
-
-@media (max-width: 1100px) {
-    .report-charts-grid {
-        grid-template-columns: 1fr;
-    }
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 2rem;
 }
 
 @media (max-width: 768px) {
-    .report-container-tbhx {
-        padding: 1rem;
-    }
-
     .report-header-tbhx {
         flex-direction: column;
-        gap: 1.5rem;
-        align-items: stretch;
-        margin-bottom: 2rem;
+        align-items: flex-start;
+        gap: 1rem;
     }
 
     .report-header-tbhx h2 {
-        font-size: 2.5rem;
-        text-align: center;
-    }
-
-    .back-btn {
-        width: 100%;
-        text-align: center;
-    }
-
-    .report-summary-row {
-        gap: 1rem;
-        margin-bottom: 2rem;
-        flex-direction: column;
-    }
-
-    .summary-card {
-        padding: 1.5rem;
+        font-size: 2.2rem;
     }
 
     .summary-card .stat-value {
         font-size: 2.8rem;
     }
 
-    .chart-section h3 {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-
     .sales-chart-wrapper,
     .chart-wrapper {
-        height: 250px;
+        height: 350px;
+        border-radius: 20px;
     }
 }

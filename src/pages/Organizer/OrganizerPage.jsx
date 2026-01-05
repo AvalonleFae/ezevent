@@ -17,7 +17,7 @@ export default function OrganizerPage() {
   return (
     <div className="organizer-page-root">
       <div className="organizer-header-section">
-        <h1 className="tbhx-header">Organizer <span className="text-glow">Dashboard</span></h1>
+        <h1 className="tbhx-header">Organizer <span className="text-glow-org">Dashboard</span></h1>
         <div className="header-accent"></div>
       </div>
 

@@ -3,56 +3,70 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 4rem 2rem;
   background: transparent;
 }
 
 .scanner-card {
   width: 100%;
   max-width: 600px;
-  background: var(--bg-dark);
-  border: 2px solid var(--primary-red);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 4rem;
+  border-radius: 32px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   position: relative;
-  box-shadow: 0 0 40px var(--primary-red-glow);
-  clip-path: polygon(0 0, 100% 0, 100% 95%, 95% 100%, 0 100%);
+  transition: all 0.3s ease;
+}
+
+.scanner-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .scanner-title {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 4rem;
-  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #fff;
   text-align: center;
-  margin-bottom: 3rem;
-  border-bottom: 2px solid var(--primary-red);
-  padding-bottom: 1rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  letter-spacing: -0.02em;
 }
 
 .start-scan-container {
   text-align: center;
-  padding: 3rem 0;
+  padding: 2rem 0;
 }
 
 .start-icon {
-  font-size: 6rem;
-  color: var(--primary-red);
-  filter: drop-shadow(0 0 15px var(--primary-red-glow));
-  margin-bottom: 2rem;
+  font-size: 5rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
 }
 
 .start-text {
-  font-size: 1.2rem;
-  color: var(--text-gray);
-  margin-bottom: 3rem;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2.5rem;
 }
 
 .scanner-window {
   width: 100%;
   aspect-ratio: 1/1;
   background: #000;
-  border: 4px solid var(--primary-red);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
 }
 
 .scanner-window::after {
@@ -62,107 +76,94 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--primary-red);
-  box-shadow: 0 0 15px var(--primary-red);
-  animation: scan 2s infinite linear;
+  background: #ffffff;
+  box-shadow: 0 0 15px #fff;
+  opacity: 0.5;
+  animation: scan 2.5s infinite ease-in-out;
 }
 
 @keyframes scan {
-  0% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
 
-  100% {
-    transform: translateY(1000px);
+  50% {
+    transform: translateY(400px);
   }
 }
 
 .scanner-overlay-text {
   position: absolute;
-  bottom: 2rem;
+  bottom: 1.5rem;
   left: 0;
   right: 0;
   text-align: center;
-  color: var(--primary-red);
-  font-family: 'Bebas Neue', cursive;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
   letter-spacing: 2px;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  padding: 0.8rem;
+  font-size: 0.85rem;
 }
 
 .status-box {
-  margin-top: 3rem;
+  margin-top: 2.5rem;
   padding: 2rem;
   text-align: center;
-  border-left: 5px solid;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .status-box.processing {
-  border-color: var(--neon-cyan);
-  background: rgba(0, 240, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 .status-box.success {
-  border-color: #0f0;
-  background: rgba(0, 255, 0, 0.05);
+  background: rgba(34, 197, 94, 0.2);
+  color: #fff;
+  border-color: rgba(34, 197, 94, 0.3);
 }
 
 .status-box.error {
-  border-color: var(--primary-red);
-  background: rgba(255, 64, 64, 0.05);
+  background: rgba(239, 68, 68, 0.2);
+  color: #fff;
+  border-color: rgba(239, 68, 68, 0.3);
 }
 
 .status-box strong {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 2rem;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
   display: block;
+  margin-bottom: 0.5rem;
 }
 
 @media (max-width: 600px) {
   .scanner-container {
-    padding: 1rem;
+    padding: 1.5rem;
   }
 
   .scanner-card {
-    padding: 3.5rem 1.5rem 2rem 1.5rem;
-    clip-path: none;
-    border-width: 1px;
-  }
-
-  .back-button {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    padding: 0.5rem 1rem !important;
-    font-size: 0.9rem !important;
-    z-index: 10;
+    padding: 3rem 1.5rem;
+    border-radius: 24px;
   }
 
   .scanner-title {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
+    font-size: 2.2rem;
   }
 
   .start-icon {
     font-size: 4rem;
-    margin-bottom: 1rem;
   }
 
   .start-text {
     font-size: 1rem;
-    margin-bottom: 2rem;
-  }
-
-  .status-box {
-    margin-top: 2rem;
-    padding: 1.5rem;
-  }
-
-  .status-box strong {
-    font-size: 1.5rem;
-  }
-
-  .status-area {
-    margin-top: 1rem;
   }
 }

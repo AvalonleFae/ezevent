@@ -43,7 +43,7 @@ const AttendanceList = () => {
                         if (!attendanceSnap.empty) {
                             // If a record exists, use the specific status
                             const data = attendanceSnap.docs[0].data();
-                            
+
                             if (data.status) {
                                 statusStr = data.status;
                             }
@@ -60,13 +60,13 @@ const AttendanceList = () => {
                         // Determine boolean for the table
                         const isAbsent = statusStr === 'absent';
 
-                        return { 
-                            name, 
-                            email: userEmail, 
-                            absence: isAbsent, 
+                        return {
+                            name,
+                            email: userEmail,
+                            absence: isAbsent,
                             statusLabel: statusStr,
                             checkInTimeLabel: checkInTimeStr, // Added to state
-                            phoneNumber 
+                            phoneNumber
                         };
                     })
                 );
@@ -86,25 +86,25 @@ const AttendanceList = () => {
     const columns = [
         { name: 'NAME', selector: row => row.name, sortable: true },
         { name: 'EMAIL', selector: row => row.email, sortable: true },
-        { 
-            name: 'ATTENDANCE STATUS', 
-            selector: row => (row.absence ? 'ABSENT' : 'PRESENT'), 
+        {
+            name: 'ATTENDANCE STATUS',
+            selector: row => (row.absence ? 'ABSENT' : 'PRESENT'),
             sortable: true,
             conditionalCellStyles: [
                 {
                     when: row => row.absence === true,
-                    style: { color: '#ff4d4d', fontWeight: 'bold' }, 
+                    style: { color: '#ff4d4d', fontWeight: 'bold' },
                 },
                 {
                     when: row => row.absence === false,
-                    style: { color: '#4dff4d', fontWeight: 'bold' }, 
+                    style: { color: '#4dff4d', fontWeight: 'bold' },
                 },
             ]
         },
         // NEW COLUMN FOR CHECK-IN TIME
-        { 
-            name: 'CHECK-IN TIME', 
-            selector: row => row.checkInTimeLabel, 
+        {
+            name: 'CHECK-IN TIME',
+            selector: row => row.checkInTimeLabel,
             sortable: true,
             width: '200px' // Optional: give it a bit more space
         },
@@ -130,7 +130,7 @@ const AttendanceList = () => {
     );
 
     // CSV Export Function
-    const safeEventName = eventName.replace(/\s+/g, '_'); 
+    const safeEventName = eventName.replace(/\s+/g, '_');
 
     function exportToCSV() {
         if (!filteredAttendees.length) return;
@@ -140,7 +140,7 @@ const AttendanceList = () => {
         const rows = filteredAttendees.map(a => [
             a.name,
             a.email,
-            a.statusLabel, 
+            a.statusLabel,
             a.absence ? 'Yes' : 'No',
             a.checkInTimeLabel, // Added to CSV rows
             a.phoneNumber,
@@ -162,7 +162,7 @@ const AttendanceList = () => {
     return (
         <div className="attendance-container">
             <div className="halftone-bg"></div>
-            <h2 className="tbhx-header">ATTENDANCE <span className="text-glow">LOG</span></h2>
+            <h2 className="tbhx-header">ATTENDANCE <span className="text-glow-org">LOG</span></h2>
 
             {/* Back Button */}
             <button

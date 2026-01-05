@@ -1,20 +1,17 @@
 .attendance-container {
-    padding: 4rem 2rem;
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
 .attendance-container h2 {
-    font-family: 'Bebas Neue', cursive;
-    font-size: 4rem;
-    margin-bottom: 3rem;
-    color: var(--text-white);
-    border-bottom: 4px solid var(--primary-red);
-    padding-bottom: 1rem;
-}
-
-.action-button-brown {
-    margin-bottom: 3rem;
+    font-family: 'Roboto', sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 2.5rem;
+    color: #fff;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 1.5rem;
+    letter-spacing: -0.02em;
 }
 
 .subheader-container {
@@ -22,83 +19,107 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    gap: 2rem;
-    padding: 1rem 0;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .search-input {
     flex: 1;
-    background: rgba(255, 0, 0, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.699);
-    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.8rem 1.2rem;
     color: white;
-    font-family: 'Inter', sans-serif;
-    transition: all 0.3s ease;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 12px;
+    transition: all 0.2s ease;
 }
 
 .search-input:focus {
     outline: none;
-    border-color: var(--neon-cyan);
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 15px var(--neon-cyan-glow);
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .action-button-CSV {
-    background: var(--neon-cyan);
-    color: black;
+    background: #ffffff;
+    color: var(--theme-primary);
     border: none;
     padding: 0.8rem 2rem;
-    font-family: 'Bebas Neue', cursive;
-    font-size: 1.2rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: block;
-    margin: 20px auto;
-    width: 200px;
+    margin: 3rem auto;
+    width: fit-content;
+    min-width: 200px;
 }
 
 .action-button-CSV:hover {
-    transform: scale(1.05) rotate(2deg);
-    box-shadow: 0 0 20px var(--neon-cyan-glow);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    background: #f8fafc;
 }
 
-/* DataTable Custom Overrides */
+/* DataTable Custom Overrides - Sharp and Clear */
 .rdt_Table {
-    background: rgba(255, 255, 255, 0.03) !important;
-    color: white !important;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #ffffff !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
 .rdt_TableHeadRow {
-    background: var(--bg-dark) !important;
-    border-bottom: 2px solid var(--primary-red) !important;
+    background: #f8fafc !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    font-weight: 800 !important;
 }
 
 .rdt_TableHeadRow div {
-    font-family: 'Bebas Neue', cursive !important;
-    font-size: 1.3rem !important;
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 0.85rem !important;
+    text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--primary-red) !important;
+    color: #475569 !important;
 }
 
 .rdt_TableRow {
-    background: transparent !important;
-    color: white !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-    transition: all 0.2s ease;
+    background: #ffffff !important;
+    color: #1e293b !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    font-size: 0.95rem !important;
+    height: 64px !important;
 }
 
 .rdt_TableRow:hover {
-    background: rgba(255, 64, 64, 0.05) !important;
-    border-left: 4px solid var(--primary-red) !important;
+    background: #f1f5f9 !important;
 }
 
 .rdt_Pagination {
-    background: var(--bg-dark) !important;
-    color: var(--text-gray) !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: #ffffff !important;
+    color: #64748b !important;
+    border-top: 1px solid #e2e8f0 !important;
 }
 
 .rdt_Pagination button svg {
-    fill: var(--primary-red) !important;
+    fill: #1e293b !important;
+}
+
+@media (max-width: 768px) {
+    .attendance-container h2 {
+        font-size: 2.2rem;
+    }
+
+    .subheader-container {
+        flex-direction: column;
+    }
+
+    .action-button-CSV {
+        width: 100%;
+    }
 }

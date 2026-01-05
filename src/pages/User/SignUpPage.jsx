@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { auth, db } from '../../firebase'
-import { createUserWithEmailAndPassword} from 'firebase/auth'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { doc, setDoc, collection, getDocs } from 'firebase/firestore'
 import { useNavigate, Link } from "react-router-dom";
 import '../../css/LoginPage.css'
@@ -73,11 +73,11 @@ export default function SignUpPage() {
             }
 
             await setDoc(doc(db, 'users', user.uid), userData);
-            
+
             // Show success popup
             setShowSuccess(true);
-            
-            
+
+
 
         } catch (err) {
             setError(err.message);
@@ -86,10 +86,12 @@ export default function SignUpPage() {
 
     return (
         <div className="auth-wrapper">
-            <div className="halftone-bg"></div>
-            <div className="auth-container">
+            <div className="auth-particles"></div>
+
+            <div className="auth-container" style={{ maxWidth: '600px' }}> {/* Wider container for signup */}
                 <div className="logo-section">
                     <p className="logo-text">EZEvent</p>
+                    <p className="logo-subtext">EVENT MANAGEMENT</p>
                 </div>
 
                 <h2>REGISTER ACCOUNT</h2>
@@ -97,15 +99,26 @@ export default function SignUpPage() {
                 {showSuccess && <div className="success-message">Account created successfully!</div>}
 
                 <form onSubmit={handleSignUp}>
-                    <div className="form-group">
+                    <div className="form-group" style={{ animationDelay: '0.1s' }}>
                         <label>FULL NAME</label>
-                        <input name="name" placeholder="YOUR NAME" onChange={handleChange} required />
+                        <input
+                            name="name"
+                            placeholder="YOUR NAME"
+                            onChange={handleChange}
+                            required
+                        />
                     </div>
 
-                    <div className="form-row">
+                    <div className="form-row" style={{ animationDelay: '0.2s' }}>
                         <div className="form-group">
                             <label>AGE</label>
-                            <input name="age" type="number" placeholder="20" onChange={handleChange} required />
+                            <input
+                                name="age"
+                                type="number"
+                                placeholder="20"
+                                onChange={handleChange}
+                                required
+                            />
                         </div>
                         <div className="form-group">
                             <label>GENDER</label>
@@ -117,23 +130,40 @@ export default function SignUpPage() {
                         </div>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group" style={{ animationDelay: '0.3s' }}>
                         <label>EMAIL</label>
-                        <input name="email" type="email" placeholder="user@example.com" onChange={handleChange} required />
+                        <input
+                            name="email"
+                            type="email"
+                            placeholder="user@example.com"
+                            onChange={handleChange}
+                            required
+                        />
                     </div>
 
-                    <div className="form-row">
+                    <div className="form-row" style={{ animationDelay: '0.4s' }}>
                         <div className="form-group">
                             <label>PASSWORD</label>
-                            <input name="password" type="password" placeholder="••••••••" onChange={handleChange} required />
+                            <input
+                                name="password"
+                                type="password"
+                                placeholder="••••••••"
+                                onChange={handleChange}
+                                required
+                            />
                         </div>
                         <div className="form-group">
                             <label>PHONE</label>
-                            <input name="phoneNumber" placeholder="+60..." onChange={handleChange} required />
+                            <input
+                                name="phoneNumber"
+                                placeholder="+60..."
+                                onChange={handleChange}
+                                required
+                            />
                         </div>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group" style={{ animationDelay: '0.5s' }}>
                         <label>SELECT YOUR ROLE</label>
                         <select name="role" value={formData.role} onChange={handleChange} required>
                             <option value="participant">PARTICIPANT</option>
@@ -141,7 +171,7 @@ export default function SignUpPage() {
                         </select>
                     </div>
 
-                    <div className="role-specific-fields">
+                    <div className="role-specific-fields" style={{ animationDelay: '0.6s' }}>
                         {formData.role === 'participant' ? (
                             <div className="form-row">
                                 <div className="form-group">
@@ -159,7 +189,7 @@ export default function SignUpPage() {
                                 </div>
                             </div>
                         ) : (
-                            <>
+                            <div style={{ animation: 'fadeIn 0.5s ease' }}>
                                 <div className="form-group">
                                     <label>COMPANY NAME</label>
                                     <input name="companyName" placeholder="ORG INC" onChange={handleChange} required />
@@ -174,11 +204,11 @@ export default function SignUpPage() {
                                         <input name="address" placeholder="STREET..." onChange={handleChange} required />
                                     </div>
                                 </div>
-                            </>
+                            </div>
                         )}
                     </div>
 
-                    <button type="submit" className="tbhx-button auth-button">
+                    <button type="submit" className="auth-button">
                         CREATE ACCOUNT
                     </button>
                 </form>

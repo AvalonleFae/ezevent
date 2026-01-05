@@ -3,7 +3,7 @@ import AdminPage from "../pages/Admin/AdminPage";
 import ManagementReportPage from "../pages/Admin/ManagementReportPage";
 import ManageUniversityPage from "../pages/Admin/ManageUniversityPage";
 import ManageFacultiesPage from "../pages/Admin/ManageFacultiesPage";
-import {Routes, Route} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "../css/AdminPage.css";
 import ValidateOrganizer from "../pages/Admin/ValidateOrganizer";
 import ViewParticipants from "../pages/Admin/ViewParticipantsPage";
@@ -12,20 +12,20 @@ import ValidateEventDetails from "../pages/Admin/ValidateEventDetails";
 
 function AdminLayout() {
     return (
-        <div className="admin-container">
+        <div className="admin-container app-layout theme-admin">
             <Sidebar role="admin" />
-            <div className="admin-content">
-            <Routes>
-                <Route path="" element={<ManagementReportPage />} />
-                <Route path="management-report" element={<ManagementReportPage />} />
-                <Route path="validate-organizers" element={<ValidateOrganizer />} />
-                <Route path="validate-events" element={<ValidateEventPage />} />
-                <Route path="validate-events/:id" element={<ValidateEventDetails />} />
-                <Route path="view-participants" element={<ViewParticipants />} />
-                <Route path="manage-universities" element={<ManageUniversityPage />} />
-                <Route path="manage-faculties/:universityId" element={<ManageFacultiesPage />} />      
-                
-            </Routes>
+            <div className="admin-content main-content">
+                <Routes>
+                    <Route path="" element={<ManagementReportPage />} />
+                    <Route path="management-report" element={<ManagementReportPage />} />
+                    <Route path="validate-organizers" element={<ValidateOrganizer />} />
+                    <Route path="validate-events" element={<ValidateEventPage />} />
+                    <Route path="validate-events/:id" element={<ValidateEventDetails />} />
+                    <Route path="view-participants" element={<ViewParticipants />} />
+                    <Route path="manage-universities" element={<ManageUniversityPage />} />
+                    <Route path="manage-faculties/:universityId" element={<ManageFacultiesPage />} />
+
+                </Routes>
 
             </div>
         </div>

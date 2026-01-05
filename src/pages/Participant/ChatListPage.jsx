@@ -63,7 +63,7 @@ export default function ChatListPage() {
         {registeredEvents.length === 0 ? (
           <div className="no-chats">
             <p>NO ACTIVE CHAT CHANNELS FOUND.</p>
-            <button className="tbhx-button" onClick={() => navigate("/participant/events")}>BROWSE MISSIONS</button>
+            <button className="tbhx-button" onClick={() => navigate("/participant/events")}>BROWSE EVENT</button>
           </div>
         ) : (
           registeredEvents.map(event => (

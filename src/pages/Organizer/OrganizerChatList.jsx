@@ -78,8 +78,8 @@ export default function OrganizerChatList() {
             <div key={thread.id} className="chat-card" onClick={() => navigate(`/organizer/chat/${thread.eventId}`)}>
               <div className="chat-card-info">
                 <h3>{thread.eventName.toUpperCase()}</h3>
-                <p>MISSION CHANNEL</p>
-                <small>LAST INTEL: {thread.lastMessage}</small>
+                <p>CHAT CHANNEL</p>
+                <small>LAST CHAT: {thread.lastMessage}</small>
               </div>
               <div className="chat-card-arrow">&rarr;</div>
             </div>
