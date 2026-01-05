@@ -12,8 +12,7 @@ import '../css/OrganizerPage.css'
 
 function OrganizerLayout() {
   return (
-    <div className="organizer-container app-layout">
-      <div className="halftone-bg"></div>
+    <div className="organizer-container app-layout theme-organizer">
       <Sidebar role="organizer" />
 
       <div className="organizer-content main-content">

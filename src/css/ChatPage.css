@@ -7,154 +7,142 @@
 .chat-grid {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 3rem;
+  gap: 1.2rem;
+  margin-top: 2rem;
 }
 
 .chat-card {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e2e8f0;
+  padding: 1.5rem 2rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   position: relative;
-  overflow: hidden;
-}
-
-.chat-card::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--primary-red);
-  transform: scaleY(0);
-  transition: transform 0.3s ease;
 }
 
 .chat-card:hover {
-  background: rgba(255, 64, 64, 0.05);
-  border-color: var(--primary-red);
-  transform: translateX(10px);
-}
-
-.chat-card:hover::before {
-  transform: scaleY(1);
+  transform: translateY(-2px);
+  background: #ffffff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: var(--theme-primary);
 }
 
 .chat-card-info h3 {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 2rem;
-  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
   margin: 0;
 }
 
 .chat-card-info p {
-  color: var(--text-gray);
-  margin: 0.5rem 0;
+  color: #64748b;
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
 }
 
 .chat-card-info small {
-  color: var(--neon-cyan);
-  font-family: monospace;
+  color: var(--theme-primary);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
 }
 
 .chat-card-arrow {
   margin-left: auto;
-  font-size: 2rem;
-  color: var(--primary-red);
-  transition: transform 0.3s ease;
-}
-
-.chat-card:hover .chat-card-arrow {
-  transform: translateX(10px);
+  font-size: 1.2rem;
+  color: #94a3b8;
 }
 
 /* Chat Window */
 .chat-window {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 10rem);
-  background: var(--bg-dark);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  /* margin-left: 280px;  Removed fixed margin here as it's handled by main-content or media queries */
+  height: calc(100vh - 12rem);
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e2e8f0;
 }
 
 @media (max-width: 768px) {
   .chat-window {
-    margin-left: 0;
-    margin-top: 80px;
-    /* Clear the hamburger menu with extra room */
-    height: calc(100vh - 80px);
+    height: calc(100vh - 100px);
+    border-radius: 0;
+    margin-top: 70px;
   }
 }
 
 .chat-header {
   padding: 1.5rem 2rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 2px solid var(--primary-red);
+  background: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .chat-header h3 {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 2rem;
-  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
   margin: 0;
 }
 
 .messages-container {
   flex: 1;
-  padding: 3rem;
+  padding: 2.5rem;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
+  background: #f1f5f9;
 }
 
 .message-bubble {
-  max-width: 70%;
-  padding: 1.5rem;
-  position: relative;
+  max-width: 80%;
+  padding: 1.2rem 1.5rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .message-bubble small {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   display: block;
-  margin-bottom: 0.5rem;
-}
-
-.message-bubble p {
-  margin: 0;
-  line-height: 1.5;
+  margin-bottom: 0.4rem;
+  opacity: 0.8;
 }
 
 .message-bubble.sent {
-  background: var(--primary-red);
+  background: var(--theme-primary);
   color: white;
   align-self: flex-end;
-  clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+  border-bottom-right-radius: 4px;
 }
 
 .message-bubble.received {
-  background: rgba(0, 240, 255, 0.1);
-  color: white;
-  border-left: 4px solid var(--neon-cyan);
+  background: #ffffff;
+  color: #1e293b;
   align-self: flex-start;
+  border-bottom-left-radius: 4px;
 }
 
 .chat-input-area-container {
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.02);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem 2rem;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
 }
 
 .input-row {
@@ -164,70 +152,49 @@
 
 .input-row input {
   flex: 1;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 1rem;
-  color: white;
-  font-family: 'Inter', sans-serif;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 0.8rem 1.2rem;
+  color: #0f172a;
+  border-radius: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
 }
 
 .input-row input:focus {
   outline: none;
-  border-color: var(--primary-red);
+  border-color: var(--theme-primary);
+  background: #fff;
 }
 
 .input-row button {
-  background: var(--primary-red);
+  background: var(--theme-primary);
   color: white;
   border: none;
-  padding: 0 3rem;
-  font-family: 'Bebas Neue', cursive;
-  font-size: 1.2rem;
+  padding: 0 1.5rem;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
-  clip-path: skewX(-15deg);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.input-row button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
 }
 
 @media (max-width: 768px) {
   .chat-list-container {
-    padding: 6rem 1rem 2rem 1rem;
-  }
-
-  .participant-header {
-    margin-bottom: 2rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 3px solid var(--primary-red);
-  }
-
-  .participant-header h1 {
-    font-size: 2.5rem;
-    text-align: center;
-  }
-
-  .chat-card {
-    padding: 1rem;
-  }
-
-  .chat-card-info h3 {
-    font-size: 1.5rem;
-  }
-
-  .chat-header {
-    padding: 1rem;
-    gap: 1rem;
+    padding: 6rem 1.5rem 2rem;
   }
 
   .messages-container {
     padding: 1.5rem;
-    gap: 1rem;
   }
 
   .message-bubble {
     max-width: 90%;
-    padding: 1rem;
-    word-break: break-all;
-  }
-
-  .input-row button {
-    padding: 0 1.5rem;
   }
 }

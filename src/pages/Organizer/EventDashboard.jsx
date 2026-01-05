@@ -154,32 +154,74 @@ export default function EventDashboard({ }) {
                 <head>
                     <title>QR Code - ${qrId.substring(0, 8)}</title>
                     <style>
-                        @media print {
-                            body { margin: 0; padding: 20px; }
-                            img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
-                            .qr-info { text-align: center; margin-top: 20px; font-family: Arial, sans-serif; }
-                            .event-name { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
-                            .qr-id { font-size: 14px; color: #666; }
+                        body { 
+                            margin: 0; 
+                            padding: 0; 
+                            display: flex; 
+                            flex-direction: column; 
+                            align-items: center; 
+                            justify-content: center;
+                            min-height: 100vh;
+                            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                            background: white;
                         }
-                        body { margin: 0; padding: 20px; text-align: center; }
-                        img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
-                        .qr-info { text-align: center; margin-top: 20px; font-family: Arial, sans-serif; }
-                        .event-name { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
-                        .qr-id { font-size: 14px; color: #666; }
+                        .qr-container {
+                            text-align: center;
+                            width: 90%;
+                            max-width: 800px;
+                            padding: 40px;
+                        }
+                        img { 
+                            width: 100%; 
+                            max-width: 650px;
+                            height: auto; 
+                            display: block; 
+                            margin: 0 auto;
+                            image-rendering: -webkit-optimize-contrast;
+                            image-rendering: crisp-edges;
+                        }
+                        .qr-info { 
+                            margin-top: 50px; 
+                        }
+                        .event-name { 
+                            font-size: 48px; 
+                            font-weight: 900; 
+                            margin-bottom: 20px;
+                            color: #000;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            line-height: 1.2;
+                        }
+                        .qr-id { 
+                            font-size: 28px; 
+                            color: #333;
+                            font-weight: 600;
+                            letter-spacing: 3px;
+                        }
+                        @media print {
+                            body { padding: 0; margin: 0; }
+                            .qr-container { width: 100%; max-width: none; padding: 0; }
+                            img { width: 90%; max-width: none; }
+                        }
                     </style>
                 </head>
                 <body>
-                    <img src="${imageUrl}" alt="QR Code" />
-                    <div class="qr-info">
-                        <div class="event-name">${eventName}</div>
-                        <div class="qr-id">QR ID: ${qrId.substring(0, 8)}</div>
+                    <div class="qr-container">
+                        <img src="${imageUrl}" alt="QR Code" />
+                        <div class="qr-info">
+                            <div class="event-name">${eventName}</div>
+                            <div class="qr-id">QR ID: ${qrId.substring(0, 8)}</div>
+                        </div>
                     </div>
                     <script>
                         window.onload = function() {
-                            window.print();
-                            window.onafterprint = function() {
-                                window.close();
-                            };
+                            // Small delay ensures images are fully rendered in all browsers
+                            setTimeout(() => {
+                                window.print();
+                                window.onafterprint = function() {
+                                    window.close();
+                                };
+                            }, 500);
                         };
                     </script>
                 </body>
@@ -195,7 +237,7 @@ export default function EventDashboard({ }) {
 
             {/* Event Name Header */}
             <header className="event-header-tbhx">
-                <h1 className="tbhx-header">Event <span className="text-glow">Dashboard</span></h1>
+                <h1 className="tbhx-header">Event <span className="text-glow-org">Dashboard</span></h1>
                 <p className="current-event-name">{eventName}</p>
                 <div className="header-accent"></div>
             </header>
@@ -238,7 +280,7 @@ export default function EventDashboard({ }) {
 
             {viewMode === 'qr' && (
                 <div className="viewqr-container-tbhx">
-                    <h2 className="tbhx-header">Event <span className="text-glow">QR Access</span></h2>
+                    <h2 className="tbhx-header">Event <span className="text-glow-org">QR Access</span></h2>
 
                     {loading && <div className="loading-message">INCOMING DATA...</div>}
                     {!loading && qrDocs.length === 0 && <div className="no-qrs">NO QR CODES GENERATED FOR THIS SECTOR.</div>}
@@ -254,7 +296,7 @@ export default function EventDashboard({ }) {
                                 <div className="qr-meta">ID: {doc.id.substring(0, 8)}...</div>
                                 {doc.imageQR && (
                                     <div className="qr-actions">
-                                        <button 
+                                        <button
                                             className="qr-action-btn print-btn"
                                             onClick={() => printQRCode(doc.imageQR, doc.id)}
                                             title="Print QR Code"

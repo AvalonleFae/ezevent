@@ -156,10 +156,10 @@ export default function CreateEvent() {
         }
 
         if (Number(form.numOfParticipants) <= 0) {
-        alert('Max participants must be at least 1.');
-        setSubmitting(false);
-        return;
-    }
+            alert('Max participants must be at least 1.');
+            setSubmitting(false);
+            return;
+        }
 
         // UPDATE 4: Validate that date is not in the past
         const selectedDate = new Date(form.date);
@@ -298,11 +298,11 @@ export default function CreateEvent() {
             <div className="ce-root">
                 <div className="halftone-bg"></div>
                 <header className="ce-header">
-                    <h1 className="tbhx-header">CREATE <span className="text-glow">EVENT</span></h1>
+                    <h1 className="tbhx-header">CREATE <span className="text-glow-org">EVENT</span></h1>
                 </header>
-                <div style={{ 
-                    textAlign: 'center', 
-                    padding: '3rem', 
+                <div style={{
+                    textAlign: 'center',
+                    padding: '3rem',
                     color: 'white',
                     maxWidth: '600px',
                     margin: '2rem auto',
@@ -314,7 +314,7 @@ export default function CreateEvent() {
                         {organizerStatus === 'Pending' ? 'Verification Pending' : 'Access Denied'}
                     </h2>
                     <p style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
-                        {organizerStatus === 'Pending' 
+                        {organizerStatus === 'Pending'
                             ? 'Your organizer account is currently pending verification. Please wait for admin approval before creating events.'
                             : 'Your organizer account has been declined. Please contact the administrator for more information.'}
                     </p>
@@ -327,153 +327,155 @@ export default function CreateEvent() {
         <div className="ce-root">
             <div className="halftone-bg"></div>
             <header className="ce-header">
-                <h1 className="tbhx-header">CREATE <span className="text-glow">EVENT</span></h1>
+                <h1 className="tbhx-header-org">CREATE <span className="text-glow-org">EVENT</span></h1>
             </header>
 
-            <form className="ce-form" onSubmit={handleSubmit}>
-                <label className="ce-field">
-                    <span className="ce-label">EVENT NAME</span>
-                    <input
-                        className="ce-input"
-                        placeholder="ENTER EVENT NAME"
-                        value={form.eventName}
-                        onChange={(e) => setForm({ ...form, eventName: e.target.value })}
-                        required
-                    />
-                </label>
-
-                <label className="ce-field">
-                    <span className="ce-label">EVENT DATE</span>
-                    <input
-                        className="ce-input"
-                        type="datetime-local"
-                        value={form.date}
-                        onChange={(e) => setForm({ ...form, date: e.target.value })}
-                        min={minDate}
-                        required
-                    />
-                </label>
-
-                <div className="ce-select-grid">
+            <div className="ce-form-wrap">
+                <form className="ce-form" onSubmit={handleSubmit}>
                     <label className="ce-field">
-                        <span className="ce-label">UNIVERSITY</span>
-                        <select
-                            className="ce-select"
-                            value={form.university}
-                            onChange={(e) => {
-                                setForm({ ...form, university: e.target.value, faculty: '' });
-                            }}
-                            required
-                        >
-                            <option value="" disabled hidden>SELECT UNIVERSITY</option>
-                            {universities.map((uni) => (
-                                <option key={uni.id} value={uni.id}>
-                                    {uni.universityName || uni.id}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
-                    <label className="ce-field">
-                        <span className="ce-label">FACULTY</span>
-                        <select
-                            className="ce-select"
-                            value={form.faculty}
-                            onChange={(e) => setForm({ ...form, faculty: e.target.value })}
-                            disabled={!form.university || form.university === 'Other'}
-                            required={form.university !== 'Other'}
-                        >
-                            <option value="" disabled hidden>SELECT FACULTY</option>
-                            {faculties.map((fac) => (
-                                <option key={fac.id} value={fac.id}>
-                                    {fac.facultyName || fac.id}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
-                </div>
-
-                <label className="ce-field">
-                    <span className="ce-label">ADDRESS</span>
-                    <input className="ce-input" placeholder="LOCATION DETAILS" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} required />
-                </label>
-
-                <label className="ce-field">
-                    <span className="ce-label">CATEGORY</span>
-                    <select
-                        className="ce-select"
-                        value={form.category}
-                        onChange={(e) => setForm({ ...form, category: e.target.value })}
-                        required
-                    >
-                        <option value="" disabled hidden >SELECT CATEGORY</option>
-                        {categories.map((cat) => (
-                            <option key={cat.id} value={cat.id}>
-                                {cat.categoryName || cat.id}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-
-                <label className="ce-field">
-                    <span className="ce-label">DESCRIPTION</span>
-                    <textarea
-                        className="ce-textarea"
-                        placeholder="EVENT DESCRIPTION AND DETAILS"
-                        value={form.description}
-                        onChange={(e) => setForm({ ...form, description: e.target.value })}
-                        required
-                    />
-                </label>
-
-                <label className="ce-field">
-                    <span className="ce-label">AFTER REGISTRATION MESSAGE</span>
-                    <textarea
-                        className="ce-textarea"
-                        placeholder="WHATSAPP LINK, TELEGRAM, ETC."
-                        value={form.afterRegistrationMessage}
-                        onChange={(e) => setForm({ ...form, afterRegistrationMessage: e.target.value })}
-                        required
-                    />
-                </label>
-
-                <div className="ce-select-grid">
-                    <label className="ce-field">
-                        <span className="ce-label">MAX PARTICIPANTS</span>
+                        <span className="ce-label">EVENT NAME</span>
                         <input
                             className="ce-input"
-                            type="number"
-                            min="1"
-                            placeholder="1"
-                            value={form.numOfParticipants}
-                            onChange={(e) => setForm({ ...form, numOfParticipants: e.target.value })}
+                            placeholder="ENTER EVENT NAME"
+                            value={form.eventName}
+                            onChange={(e) => setForm({ ...form, eventName: e.target.value })}
                             required
                         />
                     </label>
 
                     <label className="ce-field">
-                        <span className="ce-label">PRICE (RM)</span>
-                        <input className="ce-input" placeholder="FREE OR AMOUNT" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} required />
+                        <span className="ce-label">EVENT DATE</span>
+                        <input
+                            className="ce-input"
+                            type="datetime-local"
+                            value={form.date}
+                            onChange={(e) => setForm({ ...form, date: e.target.value })}
+                            min={minDate}
+                            required
+                        />
                     </label>
-                </div>
 
-                <div className="ce-field">
-                    <span className="ce-label">EVENT COVER IMAGE</span>
-                    <label className="ce-image-placeholder">
-                        {imagePreview ? (
-                            <img src={imagePreview} alt="preview" className="ce-image-preview" />
-                        ) : (
-                            <div className="ce-image-icon">🖼️</div>
-                        )}
-                        <input type="file" accept="image/*" onChange={handleImageChange} required />
+                    <div className="ce-select-grid">
+                        <label className="ce-field">
+                            <span className="ce-label">UNIVERSITY</span>
+                            <select
+                                className="ce-select"
+                                value={form.university}
+                                onChange={(e) => {
+                                    setForm({ ...form, university: e.target.value, faculty: '' });
+                                }}
+                                required
+                            >
+                                <option value="" disabled hidden>SELECT UNIVERSITY</option>
+                                {universities.map((uni) => (
+                                    <option key={uni.id} value={uni.id}>
+                                        {uni.universityName || uni.id}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                        <label className="ce-field">
+                            <span className="ce-label">FACULTY</span>
+                            <select
+                                className="ce-select"
+                                value={form.faculty}
+                                onChange={(e) => setForm({ ...form, faculty: e.target.value })}
+                                disabled={!form.university || form.university === 'Other'}
+                                required={form.university !== 'Other'}
+                            >
+                                <option value="" disabled hidden>SELECT FACULTY</option>
+                                {faculties.map((fac) => (
+                                    <option key={fac.id} value={fac.id}>
+                                        {fac.facultyName || fac.id}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
+
+                    <label className="ce-field">
+                        <span className="ce-label">ADDRESS</span>
+                        <input className="ce-input" placeholder="LOCATION DETAILS" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} required />
                     </label>
-                </div>
 
-                <div className="ce-actions">
-                    <button type="submit" className="tbhx-button ce-submit" disabled={submitting}>
-                        {submitting ? 'UPLOADING...' : 'CREATE EVENT'}
-                    </button>
-                </div>
-            </form>
+                    <label className="ce-field">
+                        <span className="ce-label">CATEGORY</span>
+                        <select
+                            className="ce-select"
+                            value={form.category}
+                            onChange={(e) => setForm({ ...form, category: e.target.value })}
+                            required
+                        >
+                            <option value="" disabled hidden >SELECT CATEGORY</option>
+                            {categories.map((cat) => (
+                                <option key={cat.id} value={cat.id}>
+                                    {cat.categoryName || cat.id}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
+                    <label className="ce-field">
+                        <span className="ce-label">DESCRIPTION</span>
+                        <textarea
+                            className="ce-textarea"
+                            placeholder="EVENT DESCRIPTION AND DETAILS"
+                            value={form.description}
+                            onChange={(e) => setForm({ ...form, description: e.target.value })}
+                            required
+                        />
+                    </label>
+
+                    <label className="ce-field">
+                        <span className="ce-label">AFTER REGISTRATION MESSAGE</span>
+                        <textarea
+                            className="ce-textarea"
+                            placeholder="WHATSAPP LINK, TELEGRAM, ETC."
+                            value={form.afterRegistrationMessage}
+                            onChange={(e) => setForm({ ...form, afterRegistrationMessage: e.target.value })}
+                            required
+                        />
+                    </label>
+
+                    <div className="ce-select-grid">
+                        <label className="ce-field">
+                            <span className="ce-label">MAX PARTICIPANTS</span>
+                            <input
+                                className="ce-input"
+                                type="number"
+                                min="1"
+                                placeholder="1"
+                                value={form.numOfParticipants}
+                                onChange={(e) => setForm({ ...form, numOfParticipants: e.target.value })}
+                                required
+                            />
+                        </label>
+
+                        <label className="ce-field">
+                            <span className="ce-label">PRICE (RM)</span>
+                            <input className="ce-input" placeholder="FREE OR AMOUNT" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} required />
+                        </label>
+                    </div>
+
+                    <div className="ce-field">
+                        <span className="ce-label">EVENT COVER IMAGE</span>
+                        <label className="ce-image-placeholder">
+                            {imagePreview ? (
+                                <img src={imagePreview} alt="preview" className="ce-image-preview" />
+                            ) : (
+                                <div className="ce-image-icon">🖼️</div>
+                            )}
+                            <input type="file" accept="image/*" onChange={handleImageChange} required />
+                        </label>
+                    </div>
+
+                    <div className="ce-actions">
+                        <button type="submit" className="tbhx-button ce-submit" disabled={submitting}>
+                            {submitting ? 'UPLOADING...' : 'CREATE EVENT'}
+                        </button>
+                    </div>
+                </form>
+            </div>
             {pendingQrId && (
                 <div className="ce-qr tbhx-card">
                     <h3 className="tbhx-header">INITIALIZING QR ACCESS</h3>

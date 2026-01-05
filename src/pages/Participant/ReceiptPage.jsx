@@ -95,7 +95,7 @@ export default function ReceiptPage() {
         <div className="receipt-divider"></div>
 
         <div className="receipt-section">
-          <label>TRANSACTION PROTOCOL</label>
+          <label>TRANSACTION</label>
           <div className="payment-table">
             <div className="payment-row">
               <span>PAYMENT ID</span>
@@ -110,7 +110,7 @@ export default function ReceiptPage() {
               <p>STRIPE SECURE LAYER</p>
             </div>
             <div className="payment-row total">
-              <span>TOTAL CREDITS</span>
+              <span>TOTAL PAYMENT</span>
               <p>{regInfo.currency} {regInfo.amountPaid}</p>
             </div>
           </div>

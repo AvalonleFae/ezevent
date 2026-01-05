@@ -1,74 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap');
+
 .ce-root {
   min-height: 100vh;
   padding: 4rem 2rem;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   position: relative;
+  font-family: 'Roboto', sans-serif;
 }
 
 .ce-header {
-  margin-bottom: 4rem;
-  border-bottom: 4px solid var(--primary-red);
-  padding-bottom: 1rem;
+  margin-bottom: 3rem;
+  text-align: center;
 }
 
 .ce-header h1 {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 5rem;
-  color: var(--text-white);
+  font-size: 4rem;
+  font-weight: 900;
+  color: white;
   text-transform: uppercase;
   margin: 0;
+  letter-spacing: -1.5px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+}
+
+.text-glow-org {
+  background: linear-gradient(135deg, #b9b010, #e54659);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glassmorphism Container */
+.ce-form-wrap {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 32px;
+  padding: 4rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  margin-bottom: 4rem;
 }
 
 .ce-form {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
 .ce-field {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.75rem;
 }
 
 .ce-label {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 1.2rem;
-  color: var(--primary-red);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
   letter-spacing: 2px;
+  padding-left: 5px;
 }
 
 .ce-input,
 .ce-select,
 .ce-textarea {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 1.2rem;
-  color: white;
-  font-family: 'Inter', sans-serif;
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.95);
+  /* More opaque for better visibility */
+  border: 2px solid transparent;
+  padding: 1.1rem 1.4rem;
+  color: #1a1a1a;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ce-input::placeholder,
+.ce-textarea::placeholder {
+  color: #888;
 }
 
 .ce-input:focus,
 .ce-select:focus,
 .ce-textarea:focus {
   outline: none;
-  border-color: var(--primary-red);
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 15px var(--primary-red-glow);
+  background: #ffffff;
+  border-color: #b9b010;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
 }
 
 .ce-select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FF4040' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1.2rem center;
-  background-size: 1.5rem;
+  background-size: 1.2rem;
+  cursor: pointer;
+}
+
+.ce-select option {
+  background-color: white;
+  color: #333;
 }
 
 .ce-textarea {
-  min-height: 150px;
+  min-height: 120px;
+  resize: vertical;
 }
 
 .ce-select-grid {
@@ -79,9 +122,10 @@
 
 .ce-image-placeholder {
   width: 100%;
-  height: 250px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px dashed rgba(255, 64, 64, 0.3);
+  height: 280px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px dashed rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -92,73 +136,86 @@
 }
 
 .ce-image-placeholder:hover {
-  border-color: var(--primary-red);
-  background: rgba(255, 64, 64, 0.05);
-}
-
-.ce-image-placeholder input[type="file"] {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  cursor: pointer;
+  border-color: white;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.01);
 }
 
 .ce-image-icon {
   font-size: 4rem;
-  filter: drop-shadow(0 0 10px var(--primary-red-glow));
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+  transition: 0.3s;
+}
+
+.ce-image-placeholder:hover .ce-image-icon {
+  transform: scale(1.1);
 }
 
 .ce-image-preview {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 18px;
 }
 
 .ce-actions {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .ce-submit {
   width: 100%;
+  padding: 1.25rem;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #b9b010, #e54659);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 20px rgba(229, 70, 89, 0.3);
+}
+
+.ce-submit:hover {
+  transform: scale(1.02) translateY(-3px);
+  box-shadow: 0 15px 30px rgba(229, 70, 89, 0.4);
 }
 
 .ce-qr {
   margin-top: 4rem;
   text-align: center;
-  padding: 3rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--primary-red);
+  padding: 4rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 32px;
 }
 
 .ce-qr h3 {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  color: var(--primary-red);
-}
-
-.ce-hint {
-  font-size: 0.8rem;
-  color: var(--text-gray);
-  margin-top: 0.5rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 2.5rem;
+  color: white;
+  text-transform: uppercase;
 }
 
 @media (max-width: 768px) {
-  .ce-header h1 {
-    font-size: 3rem;
+  .ce-root {
+    padding: 2rem 1rem;
   }
 
-  .tbhx-header {
-    text-align: center;
+  .ce-form-wrap {
+    padding: 2rem 1.5rem;
+  }
+
+  .ce-header h1 {
+    font-size: 2.5rem;
   }
 
   .ce-select-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
-}
-
-.ce-select option {
-  background-color: #1a1a1a; /* Dark background */
-  color: white;              /* White text */
-  padding: 10px;
 }

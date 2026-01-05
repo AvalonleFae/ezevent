@@ -1,15 +1,52 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
 :root {
-  --primary-red: #FF4040;
-  --primary-red-glow: rgba(255, 64, 64, 0.5);
-  --neon-cyan: #00F0FF;
-  --neon-cyan-glow: rgba(0, 240, 255, 0.5);
-  --bg-black: #000000;
-  --bg-dark: #0A0A0A;
-  --text-white: #FFFFFF;
-  --text-gray: #AAAAAA;
-  --halftone: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  /* Common Colors */
+  --bg-primary: #ffffff;
+  --text-primary: #ffffff;
+  --text-dark: #1e293b;
+  --text-muted: rgba(255, 255, 255, 0.7);
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.2);
+
+  /* Role Palettes */
+  --admin-primary: #4338ca;
+  --admin-secondary: #6366f1;
+  --admin-gradient: linear-gradient(135deg, #4338ca, #6366f1, #8b5cf6);
+
+  /* Organizer - Emerald/Teal */
+  --organizer-primary: #047857;
+  --organizer-secondary: #10b981;
+  --organizer-gradient: linear-gradient(135deg, #047857, #10b981, #06b6d4);
+
+  /* Participant - Orange/Coral */
+  --participant-primary: #c2410c;
+  --participant-secondary: #f97316;
+  --participant-gradient: linear-gradient(135deg, #c2410c, #f97316, #f59e0b);
+
+  /* Default Theme */
+  --theme-primary: var(--admin-primary);
+  --theme-secondary: var(--admin-secondary);
+  --theme-gradient: var(--admin-gradient);
+}
+
+/* Role Class Overrides applied to layout containers */
+.theme-admin {
+  --theme-primary: var(--admin-primary);
+  --theme-secondary: var(--admin-secondary);
+  --theme-gradient: var(--admin-gradient);
+}
+
+.theme-organizer {
+  --theme-primary: var(--organizer-primary);
+  --theme-secondary: var(--organizer-secondary);
+  --theme-gradient: var(--organizer-gradient);
+}
+
+.theme-participant {
+  --theme-primary: var(--participant-primary);
+  --theme-secondary: var(--participant-secondary);
+  --theme-gradient: var(--participant-gradient);
 }
 
 * {
@@ -20,103 +57,98 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
-  background-color: var(--bg-black);
-  color: var(--text-white);
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-dark);
   overflow-x: hidden;
   min-height: 100vh;
-}
-
-/* Global Neon Glow Vignette */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  background: radial-gradient(circle at center, transparent 30%, rgba(0, 240, 255, 0.05) 100%);
-  z-index: 999;
-}
-
-.halftone-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: var(--halftone);
-  background-size: 20px 20px;
-  opacity: 0.3;
-  pointer-events: none;
-  z-index: 1;
+  line-height: 1.5;
+  background: #ffffff;
+  /* Landing page default */
 }
 
 h1,
 h2,
 h3,
-.tbhx-header {
-  font-family: 'Bebas Neue', cursive;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+h4,
+h5,
+h6 {
+  font-weight: 800;
+  color: inherit;
 }
 
 a {
-  color: var(--neon-cyan);
+  color: inherit;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: opacity 0.2s ease;
 }
 
 a:hover {
-  text-shadow: 0 0 10px var(--neon-cyan-glow);
+  opacity: 0.8;
 }
 
+/* Glassmorphism Classes */
+.glass-effect {
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border-radius: 24px;
+  padding: 2.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* Common Components */
 .tbhx-button {
-  background: var(--primary-red);
-  color: white;
+  background: #ffffff;
+  color: var(--theme-primary);
   border: none;
-  padding: 1rem 2.5rem;
-  font-family: 'Bebas Neue', cursive;
-  font-size: 1.2rem;
+  padding: 1rem 2.22rem;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 100px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .tbhx-button:hover {
-  transform: scale(1.05) skewX(-5deg);
-  box-shadow: -5px 0 20px var(--primary-red-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  filter: brightness(0.95);
 }
 
-.tbhx-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 2rem;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.tbhx-card:hover {
-  border-color: var(--primary-red);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-/* Layout Framework */
+/* Layout */
 .app-layout {
   display: flex;
   width: 100%;
   min-height: 100vh;
+  position: relative;
+  background: var(--theme-gradient) fixed;
 }
 
 .main-content {
   flex: 1;
   min-width: 0;
-  /* Prevents flex items from overflowing */
   position: relative;
   margin-left: 280px;
-  /* Accommodate fixed sidebar globally */
+  padding: 4rem 3rem;
   z-index: 2;
   transition: margin-left 0.3s ease;
 }
@@ -124,18 +156,24 @@ a:hover {
 @media (max-width: 768px) {
   .main-content {
     margin-left: 0;
+    padding: 6rem 1.5rem 2rem;
   }
 }
 
-/* Scrollbar beautification */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-black);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary-red);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }

@@ -18,7 +18,7 @@ export default function EventHistoryPage() {
   return (
     <div className="history-page-root">
       <div className="participant-header">
-        <h1 className="tbhx-header">MISSION <span className="text-glow">HISTORY</span></h1>
+        <h1 className="tbhx-header">EVENT <span className="text-glow">HISTORY</span></h1>
         <div className="header-accent"></div>
       </div>
 
@@ -27,13 +27,13 @@ export default function EventHistoryPage() {
           className={`tbhx-button ${filterType === "upcoming" ? "" : "secondary"}`}
           onClick={() => setFilterType("upcoming")}
         >
-          UPCOMING DEPLOYMENTS
+          UPCOMING EVENTS
         </button>
         <button
           className={`tbhx-button ${filterType === "past" ? "" : "secondary"}`}
           onClick={() => setFilterType("past")}
         >
-          ARCHIVED MISSIONS
+          ARCHIVED EVENTS
         </button>
       </div>
 

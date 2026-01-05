@@ -16,8 +16,7 @@ function ParticipantsLayout() {
   const isScanning = location.pathname.includes("scan-attendance");
 
   return (
-    <div className="participant-container-tbhx app-layout">
-      <div className="halftone-bg"></div>
+    <div className="participant-container-tbhx app-layout theme-participant">
       {!isScanning && <Sidebar role="participant" />}
 
       <div className="participant-content main-content">

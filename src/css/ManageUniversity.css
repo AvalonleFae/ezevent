@@ -1,88 +1,108 @@
-.manage-university {
-  padding: 2rem;
-  max-width: 98%;
+.manage-uni-container {
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-.manage-university h1 {
-  color: var(--text-white);
+.manage-uni-container h2 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 2.5rem;
+  color: #fff;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.uni-subheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 2.5rem;
+  font-weight: 800;
 }
 
 .universities-list-section,
 .add-university-section {
-  background-color: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 1.5rem;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 12px;
+  padding: 2rem;
   margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .universities-list-section h2,
 .add-university-section h2 {
-  color: var(--text-white);
+  color: #1a1a1a;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
+  border-left: 5px solid var(--primary-red);
+  padding-left: 1rem;
 }
 
 .universities-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin-top: 1rem;
 }
 
-.universities-table thead {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
 .universities-table th {
-  padding: 1rem;
+  padding: 1.2rem 1rem;
   text-align: left;
-  font-weight: 600;
-  color: var(--neon-cyan);
-  border-bottom: 2px solid var(--neon-cyan);
+  font-weight: 700;
+  color: #444;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #eeeeee;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .universities-table td {
-  padding: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-white);
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+  font-size: 1rem;
 }
 
 .universities-table tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: #fdfdfd;
 }
 
 .action-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
-  font-family: 'Bebas Neue', cursive;
-  font-size: 1rem;
-  letter-spacing: 1px;
-  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
 }
 
 .edit-btn {
-  background-color: var(--neon-cyan);
-  color: #000;
+  background-color: #e3f2fd;
+  color: #1976d2;
   margin-right: 0.5rem;
 }
 
-.delete-btn {
-  background-color: var(--primary-red);
-  color: #fff;
+.edit-btn:hover {
+  background-color: #1976d2;
+  color: white;
 }
 
-.action-btn:hover {
-  transform: scale(1.05);
-  opacity: 0.9;
+.delete-btn {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+  color: white;
 }
 
 .form-field {
@@ -92,23 +112,27 @@
 .form-field label {
   display: block;
   margin-bottom: 0.5rem;
-  color: var(--text-white);
-  font-weight: 500;
+  color: #444;
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 
 .form-control {
   width: 100%;
-  padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  color: white;
+  padding: 0.8rem 1rem;
+  background: #f9f9f9;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  color: #1a1a1a;
   font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 .form-control:focus {
   outline: none;
-  border-color: var(--neon-cyan);
+  border-color: var(--primary-red);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px var(--primary-red-glow);
 }
 
 .form-actions {
@@ -118,65 +142,32 @@
 }
 
 .primary-btn {
-  background-color: var(--neon-cyan);
-  color: #000;
-  padding: 0.75rem 2rem;
+  background-color: var(--primary-red);
+  color: white;
+  padding: 0.8rem 2.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px var(--primary-red-glow);
 }
 
 @media (max-width: 768px) {
-  .manage-university {
-    padding: 1rem;
-  }
-
-  .universities-table,
-  .universities-table thead,
-  .universities-table tbody,
-  .universities-table th,
-  .universities-table td,
   .universities-table tr {
-    display: block;
-    width: 100%;
-  }
-
-  .universities-table thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-
-  .universities-table tr {
+    border: 1px solid #eeeeee;
+    background: #ffffff;
     margin-bottom: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.03);
     padding: 1rem;
-    border-radius: 8px;
-  }
-
-  .universities-table td {
-    border: none;
-    padding: 0.5rem 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: right;
+    border-radius: 12px;
   }
 
   .universities-table td::before {
-    content: attr(data-label);
-    font-weight: bold;
-    color: var(--neon-cyan);
-    text-transform: uppercase;
-    font-size: 0.8rem;
-  }
-
-  .universities-table td:last-child {
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-top: 1rem;
-  }
-
-  .action-btn {
-    width: 100%;
-    margin-right: 0;
+    color: #888;
+    font-weight: 700;
   }
 }

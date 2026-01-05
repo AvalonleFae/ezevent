@@ -89,10 +89,10 @@ export default function EventChat() {
       <div className="halftone-bg"></div>
       <div className="chat-header">
         <button className="tbhx-button secondary" onClick={() => navigate(-1)}>&larr;</button>
-        <h3>MISSION CHANNEL: <span className="text-glow">{eventData?.eventName?.toUpperCase() || "INTEL"}</span></h3>
+        <h3>EVENT CHANNEL: <span className="text-glow">{eventData?.eventName?.toUpperCase() || "INTEL"}</span></h3>
       </div>
       <div className="messages-container">
-        {messages.length === 0 && <p style={{ textAlign: 'center', color: 'var(--text-gray)', fontFamily: 'Bebas Neue' }}>NO SECURE COMMS RECORDED.</p>}
+        {messages.length === 0 && <p style={{ textAlign: 'center', color: 'var(--text-gray)', fontFamily: 'Bebas Neue' }}>NO CHAT RECORDED.</p>}
         {messages.map((msg) => (
           <div key={msg.id} className={`message-wrapper ${msg.senderId === user.uid ? "right" : "left"}`}>
             <div className={`message-bubble ${msg.senderId === user.uid ? "sent" : "received"}`}>
@@ -105,8 +105,8 @@ export default function EventChat() {
       </div>
       <form onSubmit={sendMessage} className="chat-input-area-container">
         <div className="input-row">
-          <input value={newMessage} onChange={(e) => setNewMessage(e.target.value)} placeholder="TRANSMIT INTEL..." />
-          <button type="submit" className="tbhx-button">TRANSMIT</button>
+          <input value={newMessage} onChange={(e) => setNewMessage(e.target.value)} placeholder="type here..." />
+          <button type="submit" className="tbhx-button">SEND</button>
         </div>
       </form>
     </div>

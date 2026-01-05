@@ -1,105 +1,71 @@
 .view-participants {
   padding: 2rem;
-  max-width: 98%;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .view-participants h1 {
-  color: var(--text-white);
+  color: #1a1a1a;
   margin-bottom: 2rem;
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 2.5rem;
+  font-weight: 800;
 }
 
 .participant-list-section {
-  background-color: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 1.5rem;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 12px;
+  padding: 2rem;
   margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .participant-list-section h2 {
-  color: var(--text-white);
+  color: #1a1a1a;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
+  border-left: 5px solid var(--primary-red);
+  padding-left: 1rem;
 }
 
 .participants-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin-top: 1rem;
 }
 
-.participants-table thead {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
 .participants-table th {
-  padding: 1rem;
+  padding: 1.2rem 1rem;
   text-align: left;
-  font-weight: 600;
-  color: var(--neon-cyan);
-  border-bottom: 2px solid var(--neon-cyan);
+  font-weight: 700;
+  color: #444;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #eeeeee;
 }
 
 .participants-table td {
-  padding: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-white);
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
 }
 
 .participants-table tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: #fdfdfd;
 }
 
 @media (max-width: 768px) {
-  .view-participants {
-    padding: 1rem;
-  }
-
-  .participants-table,
-  .participants-table thead,
-  .participants-table tbody,
-  .participants-table th,
-  .participants-table td,
-  .participants-table tr {
-    display: block;
-    width: 100%;
-  }
-
-  .participants-table thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-
   .participants-table tr {
     margin-bottom: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid #eeeeee;
+    background: #ffffff;
     padding: 1rem;
-    border-radius: 8px;
-  }
-
-  .participants-table td {
-    border: none;
-    padding: 0.5rem 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: right;
+    border-radius: 12px;
   }
 
   .participants-table td::before {
-    content: attr(data-label);
-    font-weight: bold;
-    color: var(--neon-cyan);
-    text-transform: uppercase;
-    font-size: 0.8rem;
+    color: #888;
+    font-weight: 700;
   }
 }

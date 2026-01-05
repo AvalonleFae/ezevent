@@ -304,7 +304,7 @@ const ReportPage = () => {
     return (
         <div className="report-container-tbhx">
             <header className="report-header-tbhx">
-                <h2 className="tbhx-header">Event <span className="text-glow">Insights</span></h2>
+                <h2 className="tbhx-header">Event <span className="text-glow-org">Insights</span></h2>
                 <button className="tbhx-button back-btn" onClick={() => navigate(-1)}>
                     &larr; BACK
                 </button>
