@@ -12,7 +12,8 @@ export default function EventDetailsPage() {
 
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [registrationCount, setRegistrationCount] = useState(0); // New State for count
+  const [registrationCount, setRegistrationCount] = useState(0);
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
   const { user } = useAuth();
 
@@ -141,6 +142,16 @@ export default function EventDetailsPage() {
     navigate(`/participant/history/receipt/ticket/${id}`);
   };
 
+  const nextImg = () => {
+    if (!event.images || event.images.length === 0) return;
+    setCurrentImgIndex((prev) => (prev + 1) % event.images.length);
+  };
+
+  const prevImg = () => {
+    if (!event.images || event.images.length === 0) return;
+    setCurrentImgIndex((prev) => (prev - 1 + event.images.length) % event.images.length);
+  };
+
   if (loading) return (
     <div className="event-details-loading">
       <div className="halftone-bg"></div>
@@ -171,86 +182,129 @@ export default function EventDetailsPage() {
         <div className="header-accent"></div>
       </div>
 
-      <div className="ed-layout">
-        <div className="ed-media-section">
-          {event.Image ? (
-            <div className="ed-image-container">
-              <img src={event.Image} alt={event.eventName} className="ed-image" />
-              <div className="image-glitch-overlay"></div>
+      <div className="ed-layout-stacked">
+        {/* Top Media Section: Gallery/Carousel */}
+        <div className="ed-media-section-top">
+          {event.images && event.images.length > 0 ? (
+            <div className="ed-carousel-container">
+              <div className="ed-carousel-stage">
+                <img
+                  src={event.images[currentImgIndex]}
+                  alt={event.eventName}
+                  className="ed-main-image-hero"
+                />
+                <div className="image-glitch-overlay-hero"></div>
+
+                {event.images.length > 1 && (
+                  <>
+                    <button className="carousel-nav-btn prev" onClick={prevImg}>&#10094;</button>
+                    <button className="carousel-nav-btn next" onClick={nextImg}>&#10095;</button>
+                    <div className="carousel-dots">
+                      {event.images.map((_, idx) => (
+                        <span
+                          key={idx}
+                          className={`dot ${idx === currentImgIndex ? 'active' : ''}`}
+                          onClick={() => setCurrentImgIndex(idx)}
+                        ></span>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          ) : event.Image ? (
+            <div className="ed-image-container-hero">
+              <img src={event.Image} alt={event.eventName} className="ed-main-image-hero" />
             </div>
           ) : (
-            <div className="ed-image-placeholder">NO VISUAL DATA</div>
+            <div className="ed-image-placeholder-hero">NO VISUAL DATA</div>
           )}
-
-          <div className="ed-price-tag tbhx-card">
-            <span className="price-label">ENTRY CREDIT</span>
-            <span className="price-amount text-glow-cyan">
-              {event.price ? `RM ${event.price}` : "FREE"}
-            </span>
-          </div>
         </div>
 
-        <div className="ed-info-section">
-          <div className="tbhx-card ed-info-card">
-            <div className="ed-row">
-              <span className="ed-label">STATUS</span>
-              {/* Dynamic Status Update */}
-              <span className={`ed-value ${isFull ? 'text-glow-red' : 'text-glow'}`}>
-                {isFull ? "SOLD OUT" : "ACTIVE"}
+        {/* Content Sections Below Image */}
+        <div className="ed-content-grid">
+          {/* Left Column: Price & Registration */}
+          <div className="ed-primary-col">
+            <div className="ed-price-tag-v2 tbhx-card">
+              <span className="price-label">ENTRY CREDIT</span>
+              <span className="price-amount text-glow-cyan">
+                {event.price ? `RM ${event.price}` : "FREE"}
               </span>
             </div>
-            <div className="ed-row">
-              <span className="ed-label">SLOTS TAKEN</span>
-              <span className="ed-value">
-                {registrationCount} / {event.numOfParticipants}
-              </span>
-            </div>
-            <div className="ed-row">
-              <span className="ed-label">CATEGORY</span>
-              <span className="ed-value">{event.categoryName.toUpperCase()}</span>
-            </div>
-            <div className="ed-row">
-              <span className="ed-label">EVENT DATE</span>
-              <span className="ed-value">{formatDate(event.date)}</span>
-            </div>
-            <div className="ed-row">
-              <span className="ed-label">LOCATION</span>
-              <span className="ed-value">{event.universityName.toUpperCase()}</span>
-            </div>
-            <div className="ed-row">
-              <span className="ed-label">FACULTY</span>
-              <span className="ed-value">{event.facultyName.toUpperCase()}</span>
-            </div>
-            <div className="ed-row">
-              <span className="ed-label">ADDRESS</span>
-              <span className="ed-value">{event.address || "SECTOR UNKNOWN"}</span>
+
+            <div className="tbhx-card description-card">
+              <span className="ed-label">DESCRIPTION</span>
+              <p className="ed-description">{event.description}</p>
             </div>
           </div>
 
-          <div className="tbhx-card description-card">
-            <span className="ed-label">DESCRIPTION</span>
-            <p className="ed-description">{event.description}</p>
-          </div>
+          {/* Right Column: Event Intel/Details */}
+          <div className="ed-secondary-col">
+            <div className="tbhx-card ed-info-card">
+              <div className="ed-row">
+                <span className="ed-label">STATUS</span>
+                <span className={`ed-value ${isFull ? 'text-glow-red' : 'text-glow'}`}>
+                  {isFull ? "SOLD OUT" : "ACTIVE"}
+                </span>
+              </div>
+              <div className="ed-row">
+                <span className="ed-label">SLOTS TAKEN</span>
+                <span className="ed-value">
+                  {registrationCount} / {event.numOfParticipants}
+                </span>
+              </div>
+              <div className="ed-row">
+                <span className="ed-label">CATEGORY</span>
+                <span className="ed-value">{event.categoryName.toUpperCase()}</span>
+              </div>
+              <div className="ed-row">
+                <span className="ed-label">EVENT DATE</span>
+                <span className="ed-value">{formatDate(event.date)}</span>
+              </div>
+              <div className="ed-row">
+                <span className="ed-label">LOCATION</span>
+                <span className="ed-value">{event.universityName.toUpperCase()}</span>
+              </div>
+              <div className="ed-row">
+                <span className="ed-label">FACULTY</span>
+                <span className="ed-value">{event.facultyName.toUpperCase()}</span>
+              </div>
+              <div className="ed-row">
+                <span className="ed-label">ADDRESS</span>
+                <span className="ed-value">{event.address || "SECTOR UNKNOWN"}</span>
+              </div>
+            </div>
 
-          {isHistoryMode ? (
-            <div className="tbhx-card message-card">
-              <span className="ed-label">POST-REGISTRATION INTEL</span>
-              <p className="ed-message">{event.afterRegistrationMessage || "NO ADDITIONAL INTEL."}</p>
-              <button onClick={handleViewReceipt} className="tbhx-button ed-action-btn">
-                VIEW TICKET & RECEIPT
+            {/* Action Buttons Moved Here */}
+            {isHistoryMode ? (
+              <div className="tbhx-card message-card">
+                <span className="ed-label">POST-REGISTRATION INTEL</span>
+                <p className="ed-message">{event.afterRegistrationMessage || "NO ADDITIONAL INTEL."}</p>
+                <div className="ed-action-group">
+                  <button onClick={handleViewReceipt} className="tbhx-button ed-action-btn">
+                    VIEW TICKET & RECEIPT
+                  </button>
+                  {new Date(event.date?.seconds * 1000 || event.date) < new Date() && (
+                    <button
+                      onClick={() => navigate(`/participant/history/review/${id}`)}
+                      className="tbhx-button ed-action-btn review-btn"
+                      style={{ marginTop: '1rem', background: 'linear-gradient(135deg, #4f46e5, #ec4899)', color: 'white' }}
+                    >
+                      REVIEW EVENT
+                    </button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={handleRegistration}
+                disabled={isFull}
+                className={`tbhx-button ed-action-btn ${isFull ? 'disabled-btn' : 'register-now'}`}
+              >
+                {isFull ? "EVENT FULL / SOLD OUT" : "REGISTER FOR EVENT"}
               </button>
-            </div>
-          ) : (
-            // Logic to disable button if full
-            <button 
-              onClick={handleRegistration} 
-              disabled={isFull}
-              className={`tbhx-button ed-action-btn ${isFull ? 'disabled-btn' : 'register-now'}`}
-              style={isFull ? { opacity: 0.5, cursor: 'not-allowed', borderColor: '#555' } : {}}
-            >
-              {isFull ? "EVENT FULL / SOLD OUT" : "REGISTER FOR EVENT"}
-            </button>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

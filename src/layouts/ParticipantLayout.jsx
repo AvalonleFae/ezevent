@@ -11,6 +11,8 @@ import ScanAttendance from "../pages/Participant/ScanAttendance";
 import ChatListPage from "../pages/Participant/ChatListPage";
 import EventChat from "../pages/Participant/EventChat";
 
+import ReviewPage from "../pages/Participant/ReviewPage";
+
 function ParticipantsLayout() {
   const location = useLocation();
   const isScanning = location.pathname.includes("scan-attendance");
@@ -27,9 +29,8 @@ function ParticipantsLayout() {
           <Route path="events/:id" element={<EventDetailsPage />} />
           <Route path="history/receipt/:id" element={<EventDetailsPage />} />
           <Route path="history/receipt/ticket/:id" element={<ReceiptPage />} />
+          <Route path="history/review/:id" element={<ReviewPage />} />
           <Route path="history" element={<EventHistoryPage />} />
-          <Route path="events/success" element={<SuccessPage />} />
-          <Route path="/events/:id" element={<EventDetailsPage />} />
           <Route path="scan-attendance" element={<ScanAttendance />} />
           <Route path="chat" element={<ChatListPage />} />
           <Route path="chat/:eventId" element={<EventChat />} />

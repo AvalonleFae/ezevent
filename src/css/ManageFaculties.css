@@ -5,7 +5,7 @@
 }
 
 .manage-faculties h1 {
-  color: #1a1a1a;
+  color: var(--text-dark);
   margin-bottom: 2rem;
   font-size: 2.5rem;
   font-weight: 800;

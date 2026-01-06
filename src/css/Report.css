@@ -16,7 +16,7 @@
     font-size: clamp(2rem, 5vw, 3rem);
     margin: 0;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-dark);
     letter-spacing: -0.02em;
 }
 
@@ -50,7 +50,9 @@
     font-family: 'Roboto', sans-serif;
     font-size: 0.85rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin-bottom: 0.75rem;
@@ -60,7 +62,9 @@
     font-family: 'Roboto', sans-serif;
     font-size: 3.5rem;
     font-weight: 800;
-    color: #ffffff;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--text-dark);
     line-height: 1;
 }
 
@@ -73,9 +77,11 @@
     font-size: 1.6rem;
     font-weight: 800;
     margin-bottom: 2rem;
-    color: #fff;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    color: var(--text-dark);
     padding-left: 1.2rem;
-    border-left: 5px solid #ffffff;
+    border-left: 5px solid var(--theme-primary);
 }
 
 .sales-chart-wrapper {
@@ -98,7 +104,8 @@
 .chart-wrapper {
     height: 400px;
     position: relative;
-    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+    background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -125,4 +132,122 @@
         height: 350px;
         border-radius: 20px;
     }
+}
+
+/* Reviews Section */
+.reviews-section-tbhx {
+    margin-top: 4rem;
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.reviews-header-tbhx {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.avg-rating-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #00F0FF, #00b8ff);
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    color: #000;
+    font-weight: 800;
+    box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
+}
+
+.rating-val {
+    font-size: 1.4rem;
+}
+
+.rating-star {
+    font-size: 1.2rem;
+}
+
+.rating-count {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.reviews-list-tbhx {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+.reviews-list-tbhx::-webkit-scrollbar {
+    width: 6px;
+}
+
+.reviews-list-tbhx::-webkit-scrollbar-thumb {
+    background: rgba(0, 240, 255, 0.4);
+    border-radius: 10px;
+}
+
+.review-item-tbhx {
+    background: rgba(255, 255, 255, 0.6);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    transition: transform 0.2s ease;
+}
+
+.review-item-tbhx:hover {
+    transform: translateX(10px);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.review-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.reviewer-name {
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 1.1rem;
+}
+
+.mini-star {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+}
+
+.mini-star.filled {
+    color: #f59e0b;
+}
+
+.review-message {
+    font-style: italic;
+    color: #334155;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.review-meta {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.no-reviews {
+    text-align: center;
+    padding: 3rem;
+    color: #94a3b8;
+    font-style: italic;
 }

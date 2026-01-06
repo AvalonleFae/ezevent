@@ -4,12 +4,12 @@ import emailIcon from '../../assets/icons/email.svg';
 import instagramIcon from '../../assets/icons/instagram.svg';
 import facebookIcon from '../../assets/icons/facebook.svg';
 import '../../css/LandingPage.css';
+import EventCard from '../../components/EventCard';
 
 export default function LandingPage() {
     const observerRef = useRef(null);
 
     useEffect(() => {
-        // Smooth scroll for anchors
         const anchors = document.querySelectorAll('a[href^="#"]');
         const handler = function (e) {
             e.preventDefault();
@@ -21,7 +21,6 @@ export default function LandingPage() {
     }, []);
 
     useEffect(() => {
-        // Intersection Observer for animations
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -35,7 +34,6 @@ export default function LandingPage() {
 
         const elements = document.querySelectorAll('.animate-on-scroll');
         elements.forEach((el) => observer.observe(el));
-
         observerRef.current = observer;
 
         return () => observer.disconnect();
@@ -50,7 +48,7 @@ export default function LandingPage() {
                 <div className="hero-bg-text">EZEVENT</div>
                 <div className="lp-container">
                     <h1 className="tbhx-header animate-on-scroll">
-                        <span className="text-glow typing-effect">EZEvent</span>
+                        EZEVENT
                     </h1>
                     <p className="hero-subtitle animate-on-scroll">EVENT MANAGEMENT. FUTURISTIC COMMUNITY.</p>
                     <button className="tbhx-button animate-on-scroll">EXPLORE NOW</button>
@@ -61,21 +59,38 @@ export default function LandingPage() {
                 <div className="lp-container">
                     <h2 className="tbhx-header">Core Features</h2>
                     <div className="features-grid">
-                        <div className="tbhx-card feature-card animate-on-scroll">
-                            <span className="card-num">01</span>
-                            <h3>Explore</h3>
-                            <p>Discover university events effortlessly with our high-speed interface.</p>
-                        </div>
-                        <div className="tbhx-card feature-card animate-on-scroll">
-                            <span className="card-num">02</span>
-                            <h3>Register</h3>
-                            <p>One-click registration system with instantly generated QR codes.</p>
-                        </div>
-                        <div className="tbhx-card feature-card animate-on-scroll">
-                            <span className="card-num">03</span>
-                            <h3>Connect</h3>
-                            <p>Engage with your campus community through our networking tools.</p>
-                        </div>
+                        {[
+                            {
+                                id: 'f1',
+                                eventName: 'Explore',
+                                universityId: 'DISCOVER',
+                                description: 'Browse through a vast galaxy of upcoming campus events, talks, and workshops tailored to your interests.',
+                                emoji: '🌎',
+                            },
+                            {
+                                id: 'f2',
+                                eventName: 'Register',
+                                universityId: 'JOIN FAST',
+                                description: 'Securing your spot is just a tap away with our seamless biometric-ready registration vault.',
+                                emoji: '🎟️',
+                            },
+                            {
+                                id: 'f3',
+                                eventName: 'Connect',
+                                universityId: 'NETWORK',
+                                description: 'Bridge the gap between participants and organizers through integrated social networking tools.',
+                                emoji: '🤝',
+                            }
+                        ].map((feature, idx) => (
+                            <div className="animate-on-scroll" key={feature.id} style={{ display: 'flex', justifyContent: 'center' }}>
+                                <EventCard
+                                    event={feature}
+                                    onClick={() => { }}
+                                    index={idx + 1}
+                                    type="feature"
+                                />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -85,6 +100,21 @@ export default function LandingPage() {
                     <h2 className="tbhx-header">About EZEVENT</h2>
                     <div className="about-content">
                         <p>WE ARE THE FUTURE OF EVENT MANAGEMENT.</p>
+                        <div className="about-ticket-container">
+                            <EventCard
+                                event={{
+                                    eventName: 'EZEVENT',
+                                    universityId: 'PREMIER PLATFORM',
+                                    description: 'EZEvent is the premier event management platform designed exclusively for university communities. We connect students, organizers, and institutions through seamless event discovery, instant registration, and powerful networking tools.',
+                                    slogan: 'Transforming campus life, one event at a time.',
+                                    emoji: '🚀',
+                                }}
+                                onClick={() => { }}
+                                variant="vintage"
+                                type="feature"
+                                index={5}
+                            />
+                        </div>
                     </div>
                 </div>
             </section>
@@ -98,7 +128,7 @@ export default function LandingPage() {
                             SUPPORT@EZEVENT.COM
                         </a>
                         <a href="tel:+60123456789">
-                            <img src={instagramIcon} alt="Phone" width="20" height="20" /> {/* Using Instagram icon as placeholder for phone; replace if needed */}
+                            <img src={instagramIcon} alt="Phone" width="20" height="20" />
                             +60 123 456 789
                         </a>
                     </div>

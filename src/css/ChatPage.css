@@ -14,8 +14,8 @@
 .chat-card {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 1.5rem 2rem;
   cursor: pointer;
   transition: all 0.2s ease;

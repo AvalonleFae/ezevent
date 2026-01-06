@@ -5,7 +5,7 @@ export default function AdminPage() {
   return (
     <div className="admin-content">
       <h1>Admin Dashboard</h1>
-      <p style={{ color: '#ffffff', marginTop: '1rem' }}>Welcome to the Admin Dashboard. Navigate using the sidebar to access different management functions.</p>
+      <p style={{ color: '#1e293b', marginTop: '1rem' }}>Welcome to the Admin Dashboard. Navigate using the sidebar to access different management functions.</p>
     </div>
   );
 }

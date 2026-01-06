@@ -28,6 +28,8 @@ const ReportPage = () => {
     const [institutionData, setInstitutionData] = useState({ labels: [], datasets: [] });
     const [salesData, setSalesData] = useState({ labels: [], datasets: [] });
     const [totalSales, setTotalSales] = useState(0);
+    const [reviews, setReviews] = useState([]);
+    const [avgRating, setAvgRating] = useState(0);
 
 
     useEffect(() => {
@@ -170,6 +172,16 @@ const ReportPage = () => {
                     ],
                 });
 
+                // Fetch Reviews
+                const reviewSnap = await getDocs(collection(db, 'events', id, 'review'));
+                const reviewList = reviewSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setReviews(reviewList);
+
+                if (reviewList.length > 0) {
+                    const totalRating = reviewList.reduce((acc, rev) => acc + (rev.rating || 0), 0);
+                    setAvgRating((totalRating / reviewList.length).toFixed(1));
+                }
+
             } catch (err) {
                 console.error('Error fetching report data:', err);
             }
@@ -277,6 +289,41 @@ const ReportPage = () => {
                             <p>Loading institution chart...</p>
                         )}
                     </div>
+                </div>
+            </div>
+
+            {/* Review Section */}
+            <div className="tbhx-card reviews-section-tbhx">
+                <div className="reviews-header-tbhx">
+                    <h3 className="tbhx-header">Participant Feedback</h3>
+                    <div className="avg-rating-badge">
+                        <span className="rating-val">{avgRating}</span>
+                        <span className="rating-star">★</span>
+                        <span className="rating-count">({reviews.length} reviews)</span>
+                    </div>
+                </div>
+
+                <div className="reviews-list-tbhx">
+                    {reviews.length > 0 ? (
+                        reviews.map((rev) => (
+                            <div key={rev.id} className="review-item-tbhx">
+                                <div className="review-item-header">
+                                    <span className="reviewer-name">{rev.userName || "Anonymous"}</span>
+                                    <div className="reviewer-rating">
+                                        {[...Array(5)].map((_, i) => (
+                                            <span key={i} className={`mini-star ${i < rev.rating ? 'filled' : ''}`}>★</span>
+                                        ))}
+                                    </div>
+                                </div>
+                                <p className="review-message">"{rev.message}"</p>
+                                <div className="review-meta">
+                                    <span>Recommend: {rev.recommend}</span> | <span>Objective Achieved: {rev.objective}</span>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="no-reviews">No reviews submitted yet for this event.</p>
+                    )}
                 </div>
             </div>
         </div>

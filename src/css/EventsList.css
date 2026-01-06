@@ -15,5 +15,17 @@
   .events-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
+    justify-items: center;
+    /* Center cards in mobile stack */
+  }
+}
+
+@media (max-width: 480px) {
+  .events-container {
+    padding: 1rem 0;
+  }
+
+  .events-grid {
+    gap: 1.5rem;
   }
 }

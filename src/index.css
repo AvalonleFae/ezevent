@@ -1,36 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Quicksand:wght@300..700&family=Cinzel:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Roboto:wght@300;400;500;700;900&display=swap');
 
 :root {
-  /* Common Colors */
   --bg-primary: #ffffff;
   --text-primary: #ffffff;
   --text-dark: #1e293b;
   --text-muted: rgba(255, 255, 255, 0.7);
-  --glass-bg: rgba(255, 255, 255, 0.12);
-  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.4);
 
-  /* Role Palettes */
-  --admin-primary: #4338ca;
-  --admin-secondary: #6366f1;
-  --admin-gradient: linear-gradient(135deg, #4338ca, #6366f1, #8b5cf6);
+  --admin-primary: #758CA3;
+  --admin-secondary: #BCCEDD;
+  --admin-gradient: linear-gradient(135deg, #758CA3, #BCCEDD, #D0D0D0);
 
-  /* Organizer - Emerald/Teal */
-  --organizer-primary: #047857;
-  --organizer-secondary: #10b981;
-  --organizer-gradient: linear-gradient(135deg, #047857, #10b981, #06b6d4);
+  --organizer-primary: #8397A7;
+  --organizer-secondary: #C0CFDB;
+  --organizer-gradient: linear-gradient(135deg, #8397A7, #C0CFDB, #F5F5F5);
 
-  /* Participant - Orange/Coral */
-  --participant-primary: #c2410c;
-  --participant-secondary: #f97316;
-  --participant-gradient: linear-gradient(135deg, #c2410c, #f97316, #f59e0b);
+  --participant-primary: #6B9AC4;
+  --participant-secondary: #A9D0E6;
+  --participant-gradient: linear-gradient(135deg, #6B9AC4, #A9D0E6, #D3D3D3);
 
-  /* Default Theme */
   --theme-primary: var(--admin-primary);
   --theme-secondary: var(--admin-secondary);
   --theme-gradient: var(--admin-gradient);
 }
 
-/* Role Class Overrides applied to layout containers */
 .theme-admin {
   --theme-primary: var(--admin-primary);
   --theme-secondary: var(--admin-secondary);
@@ -57,13 +51,13 @@
 
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Playfair Display', serif;
   color: var(--text-dark);
   overflow-x: hidden;
   min-height: 100vh;
   line-height: 1.5;
-  background: #ffffff;
-  /* Landing page default */
+  background: url(./assets/majestic_bg_v2.png) no-repeat center center fixed;
+  background-size: cover;
 }
 
 h1,
@@ -72,8 +66,10 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: 800;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
   color: inherit;
+  letter-spacing: 0.05em;
 }
 
 a {
@@ -86,7 +82,6 @@ a:hover {
   opacity: 0.8;
 }
 
-/* Glassmorphism Classes */
 .glass-effect {
   background: var(--glass-bg);
   backdrop-filter: blur(15px);
@@ -95,10 +90,10 @@ a:hover {
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   border-radius: 24px;
   padding: 2.5rem;
@@ -107,19 +102,18 @@ a:hover {
 
 .glass-card:hover {
   transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.5);
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
 }
 
-/* Common Components */
 .tbhx-button {
   background: #ffffff;
   color: var(--theme-primary);
-  border: none;
-  padding: 1rem 2.22rem;
-  font-family: 'Roboto', sans-serif;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.6rem 1.6rem;
+  font-family: 'Cinzel', serif;
   font-weight: 800;
-  font-size: 1rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 100px;
@@ -131,16 +125,16 @@ a:hover {
 .tbhx-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  filter: brightness(0.95);
+  background: #f8fafc;
 }
 
-/* Layout */
 .app-layout {
   display: flex;
   width: 100%;
   min-height: 100vh;
   position: relative;
-  background: var(--theme-gradient) fixed;
+  background: url(./assets/majestic_bg_v2.png) no-repeat center center fixed;
+  background-size: cover;
 }
 
 .main-content {
@@ -160,7 +154,6 @@ a:hover {
   }
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }

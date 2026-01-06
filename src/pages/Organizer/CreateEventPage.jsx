@@ -15,8 +15,8 @@ import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage
 import QRCodeGenerator from '../../components/QRCodeGenerator';
 
 export default function CreateEvent() {
-    const [imagePreview, setImagePreview] = useState(null);
-    const [imageFile, setImageFile] = useState(null);
+    const [imagePreviews, setImagePreviews] = useState([]);
+    const [imageFiles, setImageFiles] = useState([]);
     const [submitting, setSubmitting] = useState(false);
     const [qrData, setQrData] = useState(null);
     const [pendingQrId, setPendingQrId] = useState(null);
@@ -128,11 +128,24 @@ export default function CreateEvent() {
     }, [form.university]);
 
     function handleImageChange(e) {
-        const file = e.target.files && e.target.files[0];
-        if (!file) return;
-        const url = URL.createObjectURL(file);
-        setImagePreview(url);
-        setImageFile(file);
+        const files = Array.from(e.target.files || []);
+        if (files.length === 0) return;
+
+        const newFiles = [...imageFiles, ...files];
+        setImageFiles(newFiles);
+
+        const newPreviews = files.map(file => URL.createObjectURL(file));
+        setImagePreviews(prev => [...prev, ...newPreviews]);
+    }
+
+    function removeImage(index) {
+        const newFiles = [...imageFiles];
+        newFiles.splice(index, 1);
+        setImageFiles(newFiles);
+
+        const newPreviews = [...imagePreviews];
+        newPreviews.splice(index, 1);
+        setImagePreviews(newPreviews);
     }
 
     // UPDATE 3: Helper to get current time string for "min" attribute
@@ -187,12 +200,17 @@ export default function CreateEvent() {
                 numOfParticipants: form.numOfParticipants ? Number(form.numOfParticipants) : 0,
             };
 
-            if (imageFile) {
-                const filename = `${Date.now()}_${imageFile.name}`;
-                const imgRef = storageRef(storage, `events/${user.uid}/${filename}`);
-                await uploadBytes(imgRef, imageFile);
-                const downloadURL = await getDownloadURL(imgRef);
-                eventData.Image = downloadURL;
+            const imageUrls = [];
+            if (imageFiles.length > 0) {
+                for (const file of imageFiles) {
+                    const filename = `${Date.now()}_${file.name}`;
+                    const imgRef = storageRef(storage, `events/${user.uid}/${filename}`);
+                    await uploadBytes(imgRef, file);
+                    const downloadURL = await getDownloadURL(imgRef);
+                    imageUrls.push(downloadURL);
+                }
+                eventData.images = imageUrls;
+                eventData.Image = imageUrls[0]; // Primary image for compatibility
             }
 
             eventData.userId = user.uid;
@@ -221,8 +239,8 @@ export default function CreateEvent() {
                 price: '',
                 numOfParticipants: ''
             });
-            setImagePreview(null);
-            setImageFile(null);
+            setImagePreviews([]);
+            setImageFiles([]);
         } catch (err) {
             console.error('Failed to create event:', err);
             alert('Failed to create event: ' + (err.message || err));
@@ -458,15 +476,19 @@ export default function CreateEvent() {
                     </div>
 
                     <div className="ce-field">
-                        <span className="ce-label">EVENT COVER IMAGE</span>
-                        <label className="ce-image-placeholder">
-                            {imagePreview ? (
-                                <img src={imagePreview} alt="preview" className="ce-image-preview" />
-                            ) : (
-                                <div className="ce-image-icon">🖼️</div>
-                            )}
-                            <input type="file" accept="image/*" onChange={handleImageChange} required />
-                        </label>
+                        <span className="ce-label">EVENT IMAGES (SWIPE SUPPORTED)</span>
+                        <div className="ce-images-grid">
+                            {imagePreviews.map((preview, index) => (
+                                <div key={index} className="ce-image-preview-wrapper">
+                                    <img src={preview} alt="preview" className="ce-image-preview" />
+                                    <button type="button" className="ce-remove-img" onClick={() => removeImage(index)}>×</button>
+                                </div>
+                            ))}
+                            <label className="ce-image-placeholder add-more">
+                                <div className="ce-image-icon-small">+</div>
+                                <input type="file" accept="image/*" onChange={handleImageChange} multiple />
+                            </label>
+                        </div>
                     </div>
 
                     <div className="ce-actions">
