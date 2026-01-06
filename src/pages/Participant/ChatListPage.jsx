@@ -54,7 +54,7 @@ export default function ChatListPage() {
     <div className="chat-list-container">
       <div className="halftone-bg"></div>
       <div className="participant-header">
-        <h1 className="tbhx-header">CHAT <span className="text-glow">CHANNELS</span></h1>
+        <h1 className="tbhx-header">CHAT <span className="text-glow-part">CHANNELS</span></h1>
         <p>RE-ESTABLISH CONTACT WITH SECTOR COORDINATORS</p>
         <div className="header-accent"></div>
       </div>

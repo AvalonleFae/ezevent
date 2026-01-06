@@ -89,7 +89,7 @@ export default function EventChat() {
       <div className="halftone-bg"></div>
       <div className="chat-header">
         <button className="tbhx-button secondary" onClick={() => navigate(-1)}>&larr;</button>
-        <h3>EVENT CHANNEL: <span className="text-glow">{eventData?.eventName?.toUpperCase() || "INTEL"}</span></h3>
+        <h3>EVENT CHANNEL: <span className="text-glow-part">{eventData?.eventName?.toUpperCase() || "INTEL"}</span></h3>
       </div>
       <div className="messages-container">
         {messages.length === 0 && <p style={{ textAlign: 'center', color: 'var(--text-gray)', fontFamily: 'Bebas Neue' }}>NO CHAT RECORDED.</p>}

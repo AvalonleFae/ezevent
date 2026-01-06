@@ -167,7 +167,7 @@ export default function EventDetailsPage() {
       </div>
 
       <div className="ed-header">
-        <h1 className="tbhx-header"><span className="text-glow">{event.eventName}</span></h1>
+        <h1 className="tbhx-header"><span className="text-glow-part">{event.eventName}</span></h1>
         <div className="header-accent"></div>
       </div>
 
@@ -195,7 +195,7 @@ export default function EventDetailsPage() {
             <div className="ed-row">
               <span className="ed-label">STATUS</span>
               {/* Dynamic Status Update */}
-              <span className={`ed-value ${isFull ? 'text-glow-red' : 'text-glow'}`}>
+              <span className={`ed-value ${isFull ? 'text-glow-red' : 'text-glow-part'}`}>
                 {isFull ? "SOLD OUT" : "ACTIVE"}
               </span>
             </div>
@@ -242,8 +242,8 @@ export default function EventDetailsPage() {
             </div>
           ) : (
             // Logic to disable button if full
-            <button 
-              onClick={handleRegistration} 
+            <button
+              onClick={handleRegistration}
               disabled={isFull}
               className={`tbhx-button ed-action-btn ${isFull ? 'disabled-btn' : 'register-now'}`}
               style={isFull ? { opacity: 0.5, cursor: 'not-allowed', borderColor: '#555' } : {}}

@@ -172,7 +172,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-  animation: fadeInUp 1s ease-out 1.5s both;
+  animation: fadeInUp 0.5s ease-out 0.5s both;
 }
 
 .tbhx-button:hover {

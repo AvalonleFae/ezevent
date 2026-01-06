@@ -37,7 +37,7 @@ export default function ParticipantPage() {
   return (
     <div className="participant-page-root">
       <div className="participant-header">
-        <h1 className="tbhx-header">AVAILABLE <span className="text-glow">EVENTS</span></h1>
+        <h1 className="tbhx-header">AVAILABLE <span className="text-glow-part">EVENTS</span></h1>
         <div className="header-accent"></div>
       </div>
 

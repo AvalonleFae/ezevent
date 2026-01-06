@@ -18,7 +18,7 @@ export default function EventHistoryPage() {
   return (
     <div className="history-page-root">
       <div className="participant-header">
-        <h1 className="tbhx-header">EVENT <span className="text-glow">HISTORY</span></h1>
+        <h1 className="tbhx-header">EVENT <span className="text-glow-part">HISTORY</span></h1>
         <div className="header-accent"></div>
       </div>
 

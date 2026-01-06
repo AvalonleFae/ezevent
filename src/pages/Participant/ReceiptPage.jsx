@@ -79,7 +79,7 @@ export default function ReceiptPage() {
 
         <div className="receipt-section">
           <label>MISSION INTEL</label>
-          <h3 className="event-title text-glow">{data.eventName.toUpperCase()}</h3>
+          <h3 className="event-title text-glow-part">{data.eventName.toUpperCase()}</h3>
           <div className="detail-grid">
             <div className="detail-item">
               <span>DATE</span>
