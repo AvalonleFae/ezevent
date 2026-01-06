@@ -5,18 +5,30 @@ import KPICards from '../../components/charts/KPICards';
 import UserRoleChart from '../../components/charts/UserRoleChart';
 import EventStatusChart from '../../components/charts/EventStatusChart';
 import EventsOverTimeChart from '../../components/charts/EventsOverTimeChart';
-import RegistrationsOverTimeChart from '../../components/charts/RegistrationsOverTimeChart';
 import EventsByCategoryChart from '../../components/charts/EventsByCategoryChart';
 import EventsByUniversityChart from '../../components/charts/EventsByUniversityChart';
 import TopEventsChart from '../../components/charts/TopEventsChart';
 import OrganizerStatusChart from '../../components/charts/OrganizerStatusChart';
-import ParticipantsByUniversityChart from '../../components/charts/ParticipantsByUniversityChart';
-import GenderDemographicsChart from '../../components/charts/GenderDemographicsChart';
-import ParticipantsVsOrganizersChart from '../../components/charts/ParticipantsVsOrganizersChart';
+import TransactionsDoneChart from '../../components/charts/TransactionsDoneChart';
 import '../../css/ManagementReportPage.css';
 
 export default function ManagementReportPage() {
   const [loading, setLoading] = useState(true);
+  const [registrations, setRegistrations] = useState([]);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+    // If endDate is before the new startDate, clear it
+    if (endDate && date && new Date(endDate) < new Date(date)) {
+      setEndDate('');
+    }
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+  };
   const [metrics, setMetrics] = useState({
     totalUsers: 0,
     totalEvents: 0,
@@ -42,11 +54,9 @@ export default function ManagementReportPage() {
     declined: 0
   });
   const [eventsData, setEventsData] = useState([]);
-  const [registrationsData, setRegistrationsData] = useState([]);
   const [categories, setCategories] = useState([]);
   const [universities, setUniversities] = useState([]);
   const [topEvents, setTopEvents] = useState([]);
-  const [participantsData, setParticipantsData] = useState([]);
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -56,16 +66,12 @@ export default function ManagementReportPage() {
         // Fetch users
         const usersSnapshot = await getDocs(collection(db, 'users'));
         const users = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        
+
         const participants = users.filter(u => u.role === 'participant').length;
         const organizers = users.filter(u => u.role === 'organizer').length;
         const admins = users.filter(u => u.role === 'admin').length;
 
         setUserStats({ participants, organizers, admins });
-
-        // Store participants data for university chart
-        const participantsList = users.filter(u => u.role === 'participant');
-        setParticipantsData(participantsList);
 
         // Fetch organizer verification status
         const organizerUsers = users.filter(u => u.role === 'organizer');
@@ -122,7 +128,8 @@ export default function ManagementReportPage() {
           ...doc.data()
         }));
 
-        setRegistrationsData(registrations);
+        setRegistrations(registrations);
+
         setMetrics(prev => ({
           ...prev,
           totalRegistrations: registrations.length
@@ -182,15 +189,82 @@ export default function ManagementReportPage() {
     );
   }
 
+  const filteredRegistrations = registrations.filter(reg => {
+    if (!reg.registeredAt) return false;
+
+    try {
+      const date = reg.registeredAt.toDate
+        ? reg.registeredAt.toDate()
+        : new Date(reg.registeredAt);
+
+      if (startDate) {
+        const from = new Date(startDate);
+        if (date < from) return false;
+      }
+
+      if (endDate) {
+        const to = new Date(endDate + 'T23:59:59');
+        if (date > to) return false;
+      }
+
+      return true;
+    } catch (err) {
+      console.error('Error filtering registrations by date:', err);
+      return false;
+    }
+  });
+
+
+
   return (
     <div className="management-report-content">
-      <h1>Management Dashboard</h1>
-      
+      <div className="management-report-header-row">
+        <h1>EZEvent Management Report</h1>
+      </div>
+
       <div className="dashboard-container">
+        {/* Date Range Filter */}
+        <section className="dashboard-section">
+          <div className="date-range-filter-section">
+            <div className="date-range-controls">
+              <label>
+                From
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => handleStartDateChange(e.target.value)}
+                />
+              </label>
+              <label>
+                To
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => handleEndDateChange(e.target.value)}
+                  min={startDate || undefined}
+                />
+              </label>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => {
+                  setStartDate('');
+                  setEndDate('');
+                }}
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* KPI Cards */}
         <section className="dashboard-section">
           <KPICards metrics={metrics} />
         </section>
+
+        
+        
 
         {/* Charts Grid */}
         <section className="dashboard-section">
@@ -200,19 +274,10 @@ export default function ManagementReportPage() {
               <UserRoleChart userStats={userStats} />
             </div>
             <div className="chart-card">
-              <ParticipantsVsOrganizersChart userStats={userStats} />
-            </div>
-            <div className="chart-card">
-              <EventStatusChart eventStats={eventStats} />
-            </div>
-            <div className="chart-card">
               <OrganizerStatusChart organizerStats={organizerStats} />
             </div>
             <div className="chart-card">
-              <GenderDemographicsChart participantsData={participantsData} />
-            </div>
-            <div className="chart-card">
-              <ParticipantsByUniversityChart participantsData={participantsData} universities={universities} />
+              <EventStatusChart eventStats={eventStats} />
             </div>
           </div>
         </section>
@@ -226,8 +291,16 @@ export default function ManagementReportPage() {
           </div>
         </section>
 
+        {/* Row 3: Transactions Done */}
+        <section className="dashboard-section">
+          <div className="charts-grid full-width">
+            <div className="chart-card full-width">
+              <TransactionsDoneChart registrations={filteredRegistrations} />
+            </div>
+          </div>
+        </section>
 
-        {/* Row 3: Category and University Charts */}
+        {/* Row 4: Category and University Charts */}
         <section className="dashboard-section">
           <div className="charts-grid two-column">
             <div className="chart-card">
@@ -239,7 +312,7 @@ export default function ManagementReportPage() {
           </div>
         </section>
 
-        {/* Row 4: Top Events */}
+        {/* Row 5: Top Events */}
         <section className="dashboard-section">
           <div className="charts-grid full-width">
             <div className="chart-card full-width">
@@ -247,6 +320,8 @@ export default function ManagementReportPage() {
             </div>
           </div>
         </section>
+
+
       </div>
     </div>
   );

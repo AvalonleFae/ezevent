@@ -104,7 +104,7 @@ export default function EventsByCategoryChart({ eventsData, categories }) {
 
   return (
     <div className="chart-container">
-      <h3 className="chart-title">Events by Category</h3>
+      <h3 className="chart-title">Top Categories</h3>
       <div className="chart-wrapper">
         <Bar data={data} options={options} />
       </div>
