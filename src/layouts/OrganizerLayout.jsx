@@ -8,6 +8,7 @@ import Report from '../pages/Organizer/Report'
 import Chat from '../pages/Organizer/OrganizerChatList'
 import AttendanceList from '../pages/Organizer/AttendanceList'
 import EventChat from '../pages/Participant/EventChat'
+import OrganizerProfilePage from '../pages/Organizer/OrganizerProfilePage'
 import '../css/OrganizerPage.css'
 
 function OrganizerLayout() {
@@ -19,6 +20,7 @@ function OrganizerLayout() {
         <Routes>
           <Route path="" element={<OrganizerPage />} />
           <Route path="my-events" element={<OrganizerPage />} />
+          <Route path="profile" element={<OrganizerProfilePage />} />
           <Route path="create-event" element={<CreateEvent />} />
           <Route path="my-event/:id/dashboard" element={<EventDashboard />} />
           <Route path="my-event/:id/attendance-list" element={<AttendanceList />} />
