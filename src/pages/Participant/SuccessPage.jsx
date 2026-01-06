@@ -54,18 +54,18 @@ const SuccessPage = () => {
       <div className="halftone-bg"></div>
       <div className="success-message-box">
         <h2 className="success-text">SUCCESS</h2>
-        <p>RESERVATION LOGGED. ACCESS GRANTED.</p>
+        <p>YOU HAVE SUCCESSFULLY REGISTERED FOR THE EVENT.</p>
 
         {/* Display the After Registration Message */}
         {message && (
           <div className="message-intel">
-            <span className="intel-label">MISSION INTEL:</span>
+            <span className="intel-label">MESSAGE FROM THE ORGANIZER:</span>
             <p className="intel-content">{message}</p>
           </div>
         )}
 
         <button className='tbhx-button success-done-btn' onClick={handleDone}>
-          VIEW MY DEPLOYMENTS
+          VIEW MY EVENTS
         </button>
       </div>
     </div>

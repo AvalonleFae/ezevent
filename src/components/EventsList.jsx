@@ -81,6 +81,29 @@ export default function EventsList({
                     // Logic: Organizer
                     if (userRole === "organizer") {
                         eventsData = rawEvents.filter(event => event.userId === userId);
+                        
+                        // Apply time filter for organizer
+                        if (timeFilter !== "all") {
+                            const currentDate = new Date();
+                            
+                            eventsData = eventsData.filter(event => {
+                                if (!event.date) return false;
+
+                                let eventDate;
+                                if (typeof event.date.toDate === 'function') {
+                                    eventDate = event.date.toDate(); 
+                                } else {
+                                    eventDate = new Date(event.date); 
+                                }
+
+                                if (timeFilter === "upcoming") {
+                                    return eventDate >= currentDate;
+                                } else if (timeFilter === "past") {
+                                    return eventDate < currentDate;
+                                }
+                                return true;
+                            });
+                        }
                     }
 
                     // Logic: Participant (Available Events)

@@ -10,6 +10,7 @@ import "../css/ParticipantPage.css";
 import ScanAttendance from "../pages/Participant/ScanAttendance";
 import ChatListPage from "../pages/Participant/ChatListPage";
 import EventChat from "../pages/Participant/EventChat";
+import ParticipantProfilePage from "../pages/Participant/ParticipantProfilePage";
 
 import ReviewPage from "../pages/Participant/ReviewPage";
 
@@ -25,6 +26,7 @@ function ParticipantsLayout() {
         <Routes>
           <Route path="" element={<ParticipantPage />} />
           <Route path="events" element={<ParticipantPage />} />
+          <Route path="profile" element={<ParticipantProfilePage />} />
           <Route path="events/success" element={<SuccessPage />} />
           <Route path="events/:id" element={<EventDetailsPage />} />
           <Route path="history/receipt/:id" element={<EventDetailsPage />} />

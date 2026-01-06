@@ -98,6 +98,13 @@
   box-shadow: 0 6px 18px rgba(79, 70, 229, 0.4);
 }
 
+/* Hamburger Menu - Hidden on Desktop */
+.topbar-hamburger {
+  display: none;
+}
+
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .topbar-container {
     padding: 0 1rem;

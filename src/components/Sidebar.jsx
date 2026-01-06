@@ -110,9 +110,17 @@ export default function Sidebar({ role }) {
       </button>
 
       <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
-        <div className="user-profile">
+        <div
+          className={`user-profile ${effectiveRole === 'organizer' || effectiveRole === 'participant' ? 'clickable' : ''}`}
+          onClick={() => {
+            if (effectiveRole === 'organizer') navigate('/organizer/profile');
+            if (effectiveRole === 'participant') navigate('/participant/profile');
+          }}
+          role={effectiveRole === 'organizer' || effectiveRole === 'participant' ? 'button' : undefined}
+          tabIndex={effectiveRole === 'organizer' || effectiveRole === 'participant' ? 0 : undefined}
+        >
           <div className="user-name">{userData.name}</div>
-          <div className="user-role">{userData.role}</div>
+          <div className="user-role">{(userData.role || role || '').toUpperCase()}</div>
         </div>
         <ul>
           {items.map((item) => (
