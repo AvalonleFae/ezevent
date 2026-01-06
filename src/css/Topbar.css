@@ -98,6 +98,12 @@
   background: linear-gradient(135deg, #10b981, #4f46e5);
 }
 
+/* Hamburger Menu - Hidden on Desktop */
+.topbar-hamburger {
+  display: none;
+}
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .topbar-container {

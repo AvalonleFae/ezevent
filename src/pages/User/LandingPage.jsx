@@ -3,6 +3,7 @@ import Topbar from '../../components/Topbar';
 import emailIcon from '../../assets/icons/email.svg';
 import instagramIcon from '../../assets/icons/instagram.svg';
 import facebookIcon from '../../assets/icons/facebook.svg';
+import aboutIllustration from '../../assets/about_illustration.png';
 import '../../css/LandingPage.css';
 
 export default function LandingPage() {
@@ -84,7 +85,48 @@ export default function LandingPage() {
                 <div className="lp-container">
                     <h2 className="tbhx-header">About EZEVENT</h2>
                     <div className="about-content">
-                        <p>WE ARE THE FUTURE OF EVENT MANAGEMENT.</p>
+                        <div className="about-mission animate-on-scroll">
+                            <div className="mission-content">
+                                <p className="mission-statement">
+                                    EZEvent is the premier event management platform designed exclusively for university communities.
+                                    We connect students, organizers, and institutions through seamless event discovery,
+                                    instant registration, and powerful networking tools.
+                                </p>
+                                <p className="mission-tagline">
+                                    Transforming campus life, one event at a time.
+                                </p>
+                            </div>
+                            <div className="mission-visual">
+                                <img
+                                    src={aboutIllustration}
+                                    alt="Students collaborating on campus events"
+                                    className="about-illustration"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="value-props animate-on-scroll">
+                            <div className="value-item">
+                                <div className="value-icon">⚡</div>
+                                <h4>Lightning Fast</h4>
+                                <p>Register for events in seconds with our streamlined interface</p>
+                            </div>
+                            <div className="value-item">
+                                <div className="value-icon">🎯</div>
+                                <h4>Smart Discovery</h4>
+                                <p>Find events tailored to your interests and campus community</p>
+                            </div>
+                            <div className="value-item">
+                                <div className="value-icon">🔒</div>
+                                <h4>Secure & Reliable</h4>
+                                <p>Your data is protected with enterprise-grade security</p>
+                            </div>
+                            <div className="value-item">
+                                <div className="value-icon">🌐</div>
+                                <h4>Connected Community</h4>
+                                <p>Build meaningful connections with peers across your campus</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
