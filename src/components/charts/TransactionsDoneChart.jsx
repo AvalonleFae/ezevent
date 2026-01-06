@@ -21,44 +21,44 @@ ChartJS.register(
   Legend
 );
 
-export default function EventsOverTimeChart({ eventsData }) {
-  // Group events by specific date (daily)
-  const dailyData = {};
-  
-  if (!eventsData || eventsData.length === 0) {
+export default function TransactionsDoneChart({ registrations }) {
+  if (!registrations || registrations.length === 0) {
     return (
       <div className="chart-container">
-        <h3 className="chart-title">Events Created Over Time</h3>
+        <h3 className="chart-title">Transactions Done</h3>
         <div className="chart-wrapper">
-          <p style={{ textAlign: 'center', color: '#666', paddingTop: '100px' }}>No events data available</p>
+          <p style={{ textAlign: 'center', color: '#666', paddingTop: '100px' }}>
+            No transaction data available
+          </p>
         </div>
       </div>
     );
   }
 
-  eventsData.forEach(event => {
-    if (event.createdAt) {
+  const dailyCounts = {};
+
+  registrations.forEach((reg) => {
+    if (reg.registeredAt) {
       try {
-        const date = event.createdAt.toDate ? event.createdAt.toDate() : new Date(event.createdAt);
+        const date = reg.registeredAt.toDate
+          ? reg.registeredAt.toDate()
+          : new Date(reg.registeredAt);
+
         if (!isNaN(date.getTime())) {
-          const dateKey = date.toLocaleDateString('en-US', {
+          const key = date.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
             day: 'numeric'
           });
-          
-          if (!dailyData[dateKey]) {
-            dailyData[dateKey] = 0;
-          }
-          dailyData[dateKey]++;
+          dailyCounts[key] = (dailyCounts[key] || 0) + 1;
         }
-      } catch (error) {
-        console.error('Error processing event date:', error);
+      } catch (err) {
+        console.error('Error processing registration date for transactions chart:', err);
       }
     }
   });
 
-  const sorted = Object.entries(dailyData)
+  const sorted = Object.entries(dailyCounts)
     .map(([label, count]) => {
       const d = new Date(label);
       return { label, count, date: d };
@@ -69,10 +69,10 @@ export default function EventsOverTimeChart({ eventsData }) {
     labels: sorted.map((item) => item.label),
     datasets: [
       {
-        label: 'Events Created',
+        label: 'Transactions',
         data: sorted.map((item) => item.count),
-        borderColor: 'rgba(54, 162, 235, 1)',
-        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+        borderColor: 'rgba(255, 64, 64, 1)',
+        backgroundColor: 'rgba(255, 64, 64, 0.1)',
         tension: 0.4,
         fill: true,
         pointRadius: 4,
@@ -112,11 +112,12 @@ export default function EventsOverTimeChart({ eventsData }) {
 
   return (
     <div className="chart-container">
-      <h3 className="chart-title">Events Created Over Time</h3>
+      <h3 className="chart-title">Transactions Done</h3>
       <div className="chart-wrapper">
         <Line data={data} options={options} />
       </div>
     </div>
   );
 }
+
 

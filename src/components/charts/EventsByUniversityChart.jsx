@@ -104,7 +104,7 @@ export default function EventsByUniversityChart({ eventsData, universities }) {
 
   return (
     <div className="chart-container">
-      <h3 className="chart-title">Events by University</h3>
+      <h3 className="chart-title">Top Universities by Events</h3>
       <div className="chart-wrapper">
         <Bar data={data} options={options} />
       </div>
