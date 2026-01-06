@@ -217,7 +217,7 @@ export default function ManagementReportPage() {
 
 
   return (
-    <div className="management-report-content">
+    <div className="management-report-content"> 
       <div className="management-report-header-row">
         <h1>EZEvent Management Report</h1>
       </div>
