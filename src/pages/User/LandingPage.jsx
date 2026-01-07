@@ -7,6 +7,7 @@ import '../../css/LandingPage.css';
 import EventCard from '../../components/EventCard';
 
 export default function LandingPage() {
+    // test
     const observerRef = useRef(null);
 
     useEffect(() => {
