@@ -157,16 +157,17 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: linear-gradient(135deg, #00F0FF, #00b8ff);
-    padding: 0.6rem 1.2rem;
+    background: #ffffff;
+    padding: 4px 8px;
     border-radius: 12px;
     color: #000;
-    font-weight: 800;
-    box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(83, 89, 89, 0.3);
+    margin-top: 12px;
 }
 
 .rating-val {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
 }
 
 .rating-star {
