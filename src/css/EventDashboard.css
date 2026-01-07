@@ -13,7 +13,7 @@
   font-family: 'Roboto', sans-serif;
   font-size: 3.5rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--text-dark);
   margin: 0;
   letter-spacing: -0.02em;
 }
@@ -38,14 +38,14 @@
 }
 
 .attendance-hero-card {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(20px);
   padding: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
@@ -54,7 +54,9 @@
   font-weight: 900;
   font-size: 6rem;
   line-height: 1;
-  color: white;
+  font-size: 6rem;
+  line-height: 1;
+  color: var(--text-dark);
 }
 
 .attendance-label {
@@ -62,7 +64,7 @@
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 4px;
-  color: #fff;
+  color: #64748b;
   margin-top: 1rem;
   text-transform: uppercase;
 }
@@ -79,7 +81,7 @@
   align-items: center;
   padding: 2.5rem;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
@@ -88,7 +90,7 @@
   font-family: 'Roboto', sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.7);
+  color: #64748b;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 0.5rem;
@@ -99,7 +101,9 @@
   font-weight: 900;
   font-size: 4rem;
   line-height: 1;
-  color: #fff;
+  font-size: 4rem;
+  line-height: 1;
+  color: var(--text-dark);
 }
 
 .action-row-tbhx {

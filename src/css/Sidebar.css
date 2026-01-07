@@ -1,7 +1,9 @@
 .sidebar {
   width: 280px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(30px);
+  width: 280px;
+  background: rgba(30, 41, 59, 0.85);
+  /* Dark Slate Glass */
+  backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(30px);
   padding: 2.5rem 1rem;
   height: 100vh;

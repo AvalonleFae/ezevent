@@ -1,13 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
-    --surface-glass: rgba(255, 255, 255, 0.85);
+    /* Updated for Light Blue & Silver Theme */
+    --primary-gradient: linear-gradient(135deg, #5D7B9D 0%, #A4C8E1 50%, #C0C0C0 100%);
+    --surface-glass: rgba(255, 255, 255, 0.65);
     --border-glass: rgba(255, 255, 255, 0.6);
     --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --accent-color: #6366f1;
+    --text-secondary: #708090;
+    --accent-color: #5D7B9D;
     --bg-light: #f1f5f9;
+    /* Fallback */
 }
 
 .auth-wrapper {
@@ -15,7 +17,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-light);
+    /* background: var(--bg-light); Removed to show global majestic background */
+    background: transparent;
     padding: 2rem;
     position: relative;
     overflow: hidden;
@@ -38,21 +41,21 @@
 }
 
 .auth-wrapper::before {
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(93, 123, 157, 0.4) 0%, transparent 70%);
     top: -10%;
     left: -10%;
     animation: floatAround 20s infinite ease-in-out;
 }
 
 .auth-wrapper::after {
-    background: radial-gradient(circle, rgba(217, 70, 239, 0.3) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(192, 192, 192, 0.3) 0%, transparent 70%);
     bottom: -10%;
     right: -5%;
     animation: floatAround 25s infinite ease-in-out reverse;
 }
 
 .auth-particles {
-    background: radial-gradient(circle, rgba(14, 165, 233, 0.3) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(164, 200, 225, 0.3) 0%, transparent 70%);
     top: 40%;
     left: 45%;
     width: 25vmax;
@@ -105,7 +108,7 @@
 
 .auth-container {
     width: 100%;
-    max-width: 480px;
+    max-width: 650px;
     background: var(--surface-glass);
     backdrop-filter: blur(40px) saturate(180%);
     -webkit-backdrop-filter: blur(40px) saturate(180%);
@@ -220,13 +223,13 @@
 
 .auth-button {
     width: 100%;
-    padding: 1.25rem;
+    padding: 0.8rem 1.6rem;
     background: var(--primary-gradient);
     background-size: 200% auto;
     color: white;
     border: none;
     border-radius: 16px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 800;
     letter-spacing: 1px;
     cursor: pointer;
@@ -340,5 +343,20 @@
 
     .logo-text {
         font-size: 2.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 2rem;
+    }
+
+    .auth-card-wrap {
+        padding: 1rem;
+    }
+
+    .auth-container {
+        padding: 2rem 1.2rem;
+        border-radius: 24px;
     }
 }

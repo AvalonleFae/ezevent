@@ -30,7 +30,7 @@
 }
 
 .admin-content h1 {
-  color: #ffffff;
+  color: var(--text-dark);
   margin: 0;
 }
 

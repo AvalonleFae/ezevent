@@ -8,7 +8,7 @@
 }
 
 .validate-event-container h2 {
-    color: #ffffff;
+    color: var(--text-dark);
     margin-bottom: 0.5rem;
     font-size: 2rem;
 }
@@ -63,13 +63,13 @@
     padding-bottom: 5px;
     margin-top: 0;
     margin-bottom: 15px;
-    color: #007bff;
+    color: var(--theme-primary);
 }
 
 .organizer-details-card h4 {
     margin-top: 15px;
     margin-bottom: 10px;
-    color: #555;
+    color: #64748b;
     font-size: 1rem;
 }
 
@@ -79,7 +79,7 @@
 
 .details-line strong {
     font-weight: 600;
-    color: #333;
+    color: var(--text-dark);
 }
 
 .status-tag {
