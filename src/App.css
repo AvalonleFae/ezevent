@@ -1,8 +1,25 @@
 #root {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+}
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+/* Only apply app styles when explicitly needed (auth pages) */
+.app.auth-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logo {

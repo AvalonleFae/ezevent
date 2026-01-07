@@ -1,13 +1,17 @@
+
 import './App.css'
-import AdminPage from './pages/AdminPage'
+import AdminPage from './pages/Admin/AdminPage'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import LoginPage from './pages/LoginPage'
-import SignUpPage from './pages/SignUpPage'
-import LandingPage from './pages/LandingPage' 
+import LoginPage from './pages/User/LoginPage'
+import SignUpPage from './pages/User/SignUpPage'
+import LandingPage from './pages/User/LandingPage'
 import { useAuth } from './components/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
-import ParticipantPage from './pages/ParticipantPage'
-import OrganizerPage from './pages/OrganizerPage'
+import AdminLayout from './layouts/AdminLayout'
+import ParticipantsLayout from './layouts/ParticipantLayout'
+import OrganizerLayout from './layouts/OrganizerLayout'
+import CreateEventPage from './pages/Organizer/CreateEventPage'
+import EventDashboard from './pages/Organizer/EventDashboard'
 
 function App() {
   const { user, role, loading } = useAuth()
@@ -15,7 +19,8 @@ function App() {
   const getLandingPath = () => {
     if (role === 'participant') return '/participant'
     if (role === 'organizer') return '/organizer'
-    return '/admin'
+    if (role === 'admin') return '/admin'
+    return '/'
   }
 
   if (loading) {
@@ -24,55 +29,69 @@ function App() {
 
   return (
     <Router>
-      <div className="app">
-        <div className="auth-wrapper">
-          <div className="auth-inner">
-            <Routes>
-              <Route
-                path="/"
-                element={user ? <Navigate to={getLandingPath()} /> : <LoginPage />}
-              />
-              
-              <Route
-                path="/login"
-                element={user ? <Navigate to={getLandingPath()} /> : <LoginPage />}
-              />
+       <Routes>
+        <Route
+          path="/"
+          element={<LandingPage />}
+        />
+        
+        <Route
+          path="/login"
+          element={
+            user && role ? (
+              <Navigate to={getLandingPath()} replace />
+            ) : (
+              <div className="app auth-wrapper">
+                <div className="auth-inner">
+                  <LoginPage />
+                </div>
+              </div>
+            )
+          }
+        />
 
-              <Route 
-              path="/signup" 
-              element={<SignUpPage />} 
-              />
+        <Route 
+          path="/signup" 
+          element={
+            user && role ? (
+              <Navigate to={getLandingPath()} replace />
+            ) : (
+              <div className="app auth-wrapper">
+                <div className="auth-inner">
+                  <SignUpPage />
+                </div>
+              </div>
+            )
+          }
+        />
 
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute allowedRoles={['admin']}>
-                    <AdminPage />
-                  </ProtectedRoute>
-                }
-              />
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        />
 
-              <Route
-                path="/participant"
-                element={
-                  <ProtectedRoute allowedRoles={['participant']}>
-                    <ParticipantPage />
-                  </ProtectedRoute>
-                }
-              />
+        <Route
+          path="/participant/*"
+          element={
+            <ProtectedRoute allowedRoles={['participant']}>
+              <ParticipantsLayout />
+            </ProtectedRoute>
+          }
+        />
 
-              <Route
-                path="/organizer"
-                element={
-                  <ProtectedRoute allowedRoles={['organizer']}>
-                    <OrganizerPage />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </div>
-        </div>
-      </div>
+        <Route
+          path="/organizer/*"
+          element={
+            <ProtectedRoute allowedRoles={['organizer']}>
+              <OrganizerLayout />
+            </ProtectedRoute>
+          }
+        />
+      </Routes> 
     </Router>
   )
 }

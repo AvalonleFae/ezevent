@@ -10,7 +10,8 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-  const [role, setRole] = useState(null)
+  const [role, setRole] = useState(null);
+  const [isOrganizerVerified, setIsOrganizerVerified] = useState(false);
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -21,7 +22,18 @@ export const AuthProvider = ({ children }) => {
       if (currentUser) {
         try {
           const userDoc = await getDoc(doc(db, 'users', currentUser.uid))
-          setRole(userDoc.exists() ? userDoc.data().role : null)
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setRole(userData.role);
+            if (userData.role === 'organizer' || userData.organizer) {
+              setIsOrganizerVerified(userData.organizer.verified === 'Accepted');
+            } else {
+              setIsOrganizerVerified(false);
+            }
+          } else {
+            setRole(null);
+            setIsOrganizerVerified(false);
+          }
         } catch (error) {
           console.error('Failed to fetch user role', error)
           setRole(null)
@@ -37,7 +49,7 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, role, loading }}>
+    <AuthContext.Provider value={{ user, role, loading, isOrganizerVerified }}>
       {children}
     </AuthContext.Provider>
   )

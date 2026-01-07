@@ -1,0 +1,87 @@
+.success-page-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.success-message-box {
+  background: rgba(30, 41, 59, 0.95);
+  border: 4px solid #4f46e5;
+  padding: 5rem;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 50px var(--neon-cyan-glow);
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+  max-width: 800px;
+  width: 100%;
+}
+
+.success-message-box::after {
+  content: 'ACCESS GRANTED';
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Lato', sans-serif;
+  font-size: 1.2rem;
+  color: #4f46e5;
+  letter-spacing: 5px;
+}
+
+.success-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 6rem;
+  color: white;
+  text-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.success-message-box p {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: #cbd5e1;
+  margin-bottom: 2rem;
+}
+
+.message-intel {
+  background: rgba(79, 70, 229, 0.1);
+  padding: 2rem;
+  border-left: 5px solid #4f46e5;
+  margin-bottom: 3rem;
+  text-align: left;
+}
+
+.intel-label {
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  color: #818cf8;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.intel-content {
+  color: white;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.success-done-btn {
+  font-size: 2rem;
+  padding: 1.5rem 4rem;
+}
+
+@media (max-width: 768px) {
+  .success-text {
+    font-size: 3rem;
+  }
+
+  .success-message-box {
+    padding: 3rem 1.5rem;
+    clip-path: none;
+    border-radius: 0;
+  }
+}

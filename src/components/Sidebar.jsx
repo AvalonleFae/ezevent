@@ -2,85 +2,145 @@ import React, { useState, useEffect } from 'react'
 import { signOut } from 'firebase/auth'
 import { auth, db } from '../firebase'
 import { doc, getDoc } from 'firebase/firestore'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import '../css/Sidebar.css'
 
 
-
+// Define menu items for each role
 const menuItems = {
   participant: [
-    { label: "Home", path: "/participant/home" },
-    { label: "My Events", path: "/participant/events" },
+    { label: "View Events", path: "/participant/events" },
+    { label: "My Event History", path: "/participant/history" },
+    { label: "Messages", path: "/participant/chat" },
+    { label: "Scan Attendance QR", path: "/participant/scan-attendance" }
   ],
   admin: [
     { label: "Management Report", path: "/admin/management-report" },
     { label: "Validate Organizers", path: "/admin/validate-organizers" },
     { label: "Validate Events", path: "/admin/validate-events" },
-    { label: "Validate Participants", path: "/admin/validate-participants" }
+    { label: "View Participants", path: "/admin/view-participants" },
+    { label: "Manage Univerisities", path: "/admin/manage-universities" }
+
   ],
   organizer: [
-    { label: "Create Event", path: "/organizer/create" },
-    { label: "My Events", path: "/organizer/events" },
+    { label: "My Events", path: "/organizer/my-events" },
+    { label: "Create Event", path: "/organizer/create-event" },
+    { label: "Messages", path: "/organizer/chat" },
   ]
 };
 
+// Sidebar component
 export default function Sidebar({ role }) {
 
-    const navigate = useNavigate();
-    const [userData, setUserData] = useState({ name: '', role: '' });
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-      const fetchUserData = async () => {
-        try {
-          const currentUser = auth.currentUser;
-          if (currentUser) {
-            const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-            if (userDoc.exists()) {
-              setUserData({
-                name: userDoc.data().name || null,
-                role: userDoc.data().role || null
-              });
-            }
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [userData, setUserData] = useState({ name: '', role: '' });  // State to hold user data
+  const [loading, setLoading] = useState(true);
+
+
+  // Fetch user data on component mount
+  useEffect(() => {
+    // Function to fetch user data from Firestore
+    const fetchUserData = async () => {
+      try {
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+          const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+          if (userDoc.exists()) {
+            setUserData({
+              name: userDoc.data().name || null,
+              role: userDoc.data().role || null
+            });
           }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        } finally {
-          setLoading(false);
         }
-      };
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      fetchUserData();
-    }, []);
+    fetchUserData();
+  }, []);
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Handle user logout
   async function handleLogout() {
-    try{
+    try {
       await signOut(auth);
       console.log("User logged out successfully!")
-      navigate("/login");
-    }catch (error) {
+      navigate("/");
+    } catch (error) {
       console.error("Error Logging out:", error.message)
     }
   }
 
-  const items = menuItems[role] || [];
+  // Prefer the role from the fetched user document when available;
+  // fall back to the role prop passed by the layout.
+  const effectiveRole = userData.role || role;
+  const items = menuItems[effectiveRole] || [];
+
+  // Helper to check if item should be active (for base routes)
+  const getActiveClassName = ({ isActive }, itemPath) => {
+    // If on base route, highlight first menu item
+    if (role === 'admin' && location.pathname === '/admin' && itemPath === '/admin/management-report') {
+      return 'active';
+    }
+    if (role === 'participant' && location.pathname === '/participant' && itemPath === '/participant/home') {
+      return 'active';
+    }
+    if (role === 'organizer' && location.pathname === '/organizer' && itemPath === '/organizer/events') {
+      return 'active';
+    }
+    return isActive ? 'active' : '';
+  };
 
   return (
-    <aside className="sidebar">
-        <div className="user-profile">
+    <>
+      <button
+        className={`sidebar-toggle ${isOpen ? 'open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle Menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
+        <div
+          className={`user-profile ${effectiveRole === 'organizer' || effectiveRole === 'participant' ? 'clickable' : ''}`}
+          onClick={() => {
+            if (effectiveRole === 'organizer') navigate('/organizer/profile');
+            if (effectiveRole === 'participant') navigate('/participant/profile');
+          }}
+          role={effectiveRole === 'organizer' || effectiveRole === 'participant' ? 'button' : undefined}
+          tabIndex={effectiveRole === 'organizer' || effectiveRole === 'participant' ? 0 : undefined}
+        >
           <div className="user-name">{userData.name}</div>
-          <div className="user-role">{userData.role}</div>
+          <div className="user-role">{(userData.role || role || '').toUpperCase()}</div>
         </div>
-      <ul>
-        {items.map((item) => (
-          <div key={item.path}>
-            <a href={item.path}>{item.label}</a>
-          </div>
-        ))}
-      </ul>
-      <div className="sidebar-signout">
-        <a onClick={handleLogout}>Sign Out</a>
-      </div>
-    </aside>
+        <ul>
+          {items.map((item) => (
+            <li key={item.path}>
+              <NavLink
+                to={item.path}
+                className={(navData) => getActiveClassName(navData, item.path)}
+                onClick={() => setIsOpen(false)}
+              >
+                {item.label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+        <div className="sidebar-signout">
+          <a onClick={handleLogout}>Sign Out</a>
+        </div>
+      </aside>
+
+      {isOpen && <div className="sidebar-overlay" onClick={() => setIsOpen(false)}></div>}
+    </>
   );
 }

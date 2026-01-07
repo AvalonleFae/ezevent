@@ -1,0 +1,19 @@
+.validate-event {
+  padding: 2rem;
+  /* Updated: Use 98% width to fit more columns comfortably */
+  max-width: 98%;
+  margin: 0 auto;
+}
+
+.validate-event h1 {
+  color: var(--text-dark);
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+@media(max-width:768px) {
+  .validate-event h1 {
+    text-align: center;
+  }
+}

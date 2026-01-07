@@ -1,0 +1,211 @@
+.dashboard-container-tbhx {
+  padding: 0;
+  width: 100%;
+}
+
+.event-header-tbhx {
+  margin-bottom: 3rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 1.5rem;
+}
+
+.event-header-tbhx h1 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.current-event-name {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.2rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.dashboard-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.attendance-hero-card {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.attendance-rate {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 900;
+  font-size: 6rem;
+  line-height: 1;
+  font-size: 6rem;
+  line-height: 1;
+  color: var(--text-dark);
+}
+
+.attendance-label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #64748b;
+  margin-top: 1rem;
+  text-transform: uppercase;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.stats-card-tbhx {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.stats-label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.stats-number {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 900;
+  font-size: 4rem;
+  line-height: 1;
+  font-size: 4rem;
+  line-height: 1;
+  color: var(--text-dark);
+}
+
+.action-row-tbhx {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* QR VIEW */
+.viewqr-container-tbhx {
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qr-grid-tbhx {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+  width: 100%;
+}
+
+.qr-item-tbhx {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+}
+
+.qr-item-tbhx img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  margin-bottom: 1.5rem;
+  border: 12px solid white;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.qr-item-tbhx:hover img {
+  transform: scale(1.02);
+}
+
+.qr-meta {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+}
+
+.qr-actions {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.qr-action-btn {
+  flex: 1;
+  padding: 0.8rem;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  border: none;
+}
+
+.download-btn {
+  background: #ffffff;
+  color: var(--theme-primary);
+}
+
+.print-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+  .event-header-tbhx h1 {
+    font-size: 2.5rem;
+  }
+
+  .attendance-rate {
+    font-size: 4.5rem;
+  }
+
+  .stats-number {
+    font-size: 3rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
