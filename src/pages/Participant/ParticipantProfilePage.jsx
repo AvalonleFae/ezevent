@@ -29,6 +29,10 @@ export default function ParticipantProfilePage() {
           id: docSnap.id,
           ...(docSnap.data() || {}),
         }));
+
+        // Add "Other" option manually
+        list.push({ id: 'Other', universityName: 'Other' });
+
         setUniversities(list);
       } catch (err) {
         console.error("Failed to load universities:", err);
