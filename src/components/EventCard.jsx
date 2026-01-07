@@ -15,8 +15,13 @@ export default function EventCard({ event, onClick, userRole, buttonText = "Regi
   const isFeature = type === "feature";
   const isVintage = variant === "vintage";
 
+  const handleButtonClick = (e) => {
+    e.stopPropagation(); // Prevent card click
+    if (onClick) onClick(event);
+  };
+
   return (
-    <div className={`majestic-ticket ${colorClass} ${variant} ${isFeature ? 'feature-card' : ''}`} onClick={() => onClick && onClick(event)}>
+    <div className={`majestic-ticket ${colorClass} ${variant} ${isFeature ? 'feature-card' : ''}`} onClick={isFeature ? () => onClick && onClick(event) : undefined}>
       {isFeature ? (
         <div className={`feature-card-inner ${isVintage ? 'vintage-feature-inner' : ''}`}>
           <div className="ticket-header">
@@ -96,7 +101,7 @@ export default function EventCard({ event, onClick, userRole, buttonText = "Regi
                       {event.price ? `RM ${event.price}` : "FREE ENTRY"}
                     </p>
                   </div>
-                  <div className="ticket-barcode"></div>
+                  <button className="ticket-button" onClick={handleButtonClick}>Event Details</button>
                 </div>
               </>
             )}

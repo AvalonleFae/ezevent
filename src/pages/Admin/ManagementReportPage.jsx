@@ -220,7 +220,7 @@ export default function ManagementReportPage() {
 
 
   return (
-    <div className="management-report-content"> 
+    <div className="management-report-content">
       <div className="management-report-header-row">
         <h1>EZEvent Management Report</h1>
       </div>
@@ -230,7 +230,7 @@ export default function ManagementReportPage() {
         <section className="dashboard-section">
           <div className="date-range-filter-section">
             <div className="date-range-controls">
-              <label>
+              <label className='label'>
                 From
                 <input
                   type="date"
@@ -238,7 +238,7 @@ export default function ManagementReportPage() {
                   onChange={(e) => handleStartDateChange(e.target.value)}
                 />
               </label>
-              <label>
+              <label className='label'>
                 To
                 <input
                   type="date"
@@ -266,8 +266,8 @@ export default function ManagementReportPage() {
           <KPICards metrics={metrics} />
         </section>
 
-        
-        
+
+
 
         {/* Charts Grid */}
         <section className="dashboard-section">

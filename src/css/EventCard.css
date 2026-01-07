@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  font-family: 'Cinzel', serif;
+  font-family: 'Outfit', sans-serif;
   cursor: pointer;
 
   --mask: radial-gradient(12px at 50% 0px, #0000 98%, #000) 50% 0 / 30px 100%,
@@ -16,12 +16,7 @@
   -webkit-mask-composite: source-in, source-in;
   mask-composite: intersect;
 
-  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.25));
-}
-
-.majestic-ticket:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
 }
 
 .ticket-header {
@@ -93,7 +88,7 @@
 
 .ticket-subtitle {
   display: block;
-  font-family: 'Cinzel', serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 0.65rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -102,7 +97,7 @@
 }
 
 .ticket-main-title {
-  font-family: 'Cinzel', serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 1.15rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -150,11 +145,11 @@
 .ticket-footer {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .ticket-info {
-  text-align: left;
+  text-align: right;
 }
 
 .ticket-label {
@@ -188,15 +183,24 @@
   max-width: 150px;
 }
 
-.ticket-barcode {
-  width: 80px;
-  height: 35px;
-  background: repeating-linear-gradient(90deg,
-      #1e293b,
-      #1e293b 2px,
-      transparent 2px,
-      transparent 3px,
-      #1e293b 4px);
+.ticket-button {
+  background-color: #3e4f8e90;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.ticket-button:hover {
+  transform: translateY(-2px);
+  background-color: #3e4f8e;
 }
 
 .majestic-ticket.color-grey,
@@ -343,10 +347,6 @@
   cursor: default;
 }
 
-.feature-card:hover {
-  transform: translateY(-5px);
-}
-
 .feature-description {
   margin-top: 1.5rem;
   font-family: 'Roboto', sans-serif;
@@ -380,8 +380,10 @@
 
 .feature-emoji {
   font-size: 4.5rem;
-  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+  filter: none;
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   animation: float 3s ease-in-out infinite;
+  will-change: transform;
 }
 
 .feature-card {
@@ -416,8 +418,9 @@
 
 .feature-emoji {
   font-size: 5.5rem;
-  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.4));
+  text-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
   animation: float 3s ease-in-out infinite;
+  will-change: transform;
 }
 
 .feature-card .ticket-body {
@@ -451,7 +454,7 @@
   text-align: center !important;
   color: #0f172a !important;
   margin: 8px 0 !important;
-  font-family: 'Cinzel', serif;
+  font-family: 'Outfit', sans-serif;
   letter-spacing: -1.5px;
   font-weight: 900;
 }
@@ -468,7 +471,7 @@
 }
 
 .feature-slogan {
-  font-family: 'Cinzel', serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 1.1rem;
   font-weight: 900;
   color: #0f172a;
@@ -727,7 +730,7 @@
   padding: 1rem 0;
 }
 
-.majestic-ticket.vintage .vintage-barcode {
+.majestic-ticket.vintage {
   width: 60px;
   height: 100%;
   background: repeating-linear-gradient(90deg,
@@ -795,7 +798,7 @@
     font-size: 1.2rem;
   }
 
-  .majestic-ticket.vintage .vintage-barcode {
+  .majestic-ticket.vintage {
     height: 40px;
     width: 100px;
   }

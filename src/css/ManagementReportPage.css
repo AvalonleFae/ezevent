@@ -35,7 +35,7 @@
   display: flex;
   flex-direction: column;
   font-size: 0.8rem;
-  color: #ffffff;
+  color: #000000;
   gap: 0.25rem;
 }
 
@@ -44,7 +44,7 @@
   border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   background: rgba(0, 0, 0, 0.2);
-  color: #ffffff;
+  color: #000000;
   font-size: 0.85rem;
 }
 
@@ -65,7 +65,7 @@
 
 .btn-primary {
   background: #ff4040;
-  color: #ffffff;
+  color: #000000;
 }
 
 .btn-primary:hover {
@@ -73,9 +73,9 @@
 }
 
 .btn-secondary {
-  background: transparent;
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 .btn-secondary:hover {
@@ -102,10 +102,11 @@
   justify-content: center;
   align-items: center;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 
 .charts-grid {
   display: grid;
