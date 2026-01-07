@@ -2,54 +2,107 @@ import React from "react";
 import "../css/EventCard.css";
 import testImage from "../assets/icons/sample.jpg";
 
-const formatDate = (dateObj) => {
-  if (!dateObj) return "Date not specified";
-  if (dateObj.seconds) {
-    return new Date(dateObj.seconds * 1000).toLocaleDateString();
-  }
-  return dateObj; // Fallback if it's already a string
-};
+export default function EventCard({ event, onClick, userRole, buttonText = "Register", index = 0, variant = "vertical", type = "event" }) {
+  const dateObj = event.date?.seconds ? new Date(event.date.seconds * 1000) : new Date();
+  const day = dateObj.getDate().toString().padStart(2, '0');
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+  const year = dateObj.getFullYear();
 
-export default function EventCard({ event, onClick, userRole, buttonText = "Register" }) {
+  const colors = ['color-grey', 'color-blue', 'color-pink', 'color-lilac', 'color-mint', 'color-peach'];
+  const colorIndex = index % colors.length;
+  const colorClass = colors[colorIndex];
+
+  const isFeature = type === "feature";
+  const isVintage = variant === "vintage";
 
   return (
-    <div className="tbhx-card event-card-tbhx">
-      <div className="event-img-wrapper">
-        <img src={event.Image || testImage} alt={event.eventName} />
-        <div className="event-date-badge">
-          {formatDate(event.date)}
-        </div>
-      </div>
-
-      <div className="event-details">
-        <h3 className="tbhx-header">{event.eventName}</h3>
-        <p className="event-location">
-          <span className="accent-text">📍</span> {event.universityId}
-        </p>
-        <p className="event-desc">{event.description}</p>
-
-        <div className="event-stats">
-          <div className="stat-item">
-            <span className="stat-label">Price</span>
-            <span className="stat-val">{event.price || "Free"}</span>
-          </div>
-          {(userRole === "organizer" || userRole === "admin") && (
-            <div className="stat-item">
-              <span className="stat-label">Status</span>
-              <span className={`status-badge ${event.status?.toLowerCase()}`}>
-                {event.status}
-              </span>
+    <div className={`majestic-ticket ${colorClass} ${variant} ${isFeature ? 'feature-card' : ''}`} onClick={() => onClick && onClick(event)}>
+      {isFeature ? (
+        <div className={`feature-card-inner ${isVintage ? 'vintage-feature-inner' : ''}`}>
+          <div className="ticket-header">
+            <div className="feature-emoji-container">
+              <span className="feature-emoji">{event.emoji}</span>
             </div>
-          )}
+          </div>
+          <div className="ticket-body">
+            <div className="feature-section-row">
+              <span className="row-label">NAME</span>
+              <h2 className="ticket-main-title">{event.eventName}</h2>
+            </div>
+            <div className="feature-section-row">
+              <span className="row-label">DESCRIPTION</span>
+              <p className="feature-description">{event.description}</p>
+            </div>
+            {event.slogan && (
+              <div className="feature-section-row slogan-row">
+                <p className="feature-slogan">{event.slogan}</p>
+              </div>
+            )}
+            <div className="feature-card-footer">
+              <span className="footer-tag">EZEVENT</span>
+              <span className="footer-tag">FEATURE</span>
+            </div>
+          </div>
         </div>
+      ) : (
+        <>
+          <div className="ticket-header">
+            <img src={event.Image || testImage} alt={event.eventName} />
+            {!isVintage && (
+              <>
+                <div className="ticket-hole top-hole"></div>
+                <div className="ticket-hole bottom-hole"></div>
+              </>
+            )}
+            {isVintage && <div className="serial-number">№ 2315742</div>}
+          </div>
 
-        <button
-          className="tbhx-button card-action"
-          onClick={() => onClick(event)}
-        >
-          {buttonText}
-        </button>
-      </div>
+          <div className="ticket-body">
+            {isVintage ? (
+              <>
+                <div className="vintage-main-content">
+                  <span className="vintage-label-sm">{event.subtextTop || "PLATFORM FOR"}</span>
+                  <h2 className="ticket-main-title">{event.eventName}</h2>
+                  <span className="vintage-label-sm">{event.subtextBottom || "FUTURE EVENT TICKETING"}</span>
+                </div>
+                <div className="vintage-stub">
+                  <div className="vintage-barcode"></div>
+                  <div className="admit-one-text">{event.stubText || "EZEVENT"}</div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="ticket-date-row">
+                  <span className="ticket-full-date">
+                    {day}/{month}/{year.toString().slice(-2)}
+                  </span>
+                </div>
+
+                <div className="ticket-title-section">
+                  <span className="ticket-subtitle">
+                    {event.universityId || "UNIVERSITY EVENT"}
+                  </span>
+                  <h2 className="ticket-main-title">
+                    {event.eventName}
+                  </h2>
+                </div>
+
+                <div className="ticket-divider"></div>
+
+                <div className="ticket-footer">
+                  <div className="ticket-info">
+                    <span className="ticket-label">EZEVENT</span>
+                    <p className="ticket-price">
+                      {event.price ? `RM ${event.price}` : "FREE ENTRY"}
+                    </p>
+                  </div>
+                  <div className="ticket-barcode"></div>
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }

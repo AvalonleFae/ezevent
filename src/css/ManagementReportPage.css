@@ -83,7 +83,7 @@
 }
 
 .management-report-content h1 {
-  color: #ffffff;
+  color: var(--text-dark);
   margin: 0 0 2rem 0;
   padding: 0;
 }
@@ -174,8 +174,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-container p {
@@ -187,7 +192,7 @@
   .charts-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .charts-grid.two-column {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -210,13 +215,12 @@
   .charts-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .chart-card {
     padding: 1rem;
   }
-  
+
   .chart-wrapper {
     height: 250px;
   }
 }
-

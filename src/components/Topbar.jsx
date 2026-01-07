@@ -11,10 +11,8 @@ export default function Topbar() {
     e.preventDefault();
     setIsMenuOpen(false); // Close menu when link is clicked
     if (location.pathname !== '/') {
-      // If not on landing page, navigate to landing page first
       window.location.href = `/${hash}`;
     } else {
-      // If already on landing page, just scroll
       const element = document.querySelector(hash);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
@@ -56,4 +54,3 @@ export default function Topbar() {
     </header>
   );
 }
-

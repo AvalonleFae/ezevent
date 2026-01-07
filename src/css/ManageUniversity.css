@@ -8,8 +8,8 @@
   font-size: 3rem;
   font-weight: 900;
   margin-bottom: 2.5rem;
-  color: #fff;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  color: var(--text-dark);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   padding-bottom: 1.5rem;
   letter-spacing: -0.02em;
 }
