@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import EventsList from "../../components/EventsList";
 import { useAuth } from "../../components/AuthContext";
@@ -8,7 +9,6 @@ export default function EventHistoryPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // State to manage the filter (default to 'upcoming')
   const [filterType, setFilterType] = useState("upcoming");
 
   const handleClick = (event) => {
@@ -18,20 +18,25 @@ export default function EventHistoryPage() {
   return (
     <div className="history-page-root">
       <div className="participant-header">
-        <h1 className="tbhx-header">EVENT <span className="text-glow">HISTORY</span></h1>
+        <h1 className="tbhx-header">
+          EVENT <span className="text-glow">HISTORY</span>
+        </h1>
         <div className="header-accent"></div>
       </div>
 
-      <div className="filter-container">
+      <div className="filter-container" role="group" aria-label="Filter events">
         <button
           className={`tbhx-button ${filterType === "upcoming" ? "" : "secondary"}`}
           onClick={() => setFilterType("upcoming")}
+          aria-pressed={filterType === "upcoming"}
         >
           UPCOMING EVENTS
         </button>
+
         <button
           className={`tbhx-button ${filterType === "past" ? "" : "secondary"}`}
           onClick={() => setFilterType("past")}
+          aria-pressed={filterType === "past"}
         >
           ARCHIVED EVENTS
         </button>
@@ -50,3 +55,4 @@ export default function EventHistoryPage() {
     </div>
   );
 }
+``
