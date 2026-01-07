@@ -9,6 +9,7 @@ export default function ValidateOrganizer() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedOrganizer, setSelectedOrganizer] = useState(null);
+  const [statusFilter, setStatusFilter] = useState('All');
 
   const SERVICE_ID = "service_ezevent";
   const TEMPLATE_ID = "template_2ofdmnb";
@@ -70,10 +71,14 @@ export default function ValidateOrganizer() {
 
       try {
         const organizerRef = doc(db, 'users', organizerId);
-        await updateDoc(organizerRef, {
+        const updateData = {
           "organizer.verified": statusToSet,
           "organizer.validationTimestamp": serverTimestamp()
-        });
+        };
+        if (newStatus === 'decline') {
+          updateData["organizer.declineReason"] = rejectionReason;
+        }
+        await updateDoc(organizerRef, updateData);
 
         setOrganizers(prev =>
           prev.map(org =>
@@ -82,7 +87,8 @@ export default function ValidateOrganizer() {
                 ...org, // 1. Keep the outer user data (id, email, name, etc.)
                 organizer: {
                   ...org.organizer, // 2. Keep the existing company info
-                  verified: statusToSet // 3. Update ONLY the verified status
+                  verified: statusToSet, // 3. Update ONLY the verified status
+                  ...(newStatus === 'decline' ? { declineReason: rejectionReason } : {})
                 }
               }
               : org
@@ -119,6 +125,20 @@ export default function ValidateOrganizer() {
 
       <section className="organizer-list-section">
         <h2>Organizers List</h2>
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="statusFilter" style={{ marginRight: '0.5rem' }}>Filter by Status:</label>
+          <select
+            id="statusFilter"
+            value={statusFilter}
+            onChange={e => setStatusFilter(e.target.value)}
+            style={{ padding: '0.3rem 0.7rem', borderRadius: '4px' }}
+          >
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Declined">Declined</option>
+          </select>
+        </div>
         {loading ? (
           <p>Loading Organizers...</p>
         ) : (
@@ -138,41 +158,49 @@ export default function ValidateOrganizer() {
                 </tr>
               </thead>
               <tbody>
-                {organizers.length === 0 ? (
+                {organizers.filter(org => {
+                  const status = org.organizer.verified || 'Pending';
+                  return statusFilter === 'All' || status === statusFilter;
+                }).length === 0 ? (
                   <tr>
-                    <td colSpan="3" style={{ textAlign: 'center', padding: '2rem' }}>
+                    <td colSpan="9" style={{ textAlign: 'center', padding: '2rem' }}>
                       No Organizers found
                     </td>
                   </tr>
                 ) : (
-                  organizers.map((organizer) => (
-                    <tr key={organizer.id}>
-                      <td data-label="ID">{organizer.id}</td>
-                      <td data-label="Email">{organizer.email || 'N/A'}</td>
-                      <td data-label="Name">{organizer.name || 'N/A'}</td>
-                      <td data-label="Phone">{organizer.phoneNumber || 'N/A'}</td>
-                      <td data-label="Company">{organizer.organizer.companyName || 'N/A'}</td>
-                      <td data-label="Address">{organizer.organizer.companyAddress || 'N/A'}</td>
-                      <td data-label="Position">{organizer.organizer.position || 'N/A'}</td>
-                      <td data-label="Status">
-                        <span className={`status-tag ${organizer.organizer.verified ? organizer.organizer.verified.toLowerCase() : 'pending'}`}>
-                          {organizer.organizer.verified || 'Pending'}
-                        </span>
-                      </td>
-                      <td data-label="Action">
-                        <button
-                          type="button"
-                          className="action-btn edit-btn"
-                          onClick={() => handleValidation(organizer.id, organizer.verified || 'Pending',
-                            organizer.email,
-                            organizer.name,
-                          )}
-                        >
-                          Validate
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                  organizers
+                    .filter(org => {
+                      const status = org.organizer.verified || 'Pending';
+                      return statusFilter === 'All' || status === statusFilter;
+                    })
+                    .map((organizer) => (
+                      <tr key={organizer.id}>
+                        <td data-label="ID">{organizer.id}</td>
+                        <td data-label="Email">{organizer.email || 'N/A'}</td>
+                        <td data-label="Name">{organizer.name || 'N/A'}</td>
+                        <td data-label="Phone">{organizer.phoneNumber || 'N/A'}</td>
+                        <td data-label="Company">{organizer.organizer.companyName || 'N/A'}</td>
+                        <td data-label="Address">{organizer.organizer.address || 'N/A'}</td>
+                        <td data-label="Position">{organizer.organizer.position || 'N/A'}</td>
+                        <td data-label="Status">
+                          <span className={`status-tag ${organizer.organizer.verified ? organizer.organizer.verified.toLowerCase() : 'pending'}`}>
+                            {organizer.organizer.verified || 'Pending'}
+                          </span>
+                        </td>
+                        <td data-label="Action">
+                          <button
+                            type="button"
+                            className="action-btn edit-btn"
+                            onClick={() => handleValidation(organizer.id, organizer.verified || 'Pending',
+                              organizer.email,
+                              organizer.name,
+                            )}
+                          >
+                            Validate
+                          </button>
+                        </td>
+                      </tr>
+                    ))
                 )}
               </tbody>
             </table>

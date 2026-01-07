@@ -28,8 +28,6 @@ const ReportPage = () => {
     const [institutionData, setInstitutionData] = useState({ labels: [], datasets: [] });
     const [salesData, setSalesData] = useState({ labels: [], datasets: [] });
     const [totalSales, setTotalSales] = useState(0);
-    const [reviews, setReviews] = useState([]);
-    const [avgRating, setAvgRating] = useState(0);
     const [attendanceData, setAttendanceData] = useState({ labels: [], datasets: [] });
     const [registrationTimelineData, setRegistrationTimelineData] = useState({ labels: [], datasets: [] });
     const [checkInTimeData, setCheckInTimeData] = useState({ labels: [], datasets: [] });
@@ -65,7 +63,7 @@ const ReportPage = () => {
                 // Process each registration to get attendance and other data
                 const attendancePromises = regSnap.docs.map(async (regDoc) => {
                     const regData = regDoc.data();
-                    
+
                     // Get registration date
                     if (regData.registeredAt) {
                         const regDate = regData.registeredAt.toDate ? regData.registeredAt.toDate() : new Date(regData.registeredAt);
@@ -80,7 +78,7 @@ const ReportPage = () => {
                     // Get attendance status
                     const attendanceSub = collection(db, 'registrations', regDoc.id, 'attendance');
                     const attendanceSnap = await getDocs(attendanceSub);
-                    
+
                     let isPresent = false;
                     attendanceSnap.docs.forEach(attDoc => {
                         const attData = attDoc.data();
@@ -253,15 +251,6 @@ const ReportPage = () => {
                     ],
                 });
 
-                // Fetch Reviews
-                const reviewSnap = await getDocs(collection(db, 'events', id, 'review'));
-                const reviewList = reviewSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                setReviews(reviewList);
-
-                if (reviewList.length > 0) {
-                    const totalRating = reviewList.reduce((acc, rev) => acc + (rev.rating || 0), 0);
-                    setAvgRating((totalRating / reviewList.length).toFixed(1));
-                }
                 // Attendance Rate Chart (Present vs Absent)
                 setAttendanceData({
                     labels: ['Present', 'Absent'],
@@ -343,11 +332,11 @@ const ReportPage = () => {
                             options={{
                                 maintainAspectRatio: false,
                                 plugins: {
-                                    legend: { labels: { color: '#FFF', font: { family: 'Bebas Neue' } } }
+                                    legend: { labels: { color: '#000000ff', font: { family: 'Roboto' } } }
                                 },
                                 scales: {
-                                    y: { ticks: { color: '#FFF' }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                                    x: { ticks: { color: '#FFF' }, grid: { display: false } }
+                                    y: { ticks: { color: '#000000ff' }, grid: { color: 'rgba(255, 255, 255, 0.04)' } },
+                                    x: { ticks: { color: '#000000ff' }, grid: { display: false } }
                                 },
                             }}
                         />
@@ -368,10 +357,10 @@ const ReportPage = () => {
                                 options={{
                                     maintainAspectRatio: false,
                                     plugins: {
-                                        legend: { position: 'bottom', labels: { color: '#FFF', font: { family: 'Bebas Neue' } } },
+                                        legend: { position: 'bottom', labels: { color: '#000000ff', font: { family: 'Roboto', size: 15 } } },
                                         tooltip: {
                                             callbacks: {
-                                                label: function(context) {
+                                                label: function (context) {
                                                     const label = context.label || '';
                                                     const value = context.parsed || 0;
                                                     const total = context.dataset.data.reduce((a, b) => a + b, 0);
@@ -402,8 +391,8 @@ const ReportPage = () => {
                                         legend: { display: false }
                                     },
                                     scales: {
-                                        y: { beginAtZero: true, ticks: { color: '#FFF', precision: 0 }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                                        x: { ticks: { color: '#FFF', maxRotation: 90, minRotation: 90, font: { size: 10 } }, grid: { display: false } }
+                                        y: { beginAtZero: true, ticks: { color: '#000000ff', precision: 0 }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                                        x: { ticks: { color: '#000000ff', maxRotation: 90, minRotation: 90, font: { size: 10 } }, grid: { display: false } }
                                     }
                                 }}
                             />
@@ -426,8 +415,8 @@ const ReportPage = () => {
                                     maintainAspectRatio: false,
                                     plugins: { legend: { display: false } },
                                     scales: {
-                                        y: { beginAtZero: true, ticks: { color: '#FFF', precision: 0 }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                                        x: { ticks: { color: '#FFF' }, grid: { display: false } }
+                                        y: { beginAtZero: true, ticks: { color: '#000000ff', precision: 0 }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                                        x: { ticks: { color: '#000000ff' }, grid: { display: false } }
                                     }
                                 }}
                             />
@@ -445,7 +434,7 @@ const ReportPage = () => {
                                 data={genderData}
                                 options={{
                                     maintainAspectRatio: false,
-                                    plugins: { legend: { position: 'bottom', labels: { color: '#FFF' } } }
+                                    plugins: { legend: { position: 'bottom', labels: { color: '#000000ff' } } }
                                 }}
                             />
                         ) : (
@@ -462,7 +451,7 @@ const ReportPage = () => {
                                 data={institutionData}
                                 options={{
                                     maintainAspectRatio: false,
-                                    plugins: { legend: { position: 'bottom', labels: { color: '#FFF' } } }
+                                    plugins: { legend: { position: 'bottom', labels: { color: '#000000ff' } } }
                                 }}
                             />
                         ) : (
@@ -472,40 +461,6 @@ const ReportPage = () => {
                 </div>
             </div>
 
-            {/* Review Section */}
-            <div className="tbhx-card reviews-section-tbhx">
-                <div className="reviews-header-tbhx">
-                    <h3 className="tbhx-header">Participant Feedback</h3>
-                    <div className="avg-rating-badge">
-                        <span className="rating-val">{avgRating}</span>
-                        <span className="rating-star">★</span>
-                        <span className="rating-count">({reviews.length} reviews)</span>
-                    </div>
-                </div>
-
-                <div className="reviews-list-tbhx">
-                    {reviews.length > 0 ? (
-                        reviews.map((rev) => (
-                            <div key={rev.id} className="review-item-tbhx">
-                                <div className="review-item-header">
-                                    <span className="reviewer-name">{rev.userName || "Anonymous"}</span>
-                                    <div className="reviewer-rating">
-                                        {[...Array(5)].map((_, i) => (
-                                            <span key={i} className={`mini-star ${i < rev.rating ? 'filled' : ''}`}>★</span>
-                                        ))}
-                                    </div>
-                                </div>
-                                <p className="review-message">"{rev.message}"</p>
-                                <div className="review-meta">
-                                    <span>Recommend: {rev.recommend}</span> | <span>Objective Achieved: {rev.objective}</span>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="no-reviews">No reviews submitted yet for this event.</p>
-                    )}
-                </div>
-            </div>
         </div>
     );
 };

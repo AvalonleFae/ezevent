@@ -284,7 +284,7 @@ export default function EventDetailsPage() {
                   <button onClick={handleViewReceipt} className="tbhx-button ed-action-btn">
                     VIEW TICKET & RECEIPT
                   </button>
-                  {new Date(event.date?.seconds * 1000 || event.date) < new Date() && (
+                  {event.reviewOpen && (
                     <button
                       onClick={() => navigate(`/participant/history/review/${id}`)}
                       className="tbhx-button ed-action-btn review-btn"

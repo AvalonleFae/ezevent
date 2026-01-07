@@ -192,6 +192,17 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+.danger-btn {
+  background: rgba(255, 64, 64, 0.1) !important;
+  color: #ff4040 !important;
+  border: 1px solid rgba(255, 64, 64, 0.3) !important;
+}
+
+.danger-btn:hover {
+  background: rgba(255, 64, 64, 0.2) !important;
+  box-shadow: 0 8px 25px rgba(255, 64, 64, 0.2) !important;
+}
+
 @media (max-width: 768px) {
   .event-header-tbhx h1 {
     font-size: 2.5rem;
