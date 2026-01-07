@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../css/EventDashboard.css';
-import { collection, query, where, getDocs, orderBy, doc, getDoc } from 'firebase/firestore';
+import '../../css/Report.css';
+import { collection, query, where, getDocs, orderBy, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useParams } from 'react-router-dom';
@@ -22,6 +23,11 @@ export default function EventDashboard({ }) {
 
     const [user, setUser] = useState(null);
     const [viewMode, setViewMode] = useState('dashboard'); // Used for button toggle
+    const [eventDate, setEventDate] = useState(null);
+    const [reviewOpen, setReviewOpen] = useState(false);
+    const [openingReview, setOpeningReview] = useState(false);
+    const [reviews, setReviews] = useState([]);
+    const [avgRating, setAvgRating] = useState(0);
 
     // --- Data Calculation (Using current state values) ---
     // Note: This derived state is for display only; the actual calc happens in fetchAttendanceStats
@@ -95,6 +101,11 @@ export default function EventDashboard({ }) {
         if (eventSnapshot.exists()) {
             const eventData = eventSnapshot.data();
             setEventName(eventData.eventName);
+            setEventDate(eventData.date?.toDate ? eventData.date.toDate() : new Date(eventData.date));
+            setReviewOpen(eventData.reviewOpen || false);
+            if (eventData.reviewOpen) {
+                fetchReviews(eventId);
+            }
         } else {
             setEventName("Event Not Found");
         }
@@ -121,6 +132,39 @@ export default function EventDashboard({ }) {
             setLoading(false);
         }
     }
+
+    async function fetchReviews(eventId) {
+        try {
+            const reviewSnap = await getDocs(collection(db, 'events', eventId, 'review'));
+            const reviewList = reviewSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setReviews(reviewList);
+
+            if (reviewList.length > 0) {
+                const totalRating = reviewList.reduce((acc, rev) => acc + (rev.rating || 0), 0);
+                setAvgRating((totalRating / reviewList.length).toFixed(1));
+            }
+        } catch (error) {
+            console.error("Error fetching reviews:", error);
+        }
+    }
+
+    const handleToggleReview = async () => {
+        if (!id) return;
+        setOpeningReview(true);
+        const newStatus = !reviewOpen;
+        try {
+            await updateDoc(doc(db, 'events', id), {
+                reviewOpen: newStatus
+            });
+            setReviewOpen(newStatus);
+            alert(newStatus ? "Review has been opened to all participants!" : "Review has been closed.");
+        } catch (error) {
+            console.error("Error toggling review:", error);
+            alert("Failed to update review status. Please try again.");
+        } finally {
+            setOpeningReview(false);
+        }
+    };
 
     // Download QR code as image
     const downloadQRCode = async (imageUrl, qrId) => {
@@ -273,6 +317,26 @@ export default function EventDashboard({ }) {
                 <button className="tbhx-button" onClick={() => navigate(`/organizer/my-event/${id}/report`, { state: { eventName } })}>
                     GENERATE REPORT
                 </button>
+                {eventDate && new Date() > eventDate && (
+                    <>
+                        <button
+                            className={`tbhx-button ${reviewOpen ? 'secondary' : 'review-open-btn'}`}
+                            onClick={reviewOpen ? () => setViewMode(viewMode === 'reviews' ? 'dashboard' : 'reviews') : handleToggleReview}
+                            disabled={!reviewOpen && openingReview}
+                        >
+                            {openingReview && !reviewOpen ? 'OPENING...' : reviewOpen ? (viewMode === 'reviews' ? 'BACK TO DASHBOARD' : 'VIEW REVIEWS') : 'OPEN REVIEW'}
+                        </button>
+                        {reviewOpen && (
+                            <button
+                                className="tbhx-button danger-btn"
+                                onClick={handleToggleReview}
+                                disabled={openingReview}
+                            >
+                                {openingReview ? 'CLOSING...' : 'CLOSE REVIEW'}
+                            </button>
+                        )}
+                    </>
+                )}
                 <button className="tbhx-button secondary" onClick={() => setViewMode(viewMode === 'dashboard' ? 'qr' : 'dashboard')}>
                     {viewMode === 'dashboard' ? 'VIEW QR CODES' : 'BACK TO DASHBOARD'}
                 </button>
@@ -307,6 +371,42 @@ export default function EventDashboard({ }) {
                                 )}
                             </div>
                         ))}
+                    </div>
+                </div>
+            )}
+
+            {viewMode === 'reviews' && (
+                <div className="reviews-view-tbhx">
+                    <div className="reviews-header-tbhx">
+                        <h2 className="tbhx-header">Participant <span className="text-glow-org">Feedback</span></h2>
+                        <div className="avg-rating-badge">
+                            <span className="rating-val">{avgRating}</span>
+                            <span className="rating-star">★</span>
+                            <span className="rating-count">({reviews.length} reviews)</span>
+                        </div>
+                    </div>
+
+                    <div className="reviews-list-tbhx">
+                        {reviews.length > 0 ? (
+                            reviews.map((rev) => (
+                                <div key={rev.id} className="review-item-tbhx">
+                                    <div className="review-item-header">
+                                        <span className="reviewer-name">{rev.userName || "Anonymous"}</span>
+                                        <div className="reviewer-rating">
+                                            {[...Array(5)].map((_, i) => (
+                                                <span key={i} className={`mini-star ${i < rev.rating ? 'filled' : ''}`}>★</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <p className="review-message">"{rev.message}"</p>
+                                    <div className="review-meta">
+                                        <span>Recommend: {rev.recommend}</span> | <span>Objective Achieved: {rev.objective}</span>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="no-reviews">No reviews submitted yet for this event.</p>
+                        )}
                     </div>
                 </div>
             )}
