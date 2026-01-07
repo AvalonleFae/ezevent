@@ -10,7 +10,6 @@ import EventsByUniversityChart from '../../components/charts/EventsByUniversityC
 import TopEventsChart from '../../components/charts/TopEventsChart';
 import OrganizerStatusChart from '../../components/charts/OrganizerStatusChart';
 import TransactionsDoneChart from '../../components/charts/TransactionsDoneChart';
-import ParticipantsByUniversityChart from '../../components/charts/ParticipantsByUniversityChart';
 import '../../css/ManagementReportPage.css';
 
 export default function ManagementReportPage() {
@@ -58,7 +57,6 @@ export default function ManagementReportPage() {
   const [categories, setCategories] = useState([]);
   const [universities, setUniversities] = useState([]);
   const [topEvents, setTopEvents] = useState([]);
-  const [participants, setParticipants] = useState([]);
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -74,8 +72,6 @@ export default function ManagementReportPage() {
         const admins = users.filter(u => u.role === 'admin').length;
 
         setUserStats({ participants, organizers, admins });
-
-        setParticipants(users.filter(u => u.role === 'participant'));
 
         // Fetch organizer verification status
         const organizerUsers = users.filter(u => u.role === 'organizer');
@@ -186,6 +182,7 @@ export default function ManagementReportPage() {
     return (
       <div className="management-report-content">
         <div className="loading-container">
+          <div className="loading-spinner"></div>
           <p>Loading dashboard data...</p>
         </div>
       </div>
@@ -305,12 +302,9 @@ export default function ManagementReportPage() {
 
         {/* Row 4: Category and University Charts */}
         <section className="dashboard-section">
-          <div className="charts-grid">
+          <div className="charts-grid two-column">
             <div className="chart-card">
               <EventsByCategoryChart eventsData={eventsData} categories={categories} />
-            </div>
-            <div className="chart-card">
-              <ParticipantsByUniversityChart participantsData={participants} universities={universities} />
             </div>
             <div className="chart-card">
               <EventsByUniversityChart eventsData={eventsData} universities={universities} />
