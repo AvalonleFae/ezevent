@@ -1,5 +1,8 @@
 .participant-container-tbhx {
   width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ADD8E6 0%, #C0C0C0 100%);
+  background-attachment: fixed;
 }
 
 .participant-content {
