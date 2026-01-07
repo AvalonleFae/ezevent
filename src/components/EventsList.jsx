@@ -12,7 +12,8 @@ export default function EventsList({
     userId,
     userRole,
     categoryFilter = "all", // Used for Available Events
-    timeFilter = "all"      // Used for Event History
+    timeFilter = "all",      // Used for Event History
+    statusFilter = "All"     // Used for Admin event validation
 }) {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -178,6 +179,14 @@ export default function EventsList({
                     }
                 }
 
+                // Apply status filter if provided
+                if (statusFilter !== "All") {
+                    eventsData = eventsData.filter(event => {
+                        const eventStatus = event.status || 'pending';
+                        return eventStatus === statusFilter;
+                    });
+                }
+
                 setEvents(eventsData);
             } catch (error) {
                 console.error("Error fetching events:", error);
@@ -187,7 +196,7 @@ export default function EventsList({
         };
 
         fetchEvents();
-    }, [collectionName, userId, userRole, location.pathname, categoryFilter, timeFilter]); 
+    }, [collectionName, userId, userRole, location.pathname, categoryFilter, timeFilter, statusFilter]); 
 
     if (loading) return <p>Loading events...</p>;
 

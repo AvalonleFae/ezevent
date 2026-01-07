@@ -135,7 +135,7 @@ export default function ManagementReportPage() {
           totalRegistrations: registrations.length
         }));
 
-        // Calculate top events by registrations
+        // Calculate top events by registrations (only accepted events with registrations)
         const eventRegistrationCounts = {};
         registrations.forEach(reg => {
           const eventId = reg.eventId;
@@ -143,12 +143,14 @@ export default function ManagementReportPage() {
         });
 
         const topEventsList = events
+          .filter(event => event.status === 'Accepted') // Only show accepted events
           .map(event => ({
             ...event,
             registrationCount: eventRegistrationCounts[event.id] || 0
           }))
+          .filter(event => event.registrationCount > 0) // Only show events with registrations
           .sort((a, b) => b.registrationCount - a.registrationCount)
-          .slice(0, 10);
+          .slice(0, 5); // Top 5 events
 
         setTopEvents(topEventsList);
 
