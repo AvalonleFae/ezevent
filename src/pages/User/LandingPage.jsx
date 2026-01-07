@@ -115,6 +115,7 @@ export default function LandingPage() {
                                 type="feature"
                                 index={5}
                             />
+                        </div>
                         <div className="about-mission animate-on-scroll">
                             <div className="mission-content">
                                 <p className="mission-statement">
