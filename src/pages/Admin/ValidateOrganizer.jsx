@@ -10,6 +10,8 @@ export default function ValidateOrganizer() {
   const [error, setError] = useState(null);
   const [selectedOrganizer, setSelectedOrganizer] = useState(null);
   const [statusFilter, setStatusFilter] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const SERVICE_ID = "service_ezevent";
   const TEMPLATE_ID = "template_2ofdmnb";
@@ -119,6 +121,29 @@ export default function ValidateOrganizer() {
     }
   };
 
+  // Filter organizers based on status
+  const filteredOrganizers = organizers.filter(org => {
+    const status = org.organizer?.verified || 'Pending';
+    return statusFilter === 'All' || status === statusFilter;
+  });
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredOrganizers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentOrganizers = filteredOrganizers.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Reset to page 1 when filter changes
+  const handleFilterChange = (value) => {
+    setStatusFilter(value);
+    setCurrentPage(1);
+  };
+
   return (
     <div className="manage-organizer">
       <h1>Validate Organizers</h1>
@@ -130,7 +155,7 @@ export default function ValidateOrganizer() {
           <select
             id="statusFilter"
             value={statusFilter}
-            onChange={e => setStatusFilter(e.target.value)}
+            onChange={e => handleFilterChange(e.target.value)}
             style={{ padding: '0.3rem 0.7rem', borderRadius: '4px' }}
           >
             <option value="All">All</option>
@@ -158,52 +183,65 @@ export default function ValidateOrganizer() {
                 </tr>
               </thead>
               <tbody>
-                {organizers.filter(org => {
-                  const status = org.organizer.verified || 'Pending';
-                  return statusFilter === 'All' || status === statusFilter;
-                }).length === 0 ? (
+                {filteredOrganizers.length === 0 ? (
                   <tr>
                     <td colSpan="9" style={{ textAlign: 'center', padding: '2rem' }}>
                       No Organizers found
                     </td>
                   </tr>
                 ) : (
-                  organizers
-                    .filter(org => {
-                      const status = org.organizer.verified || 'Pending';
-                      return statusFilter === 'All' || status === statusFilter;
-                    })
-                    .map((organizer) => (
-                      <tr key={organizer.id}>
-                        <td data-label="ID">{organizer.id}</td>
-                        <td data-label="Email">{organizer.email || 'N/A'}</td>
-                        <td data-label="Name">{organizer.name || 'N/A'}</td>
-                        <td data-label="Phone">{organizer.phoneNumber || 'N/A'}</td>
-                        <td data-label="Company">{organizer.organizer.companyName || 'N/A'}</td>
-                        <td data-label="Address">{organizer.organizer.address || 'N/A'}</td>
-                        <td data-label="Position">{organizer.organizer.position || 'N/A'}</td>
-                        <td data-label="Status">
-                          <span className={`status-tag ${organizer.organizer.verified ? organizer.organizer.verified.toLowerCase() : 'pending'}`}>
-                            {organizer.organizer.verified || 'Pending'}
-                          </span>
-                        </td>
-                        <td data-label="Action">
-                          <button
-                            type="button"
-                            className="action-btn edit-btn"
-                            onClick={() => handleValidation(organizer.id, organizer.verified || 'Pending',
-                              organizer.email,
-                              organizer.name,
-                            )}
-                          >
-                            Validate
-                          </button>
-                        </td>
-                      </tr>
-                    ))
+                  currentOrganizers.map((organizer) => (
+                    <tr key={organizer.id}>
+                      <td data-label="ID">{organizer.id}</td>
+                      <td data-label="Email">{organizer.email || 'N/A'}</td>
+                      <td data-label="Name">{organizer.name || 'N/A'}</td>
+                      <td data-label="Phone">{organizer.phoneNumber || 'N/A'}</td>
+                      <td data-label="Company">{organizer.organizer?.companyName || 'N/A'}</td>
+                      <td data-label="Address">{organizer.organizer?.address || 'N/A'}</td>
+                      <td data-label="Position">{organizer.organizer?.position || 'N/A'}</td>
+                      <td data-label="Status">
+                        <span className={`status-tag ${organizer.organizer?.verified ? organizer.organizer.verified.toLowerCase() : 'pending'}`}>
+                          {organizer.organizer?.verified || 'Pending'}
+                        </span>
+                      </td>
+                      <td data-label="Action">
+                        <button
+                          type="button"
+                          className="action-btn edit-btn"
+                          onClick={() => handleValidation(organizer.id, organizer.organizer?.verified || 'Pending',
+                            organizer.email,
+                            organizer.name,
+                          )}
+                        >
+                          Validate
+                        </button>
+                      </td>
+                    </tr>
+                  ))
                 )}
               </tbody>
             </table>
+          </div>
+        )}
+        {!loading && filteredOrganizers.length > 0 && (
+          <div className="pagination">
+            <button
+              className="pagination-btn"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <div className="pagination-info">
+              Page {currentPage} of {totalPages}
+            </div>
+            <button
+              className="pagination-btn"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
           </div>
         )}
       </section>

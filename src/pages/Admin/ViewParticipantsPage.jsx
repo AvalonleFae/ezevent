@@ -8,6 +8,8 @@ export default function ViewParticipants() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedParticipant, setSelectedParticipant] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
 
 
@@ -40,6 +42,16 @@ export default function ViewParticipants() {
     fetchParticipants();
   }, []);
 
+  // Calculate pagination
+  const totalPages = Math.ceil(participant.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentParticipants = participant.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="view-participants">
@@ -68,12 +80,12 @@ export default function ViewParticipants() {
               <tbody>
                 {participant.length === 0 ? (
                   <tr>
-                    <td colSpan="3" style={{ textAlign: 'center', padding: '2rem' }}>
+                    <td colSpan="8" style={{ textAlign: 'center', padding: '2rem' }}>
                       No Participants found
                     </td>
                   </tr>
                 ) : (
-                  participant.map((participant) => (
+                  currentParticipants.map((participant) => (
                     <tr key={participant.id}>
                       <td data-label="ID">{participant.id}</td>
                       <td data-label="Email">{participant.email || 'N/A'}</td>
@@ -88,6 +100,27 @@ export default function ViewParticipants() {
                 )}
               </tbody>
             </table>
+          </div>
+        )}
+        {!loading && participant.length > 0 && (
+          <div className="pagination">
+            <button
+              className="pagination-btn"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <div className="pagination-info">
+              Page {currentPage} of {totalPages}
+            </div>
+            <button
+              className="pagination-btn"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
           </div>
         )}
       </section>

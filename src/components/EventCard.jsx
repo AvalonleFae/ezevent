@@ -98,7 +98,7 @@ export default function EventCard({ event, onClick, userRole, buttonText = "Regi
                   <div className="ticket-info">
                     <span className="ticket-label">EZEVENT</span>
                     <p className="ticket-price">
-                      {event.price ? `RM ${event.price}` : "FREE ENTRY"}
+                      {event.price != "FREE" ? `RM ${event.price}` : "FREE ENTRY"}
                     </p>
                   </div>
                   <button className="ticket-button" onClick={handleButtonClick}>Event Details</button>
