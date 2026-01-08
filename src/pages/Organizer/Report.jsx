@@ -208,7 +208,8 @@ const ReportPage = () => {
                     const regData = regDoc.data();
                     if (regData.registeredAt) {
                         const regDate = regData.registeredAt.toDate ? regData.registeredAt.toDate() : new Date(regData.registeredAt);
-                        const dateKey = regDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                        // Format: Jan 1, 2026
+                        const dateKey = regDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                         salesMap[dateKey] = (salesMap[dateKey] || 0) + eventPrice;
                     }
                 });
@@ -217,12 +218,12 @@ const ReportPage = () => {
                 const sortedSales = Object.entries(salesMap)
                     .map(([dateStr, amount]) => {
                         // Parse the date string to get a proper date for sorting
-                        const currentYear = new Date().getFullYear();
-                        const dateParts = dateStr.split(' ');
+                        // dateStr format: 'Jan 1, 2026'
+                        const [month, dayWithComma, year] = dateStr.split(' ');
+                        const day = parseInt(dayWithComma.replace(',', ''));
                         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                        const monthIndex = monthNames.indexOf(dateParts[0]);
-                        const day = parseInt(dateParts[1]);
-                        const date = new Date(currentYear, monthIndex, day);
+                        const monthIndex = monthNames.indexOf(month);
+                        const date = new Date(parseInt(year), monthIndex, day);
                         return { dateStr, amount, date };
                     })
                     .sort((a, b) => a.date - b.date);
