@@ -69,7 +69,7 @@
 
 /* DataTable Custom Overrides - Sharp and Clear */
 .rdt_Table {
-    border-radius: 20px;
+    border-radius: 0px;
     overflow: hidden;
     background: #ffffff !important;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
@@ -95,6 +95,7 @@
     border-bottom: 1px solid #f1f5f9 !important;
     font-size: 0.95rem !important;
     height: 64px !important;
+    font-family: 'Roboto', sans-serif !important;
 }
 
 .rdt_TableRow:hover {
@@ -105,6 +106,7 @@
     background: #ffffff !important;
     color: #64748b !important;
     border-top: 1px solid #e2e8f0 !important;
+    font-family: 'Roboto', sans-serif !important;
 }
 
 .rdt_Pagination button svg {
