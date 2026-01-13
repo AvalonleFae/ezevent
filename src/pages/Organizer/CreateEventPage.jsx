@@ -31,7 +31,8 @@ export default function CreateEvent() {
 
     const [form, setForm] = useState({
         eventName: '',
-        date: '',
+        startDate: '',
+        endDate: '',
         university: '',
         faculty: '',
         address: '',
@@ -174,11 +175,24 @@ export default function CreateEvent() {
             return;
         }
 
-        // UPDATE 4: Validate that date is not in the past
-        const selectedDate = new Date(form.date);
-        const currentDate = new Date();
-        if (selectedDate < currentDate) {
-            alert('Please select a future date and time.');
+        if (!form.startDate || !form.endDate) {
+            alert('Please select both start and end dates.');
+            setSubmitting(false);
+            return;
+        }
+
+        const start = new Date(form.startDate);
+        const end = new Date(form.endDate);
+        const now = new Date();
+
+        if (start < now) {
+            alert('Start date cannot be in the past.');
+            setSubmitting(false);
+            return;
+        }
+
+        if (end <= start) {
+            alert('End date must be after the start date.');
             setSubmitting(false);
             return;
         }
@@ -186,7 +200,9 @@ export default function CreateEvent() {
         try {
             const eventData = {
                 eventName: form.eventName,
-                date: form.date ? new Date(form.date) : null,
+                date: new Date(form.startDate), // For backward compatibility
+                startDate: new Date(form.startDate),
+                endDate: new Date(form.endDate),
                 universityId: form.university,
                 facultyId: form.faculty, // This will be empty string if "Other" was selected
                 address: form.address,
@@ -229,7 +245,8 @@ export default function CreateEvent() {
 
             setForm({
                 eventName: '',
-                date: '',
+                startDate: '',
+                endDate: '',
                 university: '',
                 faculty: '',
                 address: '',
@@ -361,17 +378,31 @@ export default function CreateEvent() {
                         />
                     </label>
 
-                    <label className="ce-field">
-                        <span className="ce-label">EVENT DATE</span>
-                        <input
-                            className="ce-input"
-                            type="datetime-local"
-                            value={form.date}
-                            onChange={(e) => setForm({ ...form, date: e.target.value })}
-                            min={minDate}
-                            required
-                        />
-                    </label>
+                    <div className="ce-select-grid">
+                        <label className="ce-field">
+                            <span className="ce-label">EVENT FROM</span>
+                            <input
+                                className="ce-input"
+                                type="datetime-local"
+                                value={form.startDate}
+                                onChange={(e) => setForm({ ...form, startDate: e.target.value })}
+                                min={minDate}
+                                required
+                            />
+                        </label>
+
+                        <label className="ce-field">
+                            <span className="ce-label">EVENT UNTIL</span>
+                            <input
+                                className="ce-input"
+                                type="datetime-local"
+                                value={form.endDate}
+                                onChange={(e) => setForm({ ...form, endDate: e.target.value })}
+                                min={form.startDate || minDate}
+                                required
+                            />
+                        </label>
+                    </div>
 
                     <div className="ce-select-grid">
                         <label className="ce-field">

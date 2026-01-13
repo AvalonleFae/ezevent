@@ -20,12 +20,17 @@ export default function EventDetailsPage() {
   // Check if the current URL contains 'history' or 'receipt'
   const isHistoryMode = location.pathname.includes("history") || location.pathname.includes("receipt");
 
-  const formatDate = (dateObj) => {
+  const formatDate = (dateObj, endDateObj) => {
     if (!dateObj) return "DATE NOT SPECIFIED";
-    if (dateObj.seconds) {
-      return new Date(dateObj.seconds * 1000).toLocaleDateString();
+
+    const start = dateObj.seconds ? new Date(dateObj.seconds * 1000) : new Date(dateObj);
+    const end = endDateObj ? (endDateObj.seconds ? new Date(endDateObj.seconds * 1000) : new Date(endDateObj)) : null;
+
+    if (!end || start.toDateString() === end.toDateString()) {
+      return start.toLocaleDateString();
     }
-    return new Date(dateObj).toLocaleDateString();
+
+    return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
   };
 
   useEffect(() => {
@@ -259,7 +264,7 @@ export default function EventDetailsPage() {
               </div>
               <div className="ed-row">
                 <span className="ed-label">EVENT DATE</span>
-                <span className="ed-value">{formatDate(event.date)}</span>
+                <span className="ed-value">{formatDate(event.startDate || event.date, event.endDate)}</span>
               </div>
               <div className="ed-row">
                 <span className="ed-label">LOCATION</span>
