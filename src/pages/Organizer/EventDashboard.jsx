@@ -101,7 +101,8 @@ export default function EventDashboard({ }) {
         if (eventSnapshot.exists()) {
             const eventData = eventSnapshot.data();
             setEventName(eventData.eventName);
-            setEventDate(eventData.date?.toDate ? eventData.date.toDate() : new Date(eventData.date));
+            const end = eventData.endDate?.toDate ? eventData.endDate.toDate() : (eventData.date?.toDate ? eventData.date.toDate() : new Date(eventData.date));
+            setEventDate(end);
             setReviewOpen(eventData.reviewOpen || false);
             if (eventData.reviewOpen) {
                 fetchReviews(eventId);

@@ -68,6 +68,20 @@ const AttendanceScanner = () => {
       if (eventSnapshot.exists()) {
         const eventData = eventSnapshot.data();
         eventName = eventData.eventName || eventId;
+
+        // Restriction Check: Participants cannot scan attendance past the event date
+        const eventEndDate = eventData.endDate ? eventData.endDate.toDate() : (eventData.date ? eventData.date.toDate() : null);
+        if (eventEndDate) {
+          const now = new Date();
+          const cutoff = new Date(eventEndDate);
+          // Set cutoff to the very end of the event day (23:59:59)
+          // so participants can scan any time on the specified end date.
+          cutoff.setHours(23, 59, 59, 999);
+
+          if (now > cutoff) {
+            throw new Error("ATTENDANCE WINDOW CLOSED. THE EVENT HAS ENDED.");
+          }
+        }
       }
 
       setMessage(`SYNCING WITH: ${eventName.toUpperCase()}...`);
