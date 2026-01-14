@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { useLocation } from "react-router-dom"; 
+import { useLocation } from "react-router-dom";
 import { db } from "../firebase";
 import EventCard from "./EventCard";
 import "../css/EventsList.css";
@@ -17,7 +17,7 @@ export default function EventsList({
 }) {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
-    const location = useLocation(); 
+    const location = useLocation();
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -26,22 +26,22 @@ export default function EventsList({
             try {
                 let eventsData = [];
                 const eventsCollection = collection(db, "events");
-                
+
 
                 if (userRole === "participant" && (location.pathname.includes("registration") || location.pathname.includes("history"))) {
                     const regQuery = query(
-                        collection(db, "registrations"), 
+                        collection(db, "registrations"),
                         where("userId", "==", userId)
                     );
                     const regSnapshot = await getDocs(regQuery);
                     const registeredEventIds = regSnapshot.docs.map(doc => doc.data().eventId);
-                    
+
                     if (registeredEventIds.length === 0) {
                         setEvents([]);
                         setLoading(false);
                         return;
                     }
-                    
+
                     const eventSnapshot = await getDocs(eventsCollection);
                     eventsData = eventSnapshot.docs
                         .map(doc => ({ id: doc.id, ...doc.data() }))
@@ -50,15 +50,15 @@ export default function EventsList({
 
                     if (timeFilter !== "all") {
                         const currentDate = new Date();
-                        
+
                         eventsData = eventsData.filter(event => {
                             if (!event.date) return false;
 
                             let eventDate;
                             if (typeof event.date.toDate === 'function') {
-                                eventDate = event.date.toDate(); 
+                                eventDate = event.date.toDate();
                             } else {
-                                eventDate = new Date(event.date); 
+                                eventDate = new Date(event.date);
                             }
 
                             if (timeFilter === "upcoming") {
@@ -70,7 +70,7 @@ export default function EventsList({
                         });
                     }
                 }
-                
+
 
                 else {
                     const snapshot = await getDocs(eventsCollection);
@@ -82,19 +82,19 @@ export default function EventsList({
                     // Logic: Organizer
                     if (userRole === "organizer") {
                         eventsData = rawEvents.filter(event => event.userId === userId);
-                        
+
                         // Apply time filter for organizer
                         if (timeFilter !== "all") {
                             const currentDate = new Date();
-                            
+
                             eventsData = eventsData.filter(event => {
                                 if (!event.date) return false;
 
                                 let eventDate;
                                 if (typeof event.date.toDate === 'function') {
-                                    eventDate = event.date.toDate(); 
+                                    eventDate = event.date.toDate();
                                 } else {
-                                    eventDate = new Date(event.date); 
+                                    eventDate = new Date(event.date);
                                 }
 
                                 if (timeFilter === "upcoming") {
@@ -110,31 +110,31 @@ export default function EventsList({
                     // Logic: Participant (Available Events)
                     else if (userRole === "participant") {
                         const regQuery = query(
-                            collection(db, "registrations"), 
+                            collection(db, "registrations"),
                             where("userId", "==", userId)
                         );
                         const regSnapshot = await getDocs(regQuery);
                         const registeredEventIds = regSnapshot.docs.map(doc => doc.data().eventId);
 
                         const currentDate = new Date();
-                        
+
                         // 1. Initial Synchronous Filter (Status, Date, Category, Not Joined)
                         const validCandidates = rawEvents.filter(event => {
                             // Check A: Event Status MUST be Accepted
-                            if (event.status !== 'Accepted') return false; 
+                            if (event.status !== 'Accepted') return false;
 
                             // Check B: Event Date (Hide past events)
-                            if (!event.date) return false; 
+                            if (!event.date) return false;
                             let eventDate;
                             if (typeof event.date.toDate === 'function') {
-                                eventDate = event.date.toDate(); 
+                                eventDate = event.date.toDate();
                             } else {
-                                eventDate = new Date(event.date); 
+                                eventDate = new Date(event.date);
                             }
-                            if (eventDate <= currentDate) return false; 
+                            if (eventDate <= currentDate) return false;
 
                             // Check C: Registration Status (Hide already registered)
-                            if (registeredEventIds.includes(event.id)) return false; 
+                            if (registeredEventIds.includes(event.id)) return false;
 
                             // Check D: Category Filter
                             if (categoryFilter !== "all" && event.categoryId !== categoryFilter) {
@@ -154,7 +154,7 @@ export default function EventsList({
 
                             // Query registrations for this specific event to get the count
                             const countQuery = query(
-                                collection(db, "registrations"), 
+                                collection(db, "registrations"),
                                 where("eventId", "==", event.id)
                             );
                             const countSnapshot = await getDocs(countQuery);
@@ -171,22 +171,67 @@ export default function EventsList({
                     // Logic: Admin (Show all)
                     else if (userRole === "admin") {
                         eventsData = rawEvents;
-                    } 
-                    
+                    }
+
                     // Fallback
                     else {
                         eventsData = rawEvents;
                     }
                 }
 
-                // Apply status filter if provided
-                if (statusFilter !== "All") {
+                // Apply status filter for admin validation page
+                if (userRole === "admin" && statusFilter && statusFilter !== "All") {
                     eventsData = eventsData.filter(event => {
-                        const eventStatus = event.status || 'pending';
-                        return eventStatus === statusFilter;
+                        const evStatus = event.status || '';
+                        if (statusFilter === 'pending') {
+                            return evStatus === 'pending' || evStatus === 'Pending';
+                        }
+                        return evStatus === statusFilter;
                     });
                 }
 
+                // Apply time filter if provided
+                if (timeFilter !== "all") {
+                    const currentDate = new Date();
+                    eventsData = await Promise.all(eventsData.map(async event => {
+                        if (!event.date) return null;
+                        let eventDate;
+                        if (typeof event.date.toDate === 'function') {
+                            eventDate = event.date.toDate();
+                        } else {
+                            eventDate = new Date(event.date);
+                        }
+                        // For history, also check attendance status 'present'
+                        if (location.pathname.includes("history") && timeFilter === "past") {
+                            // Find the registration for this event
+                            const regQuery = query(
+                                collection(db, "registrations"),
+                                where("userId", "==", userId),
+                                where("eventId", "==", event.id)
+                            );
+                            const regSnapshot = await getDocs(regQuery);
+                            if (regSnapshot.empty) return null;
+                            const regDoc = regSnapshot.docs[0];
+                            const attendanceRef = collection(db, "registrations", regDoc.id, "attendance");
+                            const attendanceSnapshot = await getDocs(attendanceRef);
+                            const hasPresent = attendanceSnapshot.docs.some(attDoc => {
+                                const attData = attDoc.data();
+                                return attData.status === "present";
+                            });
+                            if (eventDate < currentDate || hasPresent) {
+                                return event;
+                            } else {
+                                return null;
+                            }
+                        } else if (timeFilter === "upcoming") {
+                            return eventDate >= currentDate ? event : null;
+                        } else if (timeFilter === "past") {
+                            return eventDate < currentDate ? event : null;
+                        }
+                        return event;
+                    }));
+                    eventsData = eventsData.filter(e => e !== null);
+                }
                 setEvents(eventsData);
             } catch (error) {
                 console.error("Error fetching events:", error);
@@ -196,7 +241,7 @@ export default function EventsList({
         };
 
         fetchEvents();
-    }, [collectionName, userId, userRole, location.pathname, categoryFilter, timeFilter, statusFilter]); 
+    }, [collectionName, userId, userRole, location.pathname, categoryFilter, timeFilter, statusFilter]);
 
     if (loading) return <p>Loading events...</p>;
 

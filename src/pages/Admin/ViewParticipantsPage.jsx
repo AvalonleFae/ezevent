@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { collection, doc, getDocs, query, where, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebase';
 import "../../css/ViewParticipantsPage.css";
+import '../../css/TbhxDataTable.css';
+import DataTable, { createTheme } from 'react-data-table-component';
 
 export default function ViewParticipants() {
   const [participant, setParticipant] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedParticipant, setSelectedParticipant] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [filterText, setFilterText] = useState('');
 
 
 
@@ -42,16 +42,34 @@ export default function ViewParticipants() {
     fetchParticipants();
   }, []);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(participant.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentParticipants = participant.slice(startIndex, endIndex);
+  const filteredParticipants = participant.filter(p => {
+    const haystack = `${p?.name || ''} ${p?.email || ''} ${p?.participant?.institution || ''} ${p?.participant?.matricNumber || ''}`
+      .toLowerCase();
+    return haystack.includes(filterText.toLowerCase());
+  });
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const columns = [
+    { name: 'ID', selector: row => row.id, sortable: true, wrap: true },
+    { name: 'EMAIL', selector: row => row.email || 'N/A', sortable: true, wrap: true },
+    { name: 'NAME', selector: row => row.name || 'N/A', sortable: true, wrap: true },
+    { name: 'AGE', selector: row => row.age || 'N/A', sortable: true },
+    { name: 'PHONE NUMBER', selector: row => row.phoneNumber || 'N/A', sortable: true, wrap: true },
+    { name: 'GENDER', selector: row => row.gender || 'N/A', sortable: true },
+    { name: 'INSTITUTION', selector: row => row.participant?.institution || 'N/A', sortable: true, wrap: true },
+    { name: 'MATRIC NUMBER', selector: row => row.participant?.matricNumber || 'N/A', sortable: true, wrap: true },
+  ];
+
+  const subHeaderComponent = (
+    <div className="subheader-container">
+      <input
+        type="text"
+        placeholder="SEARCH..."
+        className="search-input"
+        value={filterText}
+        onChange={e => setFilterText(e.target.value)}
+      />
+    </div>
+  );
 
   return (
     <div className="view-participants">
@@ -62,69 +80,48 @@ export default function ViewParticipants() {
         {loading ? (
           <p>Loading Participants...</p>
         ) : (
-          <div className='table-container'>
-            <table className="participants-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Email</th>
-                  <th>Name</th>
-                  <th>Age</th>
-                  <th>Phone Number</th>
-                  <th>Gender</th>
-                  <th>Institution</th>
-                  <th>Matric Number</th>
-
-                </tr>
-              </thead>
-              <tbody>
-                {participant.length === 0 ? (
-                  <tr>
-                    <td colSpan="8" style={{ textAlign: 'center', padding: '2rem' }}>
-                      No Participants found
-                    </td>
-                  </tr>
-                ) : (
-                  currentParticipants.map((participant) => (
-                    <tr key={participant.id}>
-                      <td data-label="ID">{participant.id}</td>
-                      <td data-label="Email">{participant.email || 'N/A'}</td>
-                      <td data-label="Name">{participant.name || 'N/A'}</td>
-                      <td data-label="Age">{participant.age || 'N/A'}</td>
-                      <td data-label="Phone">{participant.phoneNumber || 'N/A'}</td>
-                      <td data-label="Gender">{participant.gender || 'N/A'}</td>
-                      <td data-label="Institution">{participant.participant.institution || 'N/A'}</td>
-                      <td data-label="Matric No">{participant.participant.matricNumber || 'N/A'}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
-        {!loading && participant.length > 0 && (
-          <div className="pagination">
-            <button
-              className="pagination-btn"
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <div className="pagination-info">
-              Page {currentPage} of {totalPages}
-            </div>
-            <button
-              className="pagination-btn"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
+          <DataTable
+            columns={columns}
+            data={filteredParticipants}
+            pagination
+            responsive
+            subHeader
+            subHeaderComponent={subHeaderComponent}
+            theme="tbhxTheme"
+            noDataComponent={
+              <div style={{ padding: '2rem', textAlign: 'center', width: '100%' }}>
+                No Participants found
+              </div>
+            }
+          />
         )}
       </section>
 
     </div>
   );
 }
+
+createTheme('tbhxTheme', {
+  text: {
+    primary: '#FFFFFF',
+    secondary: '#AAAAAA',
+  },
+  background: {
+    default: 'transparent',
+  },
+  context: {
+    background: '#FF4040',
+    text: '#FFFFFF',
+  },
+  divider: {
+    default: 'rgba(255, 64, 64, 0.2)',
+  },
+  highlightOnHover: {
+    default: 'rgba(255, 64, 64, 0.1)',
+    text: '#FFFFFF',
+  },
+  striped: {
+    default: 'rgba(255, 255, 255, 0.02)',
+    text: '#FFFFFF',
+  },
+});

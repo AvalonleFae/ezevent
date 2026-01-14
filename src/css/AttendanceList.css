@@ -15,32 +15,6 @@
     letter-spacing: -0.02em;
 }
 
-.subheader-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.search-input {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 0.8rem 1.2rem;
-    color: white;
-    font-family: 'Roboto', sans-serif;
-    border-radius: 12px;
-    transition: all 0.2s ease;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: #ffffff;
-    background: rgba(255, 255, 255, 0.2);
-}
-
 .action-button-CSV {
     background: #ffffff;
     color: var(--theme-primary);
@@ -66,60 +40,9 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     background: #f8fafc;
 }
-
-/* DataTable Custom Overrides - Sharp and Clear */
-.rdt_Table {
-    border-radius: 0px;
-    overflow: hidden;
-    background: #ffffff !important;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-}
-
-.rdt_TableHeadRow {
-    background: #f8fafc !important;
-    border-bottom: 2px solid #e2e8f0 !important;
-    font-weight: 800 !important;
-}
-
-.rdt_TableHeadRow div {
-    font-family: 'Roboto', sans-serif !important;
-    font-size: 0.85rem !important;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #475569 !important;
-}
-
-.rdt_TableRow {
-    background: #ffffff !important;
-    color: #1e293b !important;
-    border-bottom: 1px solid #f1f5f9 !important;
-    font-size: 0.95rem !important;
-    height: 64px !important;
-    font-family: 'Roboto', sans-serif !important;
-}
-
-.rdt_TableRow:hover {
-    background: #f1f5f9 !important;
-}
-
-.rdt_Pagination {
-    background: #ffffff !important;
-    color: #64748b !important;
-    border-top: 1px solid #e2e8f0 !important;
-    font-family: 'Roboto', sans-serif !important;
-}
-
-.rdt_Pagination button svg {
-    fill: #1e293b !important;
-}
-
 @media (max-width: 768px) {
     .attendance-container h2 {
         font-size: 2.2rem;
-    }
-
-    .subheader-container {
-        flex-direction: column;
     }
 
     .action-button-CSV {
