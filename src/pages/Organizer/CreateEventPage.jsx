@@ -169,6 +169,7 @@ export default function CreateEvent() {
             return;
         }
 
+
         if (Number(form.numOfParticipants) <= 0) {
             alert('Max participants must be at least 1.');
             setSubmitting(false);
@@ -177,6 +178,17 @@ export default function CreateEvent() {
 
         if (!form.startDate || !form.endDate) {
             alert('Please select both start and end dates.');
+            setSubmitting(false);
+            return;
+        }
+
+        // Price validation: must be 'FREE' or a valid number
+        const priceTrimmed = form.price.trim();
+        if (
+            priceTrimmed.toUpperCase() !== 'FREE' &&
+            (isNaN(Number(priceTrimmed)) || priceTrimmed === '')
+        ) {
+            alert('Price must be "FREE" or a valid number.');
             setSubmitting(false);
             return;
         }
