@@ -3,10 +3,22 @@ import "../css/EventCard.css";
 import testImage from "../assets/icons/sample.jpg";
 
 export default function EventCard({ event, onClick, userRole, buttonText = "Register", index = 0, variant = "vertical", type = "event" }) {
-  const dateObj = event.date?.seconds ? new Date(event.date.seconds * 1000) : new Date();
-  const day = dateObj.getDate().toString().padStart(2, '0');
-  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
-  const year = dateObj.getFullYear();
+  const startDate = event.startDate || event.date;
+  const endDate = event.endDate;
+
+  const sD = startDate?.seconds ? new Date(startDate.seconds * 1000) : new Date(startDate || Date.now());
+  const eD = endDate?.seconds ? new Date(endDate.seconds * 1000) : null;
+
+  const formatShortDate = (d) => {
+    const dayName = d.getDate().toString().padStart(2, '0');
+    const monthName = (d.getMonth() + 1).toString().padStart(2, '0');
+    const yearSuffix = d.getFullYear().toString().slice(-2);
+    return `${dayName}/${monthName}/${yearSuffix}`;
+  };
+
+  const displayDate = (!eD || sD.toDateString() === eD.toDateString())
+    ? formatShortDate(sD)
+    : `${formatShortDate(sD)} - ${formatShortDate(eD)}`;
 
   const colors = ['color-grey', 'color-blue', 'color-pink', 'color-lilac', 'color-mint', 'color-peach'];
   const colorIndex = index % colors.length;
@@ -15,8 +27,13 @@ export default function EventCard({ event, onClick, userRole, buttonText = "Regi
   const isFeature = type === "feature";
   const isVintage = variant === "vintage";
 
+  const handleButtonClick = (e) => {
+    e.stopPropagation(); // Prevent card click
+    if (onClick) onClick(event);
+  };
+
   return (
-    <div className={`majestic-ticket ${colorClass} ${variant} ${isFeature ? 'feature-card' : ''}`} onClick={() => onClick && onClick(event)}>
+    <div className={`majestic-ticket ${colorClass} ${variant} ${isFeature ? 'feature-card' : ''}`} onClick={isFeature ? () => onClick && onClick(event) : undefined}>
       {isFeature ? (
         <div className={`feature-card-inner ${isVintage ? 'vintage-feature-inner' : ''}`}>
           <div className="ticket-header">
@@ -74,7 +91,7 @@ export default function EventCard({ event, onClick, userRole, buttonText = "Regi
               <>
                 <div className="ticket-date-row">
                   <span className="ticket-full-date">
-                    {day}/{month}/{year.toString().slice(-2)}
+                    {displayDate}
                   </span>
                 </div>
 
@@ -93,10 +110,10 @@ export default function EventCard({ event, onClick, userRole, buttonText = "Regi
                   <div className="ticket-info">
                     <span className="ticket-label">EZEVENT</span>
                     <p className="ticket-price">
-                      {event.price ? `RM ${event.price}` : "FREE ENTRY"}
+                      {event.price != "FREE" ? `RM ${event.price}` : "FREE ENTRY"}
                     </p>
                   </div>
-                  <div className="ticket-barcode"></div>
+                  <button className="ticket-button" onClick={handleButtonClick}>Event Details</button>
                 </div>
               </>
             )}

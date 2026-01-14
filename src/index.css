@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Quicksand:wght@300..700&family=Cinzel:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Lato:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Roboto:wght@400;500;700;900&family=Outfit:wght@400;600;800;900&display=swap');
 
 :root {
   --bg-primary: #ffffff;
@@ -49,6 +49,10 @@
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   font-family: 'Playfair Display', serif;
@@ -56,8 +60,10 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
   line-height: 1.5;
-  background: url(./assets/majestic_bg_v2.png) no-repeat center center fixed;
-  background-size: cover;
+  background: linear-gradient(135deg, #ADD8E6 0%, #C0C0C0 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1,
@@ -66,7 +72,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Cinzel', serif;
+  font-family: 'Lato', sans-serif;
   font-weight: 700;
   color: inherit;
   letter-spacing: 0.05em;
@@ -111,7 +117,7 @@ a:hover {
   color: var(--theme-primary);
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 0.6rem 1.6rem;
-  font-family: 'Cinzel', serif;
+  font-family: 'Lato', sans-serif;
   font-weight: 800;
   font-size: 0.85rem;
   cursor: pointer;
@@ -128,13 +134,47 @@ a:hover {
   background: #f8fafc;
 }
 
+.tbhx-button[aria-pressed="true"] {
+  background: var(--theme-primary);
+  color: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+}
+
+.text-glow {
+  background: linear-gradient(135deg, #6B9AC4, #A9D0E6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-glow-red {
+  background: linear-gradient(135deg, #ff4040, #ff8080);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-glow-org {
+  background: linear-gradient(135deg, #b9b010, #e54659);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-glow-cyan {
+  background: linear-gradient(135deg, #06b6d4, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
 .app-layout {
   display: flex;
   width: 100%;
   min-height: 100vh;
   position: relative;
-  background: url(./assets/majestic_bg_v2.png) no-repeat center center fixed;
-  background-size: cover;
 }
 
 .main-content {

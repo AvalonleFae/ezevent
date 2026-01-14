@@ -18,7 +18,9 @@
     align-items: center;
     justify-content: center;
     /* background: var(--bg-light); Removed to show global majestic background */
-    background: transparent;
+    background: url(../assets/majestic_bg_v2.png) no-repeat center center;
+    background-size: cover;
+    background-attachment: scroll;
     padding: 2rem;
     position: relative;
     overflow: hidden;

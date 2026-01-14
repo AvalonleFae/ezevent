@@ -1,8 +1,8 @@
 import React from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function ParticipantsByUniversityChart({ participantsData, universities }) {
   // Count participants by university/institution
@@ -82,15 +82,17 @@ export default function ParticipantsByUniversityChart({ participantsData, univer
     };
   };
 
+  const colors = generateColors(sortedUniversities.length);
+
   const data = {
     labels: sortedUniversities.map(([name]) => name),
     datasets: [
       {
-        label: 'Number of Participants',
+        label: 'Participants by University',
         data: sortedUniversities.map(([, count]) => count),
-        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1
+        backgroundColor: colors.backgroundColor,
+        borderColor: colors.borderColor,
+        borderWidth: 2
       }
     ]
   };
@@ -100,27 +102,24 @@ export default function ParticipantsByUniversityChart({ participantsData, univer
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false
+        position: 'bottom',
+        labels: {
+          padding: 15,
+          font: {
+            size: 11
+          },
+          boxWidth: 12
+        }
       },
       tooltip: {
         callbacks: {
           label: function(context) {
-            return `Participants: ${context.parsed.y}`;
+            const label = context.label || '';
+            const value = context.parsed || 0;
+            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+            return `${label}: ${value} (${percentage}%)`;
           }
-        }
-      }
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: {
-          stepSize: 1
-        }
-      },
-      x: {
-        ticks: {
-          maxRotation: 45,
-          minRotation: 45
         }
       }
     }
@@ -130,7 +129,7 @@ export default function ParticipantsByUniversityChart({ participantsData, univer
     <div className="chart-container">
       <h3 className="chart-title">Participants by University</h3>
       <div className="chart-wrapper">
-        <Bar data={data} options={options} />
+        <Pie data={data} options={options} />
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import DataTable, { createTheme } from 'react-data-table-component';
 import { useLocation } from 'react-router-dom';
 import '../../css/AttendanceList.css';
+import '../../css/TbhxDataTable.css';
 
 const AttendanceList = () => {
     const { id } = useParams();   // eventId from route

@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Topbar from '../../components/Topbar';
 import emailIcon from '../../assets/icons/email.svg';
-import instagramIcon from '../../assets/icons/instagram.svg';
-import facebookIcon from '../../assets/icons/facebook.svg';
+import phoneIcon from '../../assets/icons/phone.svg';
 import aboutIllustration from '../../assets/about_illustration.png';
 import '../../css/LandingPage.css';
 import EventCard from '../../components/EventCard';
@@ -27,6 +26,7 @@ export default function LandingPage() {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // Stop observing once visible to save resources
                     }
                 });
             },
@@ -42,17 +42,15 @@ export default function LandingPage() {
 
     return (
         <div className="landing-page">
-            <div className="halftone-bg"></div>
             <Topbar />
 
             <section className="lp-hero" id="home">
-                <div className="hero-bg-text">EZEVENT</div>
                 <div className="lp-container">
-                    <h1 className="tbhx-header animate-on-scroll">
+                    <h1 className="tbhx-header">
                         EZEVENT
                     </h1>
-                    <p className="hero-subtitle animate-on-scroll">EVENT MANAGEMENT. FUTURISTIC COMMUNITY.</p>
-                    <button className="tbhx-button animate-on-scroll">EXPLORE NOW</button>
+                    <p className="hero-subtitle">EVENT MANAGEMENT. FUTURISTIC COMMUNITY.</p>
+                    <button className="tbhx-button">EXPLORE NOW</button>
                 </div>
             </section>
 
@@ -83,14 +81,12 @@ export default function LandingPage() {
                                 emoji: '🤝',
                             }
                         ].map((feature, idx) => (
-                            <div className="animate-on-scroll" key={feature.id} style={{ display: 'flex', justifyContent: 'center' }}>
-                                <EventCard
-                                    event={feature}
-                                    onClick={() => { }}
-                                    index={idx + 1}
-                                    type="feature"
-                                />
-                            </div>
+                            <EventCard
+                                event={feature}
+                                onClick={() => { }}
+                                index={idx + 1}
+                                type="feature"
+                            />
                         ))}
                     </div>
                 </div>
@@ -102,40 +98,33 @@ export default function LandingPage() {
                     <div className="about-content">
                         <p>WE ARE THE FUTURE OF EVENT MANAGEMENT.</p>
                         <div className="about-ticket-container">
-                            <EventCard
-                                event={{
-                                    eventName: 'EZEVENT',
-                                    universityId: 'PREMIER PLATFORM',
-                                    description: 'EZEvent is the premier event management platform designed exclusively for university communities. We connect students, organizers, and institutions through seamless event discovery, instant registration, and powerful networking tools.',
-                                    slogan: 'Transforming campus life, one event at a time.',
-                                    emoji: '🚀',
-                                }}
-                                onClick={() => { }}
-                                variant="vintage"
-                                type="feature"
-                                index={5}
-                            />
-                        </div>
-                        <div className="about-mission animate-on-scroll">
-                            <div className="mission-content">
-                                <p className="mission-statement">
-                                    EZEvent is the premier event management platform designed exclusively for university communities.
-                                    We connect students, organizers, and institutions through seamless event discovery,
-                                    instant registration, and powerful networking tools.
-                                </p>
-                                <p className="mission-tagline">
-                                    Transforming campus life, one event at a time.
-                                </p>
-                            </div>
-                            <div className="mission-visual">
-                                <img
-                                    src={aboutIllustration}
-                                    alt="Students collaborating on campus events"
-                                    className="about-illustration"
-                                />
+                            <div className="about-vintage-ticket">
+                                <div className="about-ticket-image">
+                                    <img
+                                        src={aboutIllustration}
+                                        alt="EZEVENT Platform"
+                                        loading="lazy"
+                                    />
+                                </div>
+                                <div className="about-ticket-content">
+                                    <div className="about-ticket-main">
+                                        <span className="about-ticket-label">PREMIER PLATFORM</span>
+                                        <h2 className="about-ticket-title">EZEVENT</h2>
+                                        <span className="about-ticket-label">FUTURE EVENT TICKETING</span>
+                                        <p className="about-ticket-description">
+                                            EZEvent is the premier event management platform designed exclusively for university communities.
+                                            We connect students, organizers, and institutions through seamless event discovery, instant registration,
+                                            and powerful networking tools.
+                                        </p>
+                                        <p className="about-ticket-slogan">Transforming campus life, one event at a time.</p>
+                                    </div>
+                                    <div className="about-ticket-stub">
+                                        <div className="about-ticket-barcode"></div>
+                                        <div className="about-admit-text">EZEVENT</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
                         <div className="value-props animate-on-scroll">
                             <div className="value-item">
                                 <div className="value-icon">⚡</div>
@@ -167,11 +156,12 @@ export default function LandingPage() {
                     <h2 className="tbhx-header">Contact Us</h2>
                     <div className="contact-links">
                         <a href="mailto:support@ezevent.com">
-                            <img src={emailIcon} alt="Email" width="20" height="20" />
+                            <img src={emailIcon} alt="Email" width="20" height="20" loading="lazy" />
                             SUPPORT@EZEVENT.COM
                         </a>
+                        <br />
                         <a href="tel:+60123456789">
-                            <img src={instagramIcon} alt="Phone" width="20" height="20" />
+                            <img src={phoneIcon} alt="Phone" width="20" height="20" loading="lazy" />
                             +60 123 456 789
                         </a>
                     </div>
