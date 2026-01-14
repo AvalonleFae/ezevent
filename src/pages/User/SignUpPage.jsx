@@ -171,7 +171,7 @@ export default function SignUpPage() {
                             <label>PHONE</label>
                             <input
                                 name="phoneNumber"
-                                placeholder="+60..."
+                                placeholder="011..."
                                 onChange={handleChange}
                                 required
                             />

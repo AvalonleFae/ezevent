@@ -65,8 +65,8 @@ exports.createStripeCheckout = onRequest({ cors: true }, async (req, res) => {
       mode: "payment",
 
       // URLs where Stripe will redirect the user
-      success_url: `http://localhost:5173/participant/events/success?eventId=${eventId}`,
-      cancel_url: `http://localhost:5173/participant/events/${eventId}`,
+      success_url: `https://ezevent-b494c.firebaseapp.com/participant/events/success?eventId=${eventId}`,
+      cancel_url: `https://ezevent-b494c.firebaseapp.com/participant/events/${eventId}`,
 
       metadata: {
         userId: userId,

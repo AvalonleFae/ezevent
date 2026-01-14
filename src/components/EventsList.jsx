@@ -123,7 +123,10 @@ export default function EventsList({
                             // Check A: Event Status MUST be Accepted
                             if (event.status !== 'Accepted') return false;
 
-                            // Check B: Event Date (Hide past events)
+                            // Check B: registrationOpen must be true
+                            if (event.registrationOpen === false) return false;
+
+                            // Check C: Event Date (Hide past events)
                             if (!event.date) return false;
                             let eventDate;
                             if (typeof event.date.toDate === 'function') {
@@ -133,10 +136,10 @@ export default function EventsList({
                             }
                             if (eventDate <= currentDate) return false;
 
-                            // Check C: Registration Status (Hide already registered)
+                            // Check D: Registration Status (Hide already registered)
                             if (registeredEventIds.includes(event.id)) return false;
 
-                            // Check D: Category Filter
+                            // Check E: Category Filter
                             if (categoryFilter !== "all" && event.categoryId !== categoryFilter) {
                                 return false;
                             }
