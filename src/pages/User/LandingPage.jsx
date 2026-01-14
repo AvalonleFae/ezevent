@@ -49,8 +49,7 @@ export default function LandingPage() {
                     <h1 className="tbhx-header">
                         EZEVENT
                     </h1>
-                    <p className="hero-subtitle">EVENT MANAGEMENT. FUTURISTIC COMMUNITY.</p>
-                    <button className="tbhx-button">EXPLORE NOW</button>
+                    <p className="hero-subtitle">EASY EVENT MANAGEMENT SYSTEM.</p>
                 </div>
             </section>
 
@@ -63,21 +62,21 @@ export default function LandingPage() {
                                 id: 'f1',
                                 eventName: 'Explore',
                                 universityId: 'DISCOVER',
-                                description: 'Browse through a vast galaxy of upcoming campus events, talks, and workshops tailored to your interests.',
+                                description: 'Browse through a vast selection of upcoming university events.',
                                 emoji: '🌎',
                             },
                             {
                                 id: 'f2',
                                 eventName: 'Register',
                                 universityId: 'JOIN FAST',
-                                description: 'Securing your spot is just a tap away with our seamless biometric-ready registration vault.',
+                                description: 'Securing your spot is just a tap away with easy registration.',
                                 emoji: '🎟️',
                             },
                             {
                                 id: 'f3',
                                 eventName: 'Connect',
                                 universityId: 'NETWORK',
-                                description: 'Bridge the gap between participants and organizers through integrated social networking tools.',
+                                description: 'Bridge the gap between participants and organizers with messaging features.',
                                 emoji: '🤝',
                             }
                         ].map((feature, idx) => (
@@ -113,10 +112,10 @@ export default function LandingPage() {
                                         <span className="about-ticket-label">FUTURE EVENT TICKETING</span>
                                         <p className="about-ticket-description">
                                             EZEvent is the premier event management platform designed exclusively for university communities.
-                                            We connect students, organizers, and institutions through seamless event discovery, instant registration,
-                                            and powerful networking tools.
+                                            We connect students, organizers, and institutions through seamless event discovery, fast registration,
+                                            and messaging features.
                                         </p>
-                                        <p className="about-ticket-slogan">Transforming campus life, one event at a time.</p>
+                                        <p className="about-ticket-slogan">Transforming university life, one event at a time.</p>
                                     </div>
                                     <div className="about-ticket-stub">
                                         <div className="about-ticket-barcode"></div>
@@ -127,24 +126,19 @@ export default function LandingPage() {
                         </div>
                         <div className="value-props animate-on-scroll">
                             <div className="value-item">
-                                <div className="value-icon">⚡</div>
+                                <div className="value-icon"></div>
                                 <h4>Lightning Fast</h4>
-                                <p>Register for events in seconds with our streamlined interface</p>
+                                <p>Register for events quickly with our streamlined interface</p>
                             </div>
                             <div className="value-item">
-                                <div className="value-icon">🎯</div>
-                                <h4>Smart Discovery</h4>
-                                <p>Find events tailored to your interests and campus community</p>
+                                <div className="value-icon"></div>
+                                <h4>Discover</h4>
+                                <p>Find events of varying interests and categories</p>
                             </div>
                             <div className="value-item">
-                                <div className="value-icon">🔒</div>
-                                <h4>Secure & Reliable</h4>
-                                <p>Your data is protected with enterprise-grade security</p>
-                            </div>
-                            <div className="value-item">
-                                <div className="value-icon">🌐</div>
-                                <h4>Connected Community</h4>
-                                <p>Build meaningful connections with peers across your campus</p>
+                                <div className="value-icon"></div>
+                                <h4>Quick Attendance</h4>
+                                <p>Your attendance is confirmed with a simple QR Scan</p>
                             </div>
                         </div>
                     </div>
@@ -170,7 +164,7 @@ export default function LandingPage() {
 
             <footer className="lp-footer">
                 <div className="lp-container">
-                    <p>&copy; 2023 EZEvent. All rights reserved. | Privacy Policy | Terms of Service</p>
+                    <p>&copy; 2025 EZEvent. All rights reserved. | Privacy Policy | Terms of Service</p>
                 </div>
             </footer>
         </div>

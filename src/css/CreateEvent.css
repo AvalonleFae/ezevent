@@ -1,3 +1,49 @@
+/* Denied/Declined Card Styles */
+.ce-status-card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.ce-status-card {
+  background: #23263b;
+  color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+  padding: 3rem;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  border: 1px solid rgba(255, 64, 64, 0.3);
+}
+
+.ce-status-card h2 {
+  color: var(--primary-red);
+  margin-bottom: 1rem;
+}
+
+.ce-status-card p {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.ce-status-btn {
+  background: white;
+  color: #23263b;
+  border: none;
+  border-radius: 24px;
+  padding: 0.75rem 2rem;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  transition: background 0.2s;
+}
+.ce-status-btn:hover {
+  background: #f0f0f0;
+}
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap');
 
 .ce-root {

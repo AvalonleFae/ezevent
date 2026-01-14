@@ -341,34 +341,33 @@ export default function CreateEvent() {
     }
 
     // Show message if organizer status is Pending or Declined
-    if (organizerStatus === 'Pending' || organizerStatus === 'Declined') {
-        return (
-            <div className="ce-root">
-                <div className="halftone-bg"></div>
-                <header className="ce-header">
-                    <h1 className="tbhx-header">CREATE <span className="text-glow-org">EVENT</span></h1>
-                </header>
-                <div style={{
-                    textAlign: 'center',
-                    padding: '3rem',
-                    color: 'white',
-                    maxWidth: '600px',
-                    margin: '2rem auto',
-                    background: 'rgba(255, 255, 255, 0.03)',
-                    border: '1px solid rgba(255, 64, 64, 0.3)',
-                    borderRadius: '8px'
-                }}>
-                    <h2 style={{ color: 'var(--primary-red)', marginBottom: '1rem' }}>
-                        {organizerStatus === 'Pending' ? 'Verification Pending' : 'Access Denied'}
-                    </h2>
-                    <p style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
-                        {organizerStatus === 'Pending'
-                            ? 'Your organizer account is currently pending verification. Please wait for admin approval before creating events.'
-                            : 'Your organizer account has been declined. Please contact the administrator for more information.'}
-                    </p>
+        if (organizerStatus === 'Pending' || organizerStatus === 'Declined') {
+            return (
+                <div className="ce-root">
+                    <div className="halftone-bg"></div>
+                    <header className="ce-header">
+                        <h1 className="tbhx-header">CREATE <span className="text-glow-org">EVENT</span></h1>
+                    </header>
+                    <div className="ce-status-card-container">
+                        <div className="ce-status-card">
+                            <h2>
+                                {organizerStatus === 'Pending' ? 'Verification Pending' : 'Access Denied'}
+                            </h2>
+                            <p>
+                                {organizerStatus === 'Pending'
+                                    ? 'You can only create events once your organizer account is approved by the admin. Please check your email for further details regarding your verification status.'
+                                    : 'You can only create events if your organizer account is approved. Your organizer account has been declined. Please contact the administrator for more information.'}
+                            </p>
+                            <button
+                                className="ce-status-btn"
+                                onClick={() => window.location.href = '/'}
+                            >
+                                BACK TO MY EVENTS
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        );
+            );
     }
 
     return (
