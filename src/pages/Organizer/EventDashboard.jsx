@@ -98,7 +98,6 @@ export default function EventDashboard({ }) {
     }
 
     async function fetchEventDetails(eventId) {
-
         const eventDocRef = doc(db, 'events', eventId);
         const eventSnapshot = await getDoc(eventDocRef);
         if (eventSnapshot.exists()) {
@@ -108,7 +107,19 @@ export default function EventDashboard({ }) {
             setEventDate(end);
             setReviewOpen(eventData.reviewOpen || false);
             setEventStatus(eventData.status || 'pending');
-            setRegistrationOpen(eventData.registrationOpen || false);
+
+            // If event is past, set registrationOpen to false in Firestore if not already false
+            if (end && new Date() > end && eventData.registrationOpen) {
+                try {
+                    await updateDoc(eventDocRef, { registrationOpen: false });
+                } catch (e) {
+                    console.error('Failed to auto-close registration for past event:', e);
+                }
+                setRegistrationOpen(false);
+            } else {
+                setRegistrationOpen(eventData.registrationOpen || false);
+            }
+
             if (eventData.reviewOpen) {
                 fetchReviews(eventId);
             }
@@ -332,7 +343,7 @@ export default function EventDashboard({ }) {
                     </h2>
                     <p style={{ fontSize: '1.05rem', lineHeight: 1.6 }}>
                         You can only access the event dashboard once the admin has approved this event.
-                        Please check back after the event status is updated to <strong>Accepted</strong>.
+                        Please check your email for further details regarding the approval status.
                     </p>
                     <button
                         className="tbhx-button"
@@ -388,13 +399,16 @@ export default function EventDashboard({ }) {
                 <button className="tbhx-button" onClick={() => navigate(`/organizer/my-event/${id}/report`, { state: { eventName } })}>
                     GENERATE REPORT
                 </button>
-                <button
-                    className={`tbhx-button ${registrationOpen ? 'danger-btn' : 'success-btn'}`}
-                    onClick={handleToggleRegistration}
-                    disabled={updatingRegistration}
-                >
-                    {updatingRegistration ? 'UPDATING...' : (registrationOpen ? 'CLOSE REGISTRATION' : 'OPEN REGISTRATION')}
-                </button>
+                {/* Only show registration button if event is not past */}
+                {(!eventDate || new Date() <= eventDate) && (
+                    <button
+                        className={`tbhx-button ${registrationOpen ? 'danger-btn' : 'success-btn'}`}
+                        onClick={handleToggleRegistration}
+                        disabled={updatingRegistration}
+                    >
+                        {updatingRegistration ? 'UPDATING...' : (registrationOpen ? 'CLOSE REGISTRATION' : 'OPEN REGISTRATION')}
+                    </button>
+                )}
                 {eventDate && new Date() > eventDate && (
                     <>
                         <button
