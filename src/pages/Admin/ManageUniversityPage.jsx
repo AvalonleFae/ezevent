@@ -128,20 +128,22 @@ export default function ManageUniversityPage() {
                     <td data-label="ID">{university.id}</td>
                     <td data-label="University Name">{university.universityName || 'N/A'}</td>
                     <td data-label="Action">
-                      <button
-                        type="button"
-                        className="action-btn edit-btn"
-                        onClick={() => navigate(`/admin/manage-faculties/${university.id}`)}
-                      >
-                        Faculties
-                      </button>
-                      <button
-                        type="button"
-                        className="action-btn delete-btn"
-                        onClick={() => handleDelete(university.id, university.universityName)}
-                      >
-                        Delete
-                      </button>
+                      <div className="action-buttons-wrapper">
+                        <button
+                          type="button"
+                          className="action-btn edit-btn"
+                          onClick={() => navigate(`/admin/manage-faculties/${university.id}`)}
+                        >
+                          Faculties
+                        </button>
+                        <button
+                          type="button"
+                          className="action-btn delete-btn"
+                          onClick={() => handleDelete(university.id, university.universityName)}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

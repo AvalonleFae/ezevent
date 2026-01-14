@@ -102,12 +102,14 @@ const AttendanceList = () => {
                 },
             ]
         },
-        // NEW COLUMN FOR CHECK-IN TIME
         {
             name: 'CHECK-IN TIME',
             selector: row => row.checkInTimeLabel,
             sortable: true,
-            width: '200px' // Optional: give it a bit more space
+            wrap: true,
+            width: '260px',
+            minWidth: '180px',
+            maxWidth: '320px',
         },
         { name: 'PHONE NUMBER', selector: row => row.phoneNumber, sortable: true },
     ];
