@@ -24,14 +24,29 @@ export default function SignUpPage() {
     });
 
     const [universities, setUniversities] = useState([]);
+    const [loadingUnis, setLoadingUnis] = useState(true);
     const [error, setError] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUniversities = async () => {
-            const uniSnap = await getDocs(collection(db, 'universities'));
-            setUniversities(uniSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            setLoadingUnis(true);
+            try {
+                const uniSnap = await getDocs(collection(db, 'universities'));
+                const uniList = uniSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // Add "Other" option manually for consistency
+                uniList.push({ id: 'Other', universityName: 'Other' });
+
+                setUniversities(uniList);
+            } catch (err) {
+                console.error("Firestore Error fetching universities:", err);
+                // Fallback to just "Other" if fetch fails (e.g. permission issues)
+                setUniversities([{ id: 'Other', universityName: 'Other' }]);
+            } finally {
+                setLoadingUnis(false);
+            }
         }
         fetchUniversities();
     }, []);
@@ -176,8 +191,14 @@ export default function SignUpPage() {
                             <div className="form-row">
                                 <div className="form-group">
                                     <label>INSTITUTION</label>
-                                    <select name="institution" value={formData.institution} onChange={handleChange} required>
-                                        <option value="">SELECT UNI</option>
+                                    <select
+                                        name="institution"
+                                        value={formData.institution}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={loadingUnis}
+                                    >
+                                        <option value="">{loadingUnis ? 'LOADING...' : 'SELECT UNI'}</option>
                                         {universities.map(uni => (
                                             <option key={uni.id} value={uni.id}>{uni.universityName || uni.id}</option>
                                         ))}
