@@ -68,7 +68,7 @@ export default function SignUpPage() {
                     companyName: formData.companyName,
                     position: formData.position,
                     address: formData.address,
-                    status: 'Pending'
+                    verified: 'Pending'
                 };
             }
 

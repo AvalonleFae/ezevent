@@ -13,6 +13,7 @@ export default function EventDashboard({ }) {
 
     // --- State Management ---
     const [eventName, setEventName] = useState("Loading...");
+    const [eventStatus, setEventStatus] = useState("Loading");
     const [qrDocs, setQrDocs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [attendanceStats, setAttendanceStats] = useState({
@@ -103,11 +104,13 @@ export default function EventDashboard({ }) {
             setEventName(eventData.eventName);
             setEventDate(eventData.date?.toDate ? eventData.date.toDate() : new Date(eventData.date));
             setReviewOpen(eventData.reviewOpen || false);
+            setEventStatus(eventData.status || 'pending');
             if (eventData.reviewOpen) {
                 fetchReviews(eventId);
             }
         } else {
             setEventName("Event Not Found");
+            setEventStatus("NotFound");
         }
     }
 
@@ -275,6 +278,51 @@ export default function EventDashboard({ }) {
     };
 
     // --- JSX RENDER ---
+    // If event is not accepted, show access-restricted message
+    if (eventStatus !== "Loading" && eventStatus !== "Accepted") {
+        return (
+            <div className="dashboard-container-tbhx">
+                <div className="halftone-bg"></div>
+
+                <header className="event-header-tbhx">
+                    <h1 className="tbhx-header">Event <span className="text-glow-org">Dashboard</span></h1>
+                    <p className="current-event-name">{eventName}</p>
+                    <div className="header-accent"></div>
+                </header>
+
+                <div style={{
+                    textAlign: 'center',
+                    padding: '3rem 1.5rem',
+                    maxWidth: '640px',
+                    margin: '2rem auto',
+                    background: 'rgba(15, 23, 42, 0.85)',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(248, 113, 113, 0.5)',
+                    color: 'white'
+                }}>
+                    <h2 style={{ marginBottom: '1rem', color: 'var(--primary-red)' }}>
+                        {eventStatus === 'pending' || eventStatus === 'Pending'
+                            ? 'Event Approval Pending'
+                            : eventStatus === 'Declined'
+                                ? 'Event Has Been Declined'
+                                : 'Event Not Available'}
+                    </h2>
+                    <p style={{ fontSize: '1.05rem', lineHeight: 1.6 }}>
+                        You can only access the event dashboard once the admin has approved this event.
+                        Please check back after the event status is updated to <strong>Accepted</strong>.
+                    </p>
+                    <button
+                        className="tbhx-button"
+                        style={{ marginTop: '2rem' }}
+                        onClick={() => navigate('/organizer/my-events')}
+                    >
+                        BACK TO MY EVENTS
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="dashboard-container-tbhx">
             <div className="halftone-bg"></div>

@@ -179,7 +179,18 @@ export default function EventsList({
                     }
                 }
 
-                // Apply status filter if provided
+                // Apply status filter for admin validation page
+                if (userRole === "admin" && statusFilter && statusFilter !== "All") {
+                    eventsData = eventsData.filter(event => {
+                        const evStatus = event.status || '';
+                        if (statusFilter === 'pending') {
+                            return evStatus === 'pending' || evStatus === 'Pending';
+                        }
+                        return evStatus === statusFilter;
+                    });
+                }
+
+                // Apply time filter if provided
                 if (timeFilter !== "all") {
                     const currentDate = new Date();
                     eventsData = await Promise.all(eventsData.map(async event => {
