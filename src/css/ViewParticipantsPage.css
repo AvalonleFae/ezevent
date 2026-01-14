@@ -1,6 +1,6 @@
 .view-participants {
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -15,9 +15,11 @@
   background: #ffffff;
   border: 1px solid #eeeeee;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 2.5rem;
   margin-bottom: 2rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  min-height: 600px;
 }
 
 .participant-list-section h2 {

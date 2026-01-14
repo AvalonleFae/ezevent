@@ -140,9 +140,9 @@ export default function ValidateOrganizer() {
     { name: 'ID', selector: row => row.id, sortable: true, wrap: true },
     { name: 'EMAIL', selector: row => row.email || 'N/A', sortable: true, wrap: true },
     { name: 'NAME', selector: row => row.name || 'N/A', sortable: true, wrap: true },
-    { name: 'PHONE NUMBER', selector: row => row.phoneNumber || 'N/A', sortable: true, wrap: true },
-    { name: 'COMPANY NAME', selector: row => row.organizer?.companyName || 'N/A', sortable: true, wrap: true },
-    { name: 'COMPANY ADDRESS', selector: row => row.organizer?.address || 'N/A', sortable: true, wrap: true },
+    { name: 'PHONE NO.', selector: row => row.phoneNumber || 'N/A', sortable: true, wrap: true},
+    { name: 'COMPANY NAME', selector: row => row.organizer?.companyName || 'N/A', sortable: true, wrap: true, width: '200px', minWidth: '180px' },
+    { name: 'COMPANY ADDRESS', selector: row => row.organizer?.address || 'N/A', sortable: true, wrap: true, width: '280px', minWidth: '250px' },
     { name: 'POSITION', selector: row => row.organizer?.position || 'N/A', sortable: true, wrap: true },
     {
       name: 'STATUS',
