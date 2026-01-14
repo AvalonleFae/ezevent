@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../../firebase";
-import { doc, getDoc, addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+    doc,
+    getDoc,
+    addDoc,
+    collection,
+    serverTimestamp,
+    query,
+    where,
+    getDocs
+} from "firebase/firestore";
 import { useAuth } from "../../components/AuthContext";
 import "../../css/ReviewPage.css";
 
@@ -9,9 +18,11 @@ const ReviewPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useAuth();
+
     const [event, setEvent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [isAuthorized, setIsAuthorized] = useState(false);
 
     const [rating, setRating] = useState(5);
     const [comment, setComment] = useState("");
@@ -19,28 +30,63 @@ const ReviewPage = () => {
     const [objective, setObjective] = useState("Yes");
 
     useEffect(() => {
-        const fetchEvent = async () => {
+        const verifyAttendanceAndFetchData = async () => {
+            if (!user) return;
+
             try {
-                const docRef = doc(db, "events", id);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    setEvent({ id: docSnap.id, ...docSnap.data() });
-                } else {
-                    console.error("No such event!");
+
+                const regQuery = query(
+                    collection(db, "registrations"),
+                    where("eventId", "==", id),
+                    where("userId", "==", user.uid)
+                );
+
+                const regSnap = await getDocs(regQuery);
+
+                if (regSnap.empty) {
+                    alert("You are not registered for this event.");
                     navigate("/participant/history");
+                    return;
                 }
+
+
+                const registrationDocId = regSnap.docs[0].id;
+                const attendanceRef = collection(db, "registrations", registrationDocId, "attendance");
+
+
+                const attendanceQuery = query(attendanceRef, where("status", "==", "present"));
+                const attendanceSnap = await getDocs(attendanceQuery);
+
+                if (attendanceSnap.empty) {
+                    alert("Access Denied: You must scan the QR code at the event to leave a review.");
+                    navigate("/participant/history");
+                    return;
+                }
+
+
+                setIsAuthorized(true);
+                const eventRef = doc(db, "events", id);
+                const eventSnap = await getDoc(eventRef);
+
+                if (eventSnap.exists()) {
+                    setEvent({ id: eventSnap.id, ...eventSnap.data() });
+                }
+
             } catch (error) {
-                console.error("Error fetching event:", error);
+                console.error("Verification error:", error);
+                alert("An error occurred while verifying your attendance.");
+                navigate("/participant/history");
             } finally {
                 setLoading(false);
             }
         };
-        fetchEvent();
-    }, [id, navigate]);
+
+        verifyAttendanceAndFetchData();
+    }, [id, user, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!user) return;
+        if (!user || !isAuthorized) return;
 
         setSubmitting(true);
         try {
@@ -63,7 +109,10 @@ const ReviewPage = () => {
         }
     };
 
-    if (loading) return <div className="review-loading">Loading event details...</div>;
+    if (loading) return <div className="review-loading">Verifying attendance record...</div>;
+
+
+    if (!isAuthorized) return null;
 
     return (
         <div className="review-page-container">
