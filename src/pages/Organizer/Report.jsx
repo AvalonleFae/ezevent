@@ -336,7 +336,7 @@ const ReportPage = () => {
                                     legend: { labels: { color: '#000000ff', font: { family: 'Roboto' } } }
                                 },
                                 scales: {
-                                    y: { ticks: { color: '#000000ff' }, grid: { color: 'rgba(255, 255, 255, 0.04)' } },
+                                    y: { ticks: { color: '#000000ff' }, grid: { color: 'rgba(100, 100, 100, 0.2)' } },
                                     x: { ticks: { color: '#000000ff' }, grid: { display: false } }
                                 },
                             }}
@@ -392,7 +392,7 @@ const ReportPage = () => {
                                         legend: { display: false }
                                     },
                                     scales: {
-                                        y: { beginAtZero: true, ticks: { color: '#000000ff', precision: 0 }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                                        y: { beginAtZero: true, ticks: { color: '#000000ff', precision: 0 }, grid: { color: 'rgba(100, 100, 100, 0.2)' } },
                                         x: { ticks: { color: '#000000ff', maxRotation: 90, minRotation: 90, font: { size: 10 } }, grid: { display: false } }
                                     }
                                 }}
@@ -416,7 +416,7 @@ const ReportPage = () => {
                                     maintainAspectRatio: false,
                                     plugins: { legend: { display: false } },
                                     scales: {
-                                        y: { beginAtZero: true, ticks: { color: '#000000ff', precision: 0 }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                                        y: { beginAtZero: true, ticks: { color: '#000000ff', precision: 0 }, grid: { color: 'rgba(100, 100, 100, 0.2)' } },
                                         x: { ticks: { color: '#000000ff' }, grid: { display: false } }
                                     }
                                 }}
