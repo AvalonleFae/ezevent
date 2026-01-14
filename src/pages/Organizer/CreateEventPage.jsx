@@ -214,6 +214,7 @@ export default function CreateEvent() {
                 price: form.price,
                 QR: '',
                 numOfParticipants: form.numOfParticipants ? Number(form.numOfParticipants) : 0,
+                registrationOpen: false, // Default to disabled
             };
 
             const imageUrls = [];

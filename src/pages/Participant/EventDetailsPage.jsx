@@ -99,10 +99,18 @@ export default function EventDetailsPage() {
   // Determine if event is full
   const maxParticipants = event?.numOfParticipants || 0;
   const isFull = maxParticipants > 0 && registrationCount >= maxParticipants;
+  const registrationOpen = event?.registrationOpen || false;
+  const canRegister = registrationOpen && !isFull;
 
   const handleRegistration = async () => {
     if (!user) {
       alert("UNAUTHORIZED ACCESS. PLEASE LOG IN.");
+      return;
+    }
+
+    // BLOCKER: Check if registration is open
+    if (!registrationOpen) {
+      alert("REGISTRATION FAILED: REGISTRATION IS NOT OPEN YET.");
       return;
     }
 
@@ -248,8 +256,8 @@ export default function EventDetailsPage() {
             <div className="tbhx-card ed-info-card">
               <div className="ed-row">
                 <span className="ed-label">STATUS</span>
-                <span className={`ed-value ${isFull ? 'text-glow-red' : 'text-glow'}`}>
-                  {isFull ? "SOLD OUT" : "ACTIVE"}
+                <span className={`ed-value ${!registrationOpen ? 'text-glow-org' : (isFull ? 'text-glow-red' : 'text-glow')}`}>
+                  {!registrationOpen ? "REGISTRATION CLOSED" : (isFull ? "SOLD OUT" : "ACTIVE")}
                 </span>
               </div>
               <div className="ed-row">
@@ -303,10 +311,10 @@ export default function EventDetailsPage() {
             ) : (
               <button
                 onClick={handleRegistration}
-                disabled={isFull}
-                className={`tbhx-button ed-action-btn ${isFull ? 'disabled-btn' : 'register-now'}`}
+                disabled={!canRegister}
+                className={`tbhx-button ed-action-btn ${!canRegister ? 'disabled-btn' : 'register-now'}`}
               >
-                {isFull ? "EVENT FULL / SOLD OUT" : "REGISTER FOR EVENT"}
+                {!registrationOpen ? "REGISTRATION NOT OPEN" : (isFull ? "EVENT FULL / SOLD OUT" : "REGISTER FOR EVENT")}
               </button>
             )}
           </div>
