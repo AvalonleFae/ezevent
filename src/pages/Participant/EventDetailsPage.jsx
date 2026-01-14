@@ -6,6 +6,7 @@ import "../../css/EventDetailsPage.css";
 import { useAuth } from "../../components/AuthContext";
 
 export default function EventDetailsPage() {
+    const [attendanceStatus, setAttendanceStatus] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation(); // To detect if we are in 'history' mode
@@ -83,6 +84,36 @@ export default function EventDetailsPage() {
             facultyName: facultyDisplay
           });
 
+          // Fetch attendance status for this user (if in history/receipt mode)
+          if (user && (location.pathname.includes("history") || location.pathname.includes("receipt"))) {
+            // Find registration for this user and event
+            const userRegQuery = query(
+              collection(db, "registrations"),
+              where("userId", "==", user.uid),
+              where("eventId", "==", id)
+            );
+            const userRegSnap = await getDocs(userRegQuery);
+            if (!userRegSnap.empty) {
+              const regDoc = userRegSnap.docs[0];
+              const attendanceRef = collection(db, "registrations", regDoc.id, "attendance");
+              const attendanceSnap = await getDocs(attendanceRef);
+              if (!attendanceSnap.empty) {
+                // If multiple, show the first present, else the first status
+                const presentDoc = attendanceSnap.docs.find(attDoc => attDoc.data().status === "present");
+                if (presentDoc) {
+                  setAttendanceStatus("Present");
+                } else {
+                  // Show the first status found
+                  setAttendanceStatus(attendanceSnap.docs[0].data().status || "Unknown");
+                }
+              } else {
+                setAttendanceStatus("Not Marked");
+              }
+            } else {
+              setAttendanceStatus("Not Registered");
+            }
+          }
+
         } else {
           setEvent(null);
         }
@@ -94,7 +125,8 @@ export default function EventDetailsPage() {
     };
 
     fetchEvent();
-  }, [id]);
+    // Only re-run when id, user, or location changes
+  }, [id, user, location.pathname]);
 
   // Determine if event is full
   const maxParticipants = event?.numOfParticipants || 0;
@@ -306,6 +338,13 @@ export default function EventDetailsPage() {
                       REVIEW EVENT
                     </button>
                   )}
+                </div>
+                {/* Attendance Status Display */}
+                <div className="attendance-status-row" style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                  <span className="ed-label">ATTENDANCE STATUS:</span>
+                  <span className="ed-value" style={{ marginLeft: 8, fontWeight: 600, color: attendanceStatus === 'Present' ? '#22c55e' : '#f59e42' }}>
+                    {attendanceStatus || 'Loading...'}
+                  </span>
                 </div>
               </div>
             ) : (
