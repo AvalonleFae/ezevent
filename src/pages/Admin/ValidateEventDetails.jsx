@@ -188,7 +188,7 @@ export default function ValidateEventDetails() {
                             <h4>Company Details (Organizer Role)</h4>
                             <p className="details-line"><strong>Company Name:</strong> {userData.organizer.companyName}</p>
                             <p className="details-line"><strong>Position:</strong> {userData.organizer.position}</p>
-                            <p className="details-line"><strong>Address:</strong> {userData.organizer.companyAddress}</p>
+                            <p className="details-line"><strong>Address:</strong> {userData.organizer.address}</p>
                             <p className="details-line"><strong>Validation Timestamp:</strong> {formatTimestamp(userData.organizer.validationTimestamp)}</p>
                             
                             {/* UPDATED SECTION START */}
