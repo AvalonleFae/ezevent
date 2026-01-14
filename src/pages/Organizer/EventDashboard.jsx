@@ -26,6 +26,8 @@ export default function EventDashboard({ }) {
     const [eventDate, setEventDate] = useState(null);
     const [reviewOpen, setReviewOpen] = useState(false);
     const [openingReview, setOpeningReview] = useState(false);
+    const [registrationOpen, setRegistrationOpen] = useState(false);
+    const [updatingRegistration, setUpdatingRegistration] = useState(false);
     const [reviews, setReviews] = useState([]);
     const [avgRating, setAvgRating] = useState(0);
 
@@ -104,6 +106,7 @@ export default function EventDashboard({ }) {
             const end = eventData.endDate?.toDate ? eventData.endDate.toDate() : (eventData.date?.toDate ? eventData.date.toDate() : new Date(eventData.date));
             setEventDate(end);
             setReviewOpen(eventData.reviewOpen || false);
+            setRegistrationOpen(eventData.registrationOpen || false);
             if (eventData.reviewOpen) {
                 fetchReviews(eventId);
             }
@@ -119,9 +122,9 @@ export default function EventDashboard({ }) {
             // Load QR codes for the event
             const q = query(
                 collection(db, 'QR'),
-                where('userId', '==', uid),        // Matches index
-                where('eventId', '==', currentEventId), // Matches index
-                orderBy('createdAt', 'desc')       // Matches index
+                where('userId', '==', uid),
+                where('eventId', '==', currentEventId),
+                orderBy('createdAt', 'desc')
             );
             const snaps = await getDocs(q);
             const items = snaps.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -164,6 +167,25 @@ export default function EventDashboard({ }) {
             alert("Failed to update review status. Please try again.");
         } finally {
             setOpeningReview(false);
+        }
+    };
+
+    // Toggle Event Registration
+    const handleToggleRegistration = async () => {
+        if (!id) return;
+        setUpdatingRegistration(true);
+        const newStatus = !registrationOpen;
+        try {
+            await updateDoc(doc(db, 'events', id), {
+                registrationOpen: newStatus
+            });
+            setRegistrationOpen(newStatus);
+            alert(newStatus ? "Registration is now OPEN for participants!" : "Registration is now CLOSED.");
+        } catch (error) {
+            console.error("Error toggling registration:", error);
+            alert("Failed to update registration status.");
+        } finally {
+            setUpdatingRegistration(false);
         }
     };
 
@@ -317,6 +339,13 @@ export default function EventDashboard({ }) {
                 </button>
                 <button className="tbhx-button" onClick={() => navigate(`/organizer/my-event/${id}/report`, { state: { eventName } })}>
                     GENERATE REPORT
+                </button>
+                <button
+                    className={`tbhx-button ${registrationOpen ? 'danger-btn' : 'success-btn'}`}
+                    onClick={handleToggleRegistration}
+                    disabled={updatingRegistration}
+                >
+                    {updatingRegistration ? 'UPDATING...' : (registrationOpen ? 'CLOSE REGISTRATION' : 'OPEN REGISTRATION')}
                 </button>
                 {eventDate && new Date() > eventDate && (
                     <>

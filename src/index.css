@@ -134,12 +134,39 @@ a:hover {
   background: #f8fafc;
 }
 
-.tbhx-button.is-pressed,
 .tbhx-button[aria-pressed="true"] {
   background: var(--theme-primary);
   color: #ffffff;
-  border-color: rgba(0,0,0,0.08);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.14);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+}
+
+.text-glow {
+  background: linear-gradient(135deg, #6B9AC4, #A9D0E6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-glow-red {
+  background: linear-gradient(135deg, #ff4040, #ff8080);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-glow-org {
+  background: linear-gradient(135deg, #b9b010, #e54659);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-glow-cyan {
+  background: linear-gradient(135deg, #06b6d4, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 
