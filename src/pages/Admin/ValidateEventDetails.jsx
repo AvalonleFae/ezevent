@@ -162,7 +162,7 @@ export default function ValidateEventDetails() {
                 <p className="details-line"><strong>Event Name:</strong> {eventData.eventName}</p>
                 <p className="details-line"><strong>Description:</strong> {eventData.description}</p>
                 <p className="details-line"><strong>Date:</strong> {formatTimestamp(eventData.date)}</p>
-                <p className="details-line"><strong>Price:</strong> {eventData.Price}</p>
+                <p className="details-line"><strong>Price:</strong> {eventData.price === 'FREE' || eventData.price === 0 || eventData.price === '0' ? 'FREE' : eventData.price}</p>
                 <p className="details-line">
                     <strong>Current Status:</strong>
                     <span
