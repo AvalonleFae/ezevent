@@ -1,0 +1,86 @@
+/* Shared styling for react-data-table-component to match AttendanceList look */
+
+.subheader-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.search-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e2e8f0;
+  padding: 0.8rem 1.2rem;
+  color: #1e293b;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #94a3b8;
+  background: #ffffff;
+}
+
+/* DataTable Custom Overrides */
+.rdt_Table {
+  border-radius: 0px;
+  overflow: hidden;
+  background: #ffffff !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.rdt_TableHeadRow {
+  background: #f8fafc !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+  font-weight: 800 !important;
+}
+
+.rdt_TableHeadRow div {
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #475569 !important;
+}
+
+.rdt_TableRow {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  font-size: 0.95rem !important;
+  height: 64px !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.rdt_TableRow:hover {
+  background: #f1f5f9 !important;
+}
+
+.rdt_Pagination {
+  background: #ffffff !important;
+  color: #64748b !important;
+  border-top: 1px solid #e2e8f0 !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.rdt_Pagination button svg {
+  fill: #1e293b !important;
+}
+
+@media (max-width: 768px) {
+  .subheader-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+

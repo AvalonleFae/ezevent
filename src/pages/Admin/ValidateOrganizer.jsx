@@ -3,15 +3,15 @@ import { collection, doc, getDocs, query, where, updateDoc, serverTimestamp } fr
 import { db } from '../../firebase';
 import emailjs from '@emailjs/browser';
 import "../../css/ValidateOrganizer.css";
+import '../../css/TbhxDataTable.css';
+import DataTable, { createTheme } from 'react-data-table-component';
 
 export default function ValidateOrganizer() {
   const [organizers, setOrganizers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedOrganizer, setSelectedOrganizer] = useState(null);
   const [statusFilter, setStatusFilter] = useState('All');
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [filterText, setFilterText] = useState('');
 
   const SERVICE_ID = "service_ezevent";
   const TEMPLATE_ID = "template_2ofdmnb";
@@ -124,25 +124,79 @@ export default function ValidateOrganizer() {
   // Filter organizers based on status
   const filteredOrganizers = organizers.filter(org => {
     const status = org.organizer?.verified || 'Pending';
-    return statusFilter === 'All' || status === statusFilter;
+    const statusOk = statusFilter === 'All' || status === statusFilter;
+    if (!statusOk) return false;
+
+    const haystack = `${org?.name || ''} ${org?.email || ''} ${org?.phoneNumber || ''} ${org?.organizer?.companyName || ''} ${org?.organizer?.address || ''} ${org?.organizer?.position || ''}`
+      .toLowerCase();
+    return haystack.includes(filterText.toLowerCase());
   });
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredOrganizers.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentOrganizers = filteredOrganizers.slice(startIndex, endIndex);
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // Reset to page 1 when filter changes
   const handleFilterChange = (value) => {
     setStatusFilter(value);
-    setCurrentPage(1);
   };
+
+  const columns = [
+    { name: 'ID', selector: row => row.id, sortable: true, wrap: true },
+    { name: 'EMAIL', selector: row => row.email || 'N/A', sortable: true, wrap: true },
+    { name: 'NAME', selector: row => row.name || 'N/A', sortable: true, wrap: true },
+    { name: 'PHONE NUMBER', selector: row => row.phoneNumber || 'N/A', sortable: true, wrap: true },
+    { name: 'COMPANY NAME', selector: row => row.organizer?.companyName || 'N/A', sortable: true, wrap: true },
+    { name: 'COMPANY ADDRESS', selector: row => row.organizer?.address || 'N/A', sortable: true, wrap: true },
+    { name: 'POSITION', selector: row => row.organizer?.position || 'N/A', sortable: true, wrap: true },
+    {
+      name: 'STATUS',
+      cell: row => (
+        <span className={`status-tag ${row.organizer?.verified ? row.organizer.verified.toLowerCase() : 'pending'}`}>
+          {row.organizer?.verified || 'Pending'}
+        </span>
+      ),
+      sortable: true,
+    },
+    {
+      name: 'ACTION',
+      cell: row => (
+        <button
+          type="button"
+          className="action-btn edit-btn"
+          onClick={() =>
+            handleValidation(
+              row.id,
+              row.organizer?.verified || 'Pending',
+              row.email,
+              row.name,
+            )
+          }
+        >
+          Validate
+        </button>
+      ),
+    },
+  ];
+
+  const subHeaderComponent = (
+    <div className="subheader-container">
+      <input
+        type="text"
+        placeholder="SEARCH..."
+        className="search-input"
+        value={filterText}
+        onChange={e => setFilterText(e.target.value)}
+      />
+
+      <select
+        id="statusFilter"
+        value={statusFilter}
+        onChange={e => handleFilterChange(e.target.value)}
+        style={{ padding: '0.7rem 0.9rem', borderRadius: '10px', border: '1px solid #e2e8f0' }}
+      >
+        <option value="All">All</option>
+        <option value="Pending">Pending</option>
+        <option value="Accepted">Accepted</option>
+        <option value="Declined">Declined</option>
+      </select>
+    </div>
+  );
 
   return (
     <div className="manage-organizer">
@@ -150,102 +204,51 @@ export default function ValidateOrganizer() {
 
       <section className="organizer-list-section">
         <h2>Organizers List</h2>
-        <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="statusFilter" style={{ marginRight: '0.5rem' }}>Filter by Status:</label>
-          <select
-            id="statusFilter"
-            value={statusFilter}
-            onChange={e => handleFilterChange(e.target.value)}
-            style={{ padding: '0.3rem 0.7rem', borderRadius: '4px' }}
-          >
-            <option value="All">All</option>
-            <option value="Pending">Pending</option>
-            <option value="Accepted">Accepted</option>
-            <option value="Declined">Declined</option>
-          </select>
-        </div>
         {loading ? (
           <p>Loading Organizers...</p>
         ) : (
-          <div className='table-container'>
-            <table className="organizer-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Email</th>
-                  <th>Name</th>
-                  <th>Phone Number</th>
-                  <th>Company Name</th>
-                  <th>Company Address</th>
-                  <th>Position</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredOrganizers.length === 0 ? (
-                  <tr>
-                    <td colSpan="9" style={{ textAlign: 'center', padding: '2rem' }}>
-                      No Organizers found
-                    </td>
-                  </tr>
-                ) : (
-                  currentOrganizers.map((organizer) => (
-                    <tr key={organizer.id}>
-                      <td data-label="ID">{organizer.id}</td>
-                      <td data-label="Email">{organizer.email || 'N/A'}</td>
-                      <td data-label="Name">{organizer.name || 'N/A'}</td>
-                      <td data-label="Phone">{organizer.phoneNumber || 'N/A'}</td>
-                      <td data-label="Company">{organizer.organizer?.companyName || 'N/A'}</td>
-                      <td data-label="Address">{organizer.organizer?.address || 'N/A'}</td>
-                      <td data-label="Position">{organizer.organizer?.position || 'N/A'}</td>
-                      <td data-label="Status">
-                        <span className={`status-tag ${organizer.organizer?.verified ? organizer.organizer.verified.toLowerCase() : 'pending'}`}>
-                          {organizer.organizer?.verified || 'Pending'}
-                        </span>
-                      </td>
-                      <td data-label="Action">
-                        <button
-                          type="button"
-                          className="action-btn edit-btn"
-                          onClick={() => handleValidation(organizer.id, organizer.organizer?.verified || 'Pending',
-                            organizer.email,
-                            organizer.name,
-                          )}
-                        >
-                          Validate
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
-        {!loading && filteredOrganizers.length > 0 && (
-          <div className="pagination">
-            <button
-              className="pagination-btn"
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <div className="pagination-info">
-              Page {currentPage} of {totalPages}
-            </div>
-            <button
-              className="pagination-btn"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
+          <DataTable
+            columns={columns}
+            data={filteredOrganizers}
+            pagination
+            responsive
+            subHeader
+            subHeaderComponent={subHeaderComponent}
+            theme="tbhxTheme"
+            noDataComponent={
+              <div style={{ padding: '2rem', textAlign: 'center', width: '100%' }}>
+                No Organizers found
+              </div>
+            }
+          />
         )}
       </section>
 
     </div>
   );
 }
+
+createTheme('tbhxTheme', {
+  text: {
+    primary: '#FFFFFF',
+    secondary: '#AAAAAA',
+  },
+  background: {
+    default: 'transparent',
+  },
+  context: {
+    background: '#FF4040',
+    text: '#FFFFFF',
+  },
+  divider: {
+    default: 'rgba(255, 64, 64, 0.2)',
+  },
+  highlightOnHover: {
+    default: 'rgba(255, 64, 64, 0.1)',
+    text: '#FFFFFF',
+  },
+  striped: {
+    default: 'rgba(255, 255, 255, 0.02)',
+    text: '#FFFFFF',
+  },
+});
