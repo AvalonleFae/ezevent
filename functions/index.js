@@ -9,21 +9,20 @@ const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
 
-// 1. Initialize Firebase Admin
+//nitialize Firebase Admin
 admin.initializeApp();
 
-// 2. Initialize Stripe
+//Initialize Stripe
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-// 3. Webhook Secret
+//Webhook Secret
 const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
 
-// Set global options (optional, good for cost control)
+
 setGlobalOptions({ maxInstances: 10 });
 
-// ------------------------------------------------------------------
-// Function 1: Create Stripe Checkout Session (Called by React App)
-// ------------------------------------------------------------------
+
+// Create Stripe Checkout Session
 exports.createStripeCheckout = onRequest({ cors: true }, async (req, res) => {
   try {
     // Receive data from your React Frontend
@@ -85,11 +84,8 @@ exports.createStripeCheckout = onRequest({ cors: true }, async (req, res) => {
   }
 });
 
-// ------------------------------------------------------------------
-// Function 2: Handle Stripe Webhook
-// ------------------------------------------------------------------
-// 1. Remove CORS (not needed for webhooks)
-// 2. Ensure we catch all errors
+
+// Handle Stripe Webhook
 exports.handleStripeWebhook = onRequest(async (req, res) => {
   const signature = req.headers['stripe-signature'];
 
@@ -111,7 +107,7 @@ exports.handleStripeWebhook = onRequest(async (req, res) => {
 
     if (metadata && metadata.type === 'event_registration') {
       try {
-        // 1. Create Registration
+        // Create Registration
         const registrationRef = await admin.firestore().collection('registrations').add({
           userId: metadata.userId,
           userEmail: metadata.userEmail,
@@ -123,7 +119,7 @@ exports.handleStripeWebhook = onRequest(async (req, res) => {
           registeredAt: admin.firestore.FieldValue.serverTimestamp()
         });
 
-        // 2. Create Attendance Subcollection
+        // Create Attendance Subcollection
         await registrationRef.collection('attendance').add({
           status: 'absent',
           checkInTime: null,
@@ -132,7 +128,7 @@ exports.handleStripeWebhook = onRequest(async (req, res) => {
 
         console.log(`SUCCESS: Data saved for User ${metadata.userId}`);
         
-        // FIX: Send success response immediately
+       
         return res.status(200).json({ received: true });
 
       } catch (error) {
@@ -141,7 +137,7 @@ exports.handleStripeWebhook = onRequest(async (req, res) => {
       }
     } else {
       console.log("Metadata missing or type incorrect");
-      // FIX: Even if we ignore it, we must tell Stripe we received it
+      
       return res.status(200).end();
     }
   }
