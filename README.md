@@ -1,4 +1,4 @@
-##EZEvent: University Event Management and Registration Application
+## EZEvent: University Event Management and Registration Application
 ezevent is a university-centric, serverless event management and ticketing platform. It provides a role-based environment for participants to discover and register for events, organizers to manage listings, and administrators to oversee platform health and validate credentials.
 ## Features
 ### Participant Portal
